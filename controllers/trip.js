@@ -15,20 +15,26 @@ exports.load = function(req, res, next, id){
 }
 
 /**
- * GET /trips/:id
+ * GET /trip/:id
  * Get a trip!
  */
 
 exports.showTrip = function(req, res) {
-  trip = req.trip
-  res.render('trip/show', {
-    title: trip.name + " " + trip.id,
-    trip: trip
-  })
+  var ObjectId = mongoose.Types.ObjectId;
+  var Trip = mongoose.model('Trip');
+  Trip.findById(req.params.tripid).exec(function(err, trips) {
+            if (err) {
+                res.render('error', {
+                    status: 500
+                });
+            } else {
+                res.json(trips);
+            }
+        });
 };
 
 /**
- * GET /trips/create
+ * GET /trip/create
  * Show the new trip page.
  */
 
@@ -39,7 +45,7 @@ exports.renderCreate = function(req, res) {
 };
 
 /**
- * POST /trips/create
+ * POST /trip/create
  * Create a new trip!
  */
 
@@ -47,8 +53,8 @@ exports.createTrip = function(req, res) {
   trip = new Trip({
     name: req.body.tripname
   })
-  res.render('trip/show', {
-    title: trip.name + " " + trip.id,
-    trip: trip
-  })
+  trip.save(function(err, trip){
+    if(err) return console.error(err);
+  });
+  res.json(trip)
 };

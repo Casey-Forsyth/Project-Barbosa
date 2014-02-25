@@ -1,5 +1,5 @@
 module.exports = {
-  db: 'localhost',
+  db: 'localhost/barbosa',
 
   facebook: {
     clientID: '1453279814895954',

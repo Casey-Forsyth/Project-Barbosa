@@ -4,7 +4,6 @@ var tripSchema = new mongoose.Schema({
   name: String
 });
 
-
 tripSchema.statics = {
 
   /**
