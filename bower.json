@@ -1,0 +1,20 @@
+{
+  "name": "project-barbosa",
+  "version": "0.0.1",
+  "authors": [
+    "group6"
+  ],
+  "license": "MIT",
+  "homepage": "project-barbosa.herokuapp.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ember": "~1.4.0"
+  }
+}
