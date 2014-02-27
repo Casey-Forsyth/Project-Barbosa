@@ -1,5 +1,1 @@
-$(document).ready(function() {
-
-  // Place JavaScript code here...
-
-});
+window.App = Ember.Application.create();
