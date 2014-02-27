@@ -2,20 +2,25 @@ var mongoose = require('mongoose');
 var Trip = require('../models/Trip');
 
 /**
- * Load
+ * GET /trips/:id
+ * Show the trip page.
  */
 
-exports.load = function(req, res, next, id){
-  Trip.load(id, function (err, trip) {
-    if (err) return next(err)
-    if (!trip) return next(new Error('not found'))
-    req.trip = trip
-    next()
-  })
-}
+exports.renderTrip = function(req, res) {
+  var Trip = mongoose.model('Trip');
+  Trip.findById(req.params.tripid).exec(function(err, trip) {
+    if (err) {
+      res.status(500).json(null);
+    } else {
+      res.render('trips/show', {
+        trip: trip
+      });
+    }
+  });
+};
 
 /**
- * GET /trips/:id
+ * GET /api/trips/:id
  * Get a trip!
  */
 
@@ -42,7 +47,7 @@ exports.renderCreate = function(req, res) {
 };
 
 /**
- * POST /trips/create
+ * POST /api/trips/create
  * Create a new trip!
  */
 
