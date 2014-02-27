@@ -16,7 +16,15 @@ html
 
     script(src='/js/lib/jquery.js?v=#{cacheBuster}')
     script(src='/js/lib/bootstrap.js?v=#{cacheBuster}')
-    script(src='/js/main.js?v=#{cacheBuster}')
+
+    script(src='/js/components/handlebars/handlebars.runtime.js')
+    script(src='/js/components/ember/ember.js')
+    script(src='/js/components/ember-data/ember-data.js')
+    script(src="/js/main.js")
+    script(src="/js/store.js")
+    script(src="/js/router.js")
+    script(src="/js/models/trips.js")
+
   body
     #wrap
       .navbar.navbar-default.navbar-fixed-top

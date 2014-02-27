@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  form(method='POST')
+  form(method='POST' action='/api/trips/create')
     legend Create your new trip
     .form-group
       label.control-label(for='tripname') Trip Name
