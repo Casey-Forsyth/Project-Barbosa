@@ -21,4 +21,4 @@ node_modules
 Thumbs.db
 
 public/vendor
-bower_components
+public/js/components
