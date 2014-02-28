@@ -88,6 +88,7 @@ app.post('/signup', userController.postSignup);
 app.get('/trips/create', tripController.renderCreate);
 app.post('/trips/create', tripController.createTrip);
 app.get('/trips/:tripid', tripController.showTrip);
+app.get('/api/trips', tripController.showTrips);
 
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);

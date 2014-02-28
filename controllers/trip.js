@@ -22,13 +22,35 @@ exports.load = function(req, res, next, id){
 exports.showTrip = function(req, res) {
   var Trip = mongoose.model('Trip');
   Trip.findById(req.params.tripid).exec(function(err, trips) {
-            if (err) {
-                res.status(500).json(null);
-            } else {
-                res.json(trips);
-            }
-        });
+      if (err) {
+          res.status(500).json(null);
+      } else {
+          res.json(trips);
+      }
+  });
 };
+
+/**
+ * GET /api/trips
+ * Gets all trips to JSON.
+ */
+
+exports.showTrips = function(req, res) {
+  var Trip = mongoose.model('Trip');
+  Trip.find({}, function(err, trips) {
+    if (err) {
+      res.status(500).json(null);
+    } else {
+      var tripMap = {};
+
+      trips.forEach(function(trip) {
+        tripMap[trip._id] = trip;
+      });
+
+      res.json(tripMap);
+    }
+  });
+}
 
 /**
  * GET /trips/create
@@ -51,7 +73,7 @@ exports.createTrip = function(req, res) {
     name: req.body.tripname
   })
   trip.save(function(err, trip){
-    if(err) return console.error(err);
+    if (err) return console.error(err);
   });
   res.json(trip)
 };
