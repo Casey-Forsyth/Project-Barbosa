@@ -6,7 +6,10 @@ require('../vendor/handlebars');
 require('../vendor/ember');
 require('../vendor/ember-data'); // delete if you don't want ember-data
 
-var App = Ember.Application.create();
+App = Ember.Application.create({
+  LOG_TRANSITIONS: true
+});
+
 App.ApplicationSerializer = DS.RESTSerializer.extend({
   primaryKey: function(){return '_id'},
 });

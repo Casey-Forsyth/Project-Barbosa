@@ -9,6 +9,6 @@ App.Router.map(function() {
   this.route('new_trip', {path: '/trips/new'});
   // end generated routes
 
-
+  this.route('login', {path: '/login'});
 });
 
