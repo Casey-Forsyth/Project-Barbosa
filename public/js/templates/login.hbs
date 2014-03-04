@@ -1,2 +1,23 @@
-<h2>Login Test</h2>
-
+<div class container="col-sm-8 col-sm-offset-2">
+  <form method="POST" action="#login">
+    <legend>Login</legend>
+    <div class="form-group">
+      <div class="btn-group btn-group-justified">
+        <a href="/auth/facebook" class="btn btn-facebook"><i class="fa fa-facebook"></i>Facebook</a>
+        <a href="/auth/twitter" class="btn btn-twitter"><i class="fa fa-twitter"></i>Twitter</a>
+        <a href="/auth/google" class="btn btn-google-plus"><i class="fa fa-google-plus"></i>Google</a>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email" class="control-label">Email</label>
+      <input type="text" name="email" id="email" placeholder="Email" autofocus="" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="username" class="control-label">Password</label>
+      <input type="password" name="password" id="password" placeholder="Password" class="form-control">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"><i class="fa fa-unlock-alt"></i>Login</button>
+    </div>
+  </form>
+</div>

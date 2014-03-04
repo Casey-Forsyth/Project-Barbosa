@@ -289,6 +289,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   data.buffer.push("<div id=\"wrap\">\r\n  <div class=\"navbar navbar-default navbar-fixed-top\">\r\n    <div class=\"container\">\r\n      <div class=\"navbar-header\">\r\n        <button class=\"navbar-toggle\" data-target=\".navbar-collapse\"\r\n        data-toggle=\"collapse\" type=\"button\"><span class=\"sr-only\">Toggle\r\n        navigation</span></button><a class=\"navbar-brand\" href=\"/\">Project\r\n        Barbosa</a>\r\n      </div>\r\n\r\n      <div class=\"collapse navbar-collapse\">\r\n        <ul class=\"nav navbar-nav\">\r\n          <li class=\"active\"><a href=\"/\">Home</a></li>\r\n        </ul>\r\n\r\n        <ul class=\"nav navbar-nav navbar-right\">\r\n          <li><a href=\"/login\">Login</a></li>\r\n\r\n          <li><a href=\"/signup\">Create Account</a></li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"container\">\r\n    ");
   hashTypes = {};
   hashContexts = {};
@@ -296,6 +297,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("\r\n  </div>\r\n</div>\r\n\r\n<div id=\"footer\">\r\n  <div class=\"container text-center\">\r\n    <div>\r\n      © 2014 Group 3 · Project Barbosa\r\n    </div>\r\n\r\n    <div>\r\n      Created by Michael Cook, Yuriy Dyrenko, Casey Forsyth,\r\n    </div>\r\n\r\n    <div>\r\n      James Firth, William Humphreys-Cloutier, Barret Monchka\r\n    </div>\r\n\r\n    <div>\r\n      Code licensed under <a href=\r\n      \"http://opensource.org/licenses/mit-license.html\">MIT License</a>\r\n    </div>\r\n\r\n    <div>\r\n      Built with <a href=\r\n      \"https://github.com/sahat/hackathon-starter\">hackathon-starter</a>and\r\n      <a href=\"http://expressjs.com/\">Express.js</a>.\r\n    </div>\r\n  </div>\r\n</div>");
 =======
   data.buffer.push("<div id=\"wrap\">\n  <div class=\"navbar navbar-default navbar-fixed-top\">\n    <div class=\"container\">\n      <div class=\"navbar-header\">\n        <button class=\"navbar-toggle\" data-target=\".navbar-collapse\"\n        data-toggle=\"collapse\" type=\"button\"><span class=\"sr-only\">Toggle\n        navigation</span></button><a class=\"navbar-brand\" href=\"/\">Project\n        Barbosa</a>\n      </div>\n\n      <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n          <li class=\"active\"><a href=\"/\">Home</a></li>\n        </ul>\n\n        <ul class=\"nav navbar-nav navbar-right\">\n          <li><a href=\"/login\">Login</a></li>\n\n          <li><a href=\"/signup\">Create Account</a></li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container\">\n    ");
+=======
+  data.buffer.push("<div id=\"wrap\">\n  <div class=\"navbar navbar-default navbar-fixed-top\">\n    <div class=\"container\">\n      <div class=\"navbar-header\">\n        <button class=\"navbar-toggle\" data-target=\".navbar-collapse\"\n        data-toggle=\"collapse\" type=\"button\"><span class=\"sr-only\">Toggle\n        navigation</span></button><a class=\"navbar-brand\" href=\"/\">Project\n        Barbosa</a>\n      </div>\n\n      <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n          <li class=\"active\"><a href=\"/\">Home</a></li>\n        </ul>\n\n        <ul class=\"nav navbar-nav navbar-right\">\n          <li><a href=\"#login\">Login</a></li>\n\n          <li><a href=\"#signup\">Create Account</a></li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container\">\n    ");
+>>>>>>> Login HTML
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -361,8 +365,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 
 
+<<<<<<< HEAD
   data.buffer.push("<h2>Login Test</h2>\n\n");
 >>>>>>> Basic setup for login
+=======
+  data.buffer.push("<div class container=\"col-sm-8 col-sm-offset-2\">\n  <form method=\"POST\" action=\"#login\">\n    <legend>Login</legend>\n    <div class=\"form-group\">\n      <div class=\"btn-group btn-group-justified\">\n        <a href=\"/auth/facebook\" class=\"btn btn-facebook\"><i class=\"fa fa-facebook\"></i>Facebook</a>\n        <a href=\"/auth/twitter\" class=\"btn btn-twitter\"><i class=\"fa fa-twitter\"></i>Twitter</a>\n        <a href=\"/auth/google\" class=\"btn btn-google-plus\"><i class=\"fa fa-google-plus\"></i>Google</a>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"email\" class=\"control-label\">Email</label>\n      <input type=\"text\" name=\"email\" id=\"email\" placeholder=\"Email\" autofocus=\"\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label for=\"username\" class=\"control-label\">Password</label>\n      <input type=\"password\" name=\"password\" id=\"password\" placeholder=\"Password\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fa fa-unlock-alt\"></i>Login</button>\n    </div>\n  </form>\n</div>");
+>>>>>>> Login HTML
   
 });
 
