@@ -68,14 +68,15 @@ exports.postLogin = function(req, res, next) {
     }
 
     if (!user) {
-      console.log(info.message);
       return res.json([{param: 'password', msg: info.message}]);
     }
 
     req.logIn(user, function(err) {
-      if (err) return next(err);
-      console.log('login error');
-      console.log(err);
+      if (err) {
+        console.log('login error');
+        console.log(err);
+        return next(err);
+      }
       return res.json({loggedIn: true});
     });
   })(req, res, next);
@@ -109,13 +110,19 @@ exports.postSignup = function(req, res, next) {
   user.save(function(err) {
     if (err) {
       if (err.code === 11000) {
-        req.flash('errors', { msg: 'User already exists.' });
+        errors = [{msg: 'User already exists.'}];
+      } else {
+        errors = [{msg: 'Signup error.'}];
       }
-      return res.redirect('/signup');
+      return res.json(errors);
     }
     req.logIn(user, function(err) {
-      if (err) return next(err);
-      res.redirect('/');
+      if (err) {
+        console.log('signup error');
+        console.log(err);
+        return next(err);
+      }
+      return res.json({loggedIn: true});
     });
   });
 };
