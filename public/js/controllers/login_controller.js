@@ -5,26 +5,28 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
 
   loginFailed: false,
   isProcessing: false,
+  errors: [],
 
   actions: {
+
     // Called via form submit
     authenticate: function() {
       var credentials = {
-        email: this.email,
-        password: this.password
+        email: this.get('email'),
+        password: this.get('password')
       };
       this._super(credentials);
     },
 
-    // handle login success
+    // Send user to index on success.
     sessionAuthenticationSucceeded: function() {
       this.transitionToRoute('index');
     },
 
-    // display an error when logging in fails
-    sessionAuthenticationFailed: function(message) {
-      console.log('auth error:');
-      console.log(message);
+    // Display errors on login fail.
+    sessionAuthenticationFailed: function(errors) {
+      this.set('loginFailed', true);
+      this.set('errors', errors);
     }
 
   }

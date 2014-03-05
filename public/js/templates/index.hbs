@@ -1,5 +1,8 @@
 <h2>Index</h2>
 
+
+{{ session.loggedIn }}
+
 {{#if session.isAuthenticated}}
   <a {{ action 'invalidateSession' }}>Logout</a>
 {{else}}

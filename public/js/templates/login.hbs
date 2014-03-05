@@ -1,4 +1,11 @@
-<div class container="col-sm-8 col-sm-offset-2">
+<div class="col-sm-8 col-sm-offset-2">
+  {{#if loginFailed}}
+    <div class="alert alert-danger animated fadeIn">
+      {{#each errors}}
+        <div>{{this.msg}}</div>
+      {{/each}}
+    </div>
+  {{/if}}
   <form {{action 'authenticate' on="submit"}}>
     <legend>Login</legend>
     <div class="form-group">
