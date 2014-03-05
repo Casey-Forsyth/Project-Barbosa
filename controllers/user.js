@@ -57,7 +57,6 @@ exports.postLogin = function(req, res, next) {
   var errors = req.validationErrors();
 
   if (errors) {
-    console.log(errors);
     return res.json(errors);
   }
 
@@ -99,8 +98,7 @@ exports.postSignup = function(req, res, next) {
   var errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/signup');
+    return res.json(errors);
   }
 
   var user = new User({

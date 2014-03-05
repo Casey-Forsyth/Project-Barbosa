@@ -1,11 +1,11 @@
-{{#if loginFailed}}
+{{#if signupFailed}}
   <div class="alert alert-danger animated fadeIn">
     {{#each errors}}
       <div>{{this.msg}}</div>
     {{/each}}
   </div>
 {{/if}}
-<form id="signup-form" class="form-horizontal" {{action 'signup' on="submit"}}>
+<form id="signup-form" class="form-horizontal" {{action 'authenticate' on="submit"}}>
   <legend>Signup</legend>
   <div class="form-group">
     <label for="email" class="col-sm-3 control-label">Email</label>
@@ -27,7 +27,7 @@
   </div>
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-7">
-      <button type="submit" class="btn btn-success" {{action 'signup'}} {{bindAttr disabled='isProcessing'}}><i class="fa fa-check"></i>Signup</button>
+      <button type="submit" class="btn btn-success" {{action 'authenticate'}} {{bindAttr disabled='isProcessing'}}><i class="fa fa-check"></i>Signup</button>
     </div>
   </div>
 </form>

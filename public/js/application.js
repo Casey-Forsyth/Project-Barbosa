@@ -134,7 +134,11 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
     } else {
       promise = new Ember.RSVP.Promise(function(resolve, reject) {
         $.post("/signup", credentials).done(function(data) {
-          console.log(data);
+          if(data.loggedIn) {
+            resolve(data);
+          } else {
+            reject(data);
+          }
         });
       });
     }
@@ -247,7 +251,22 @@ var SignupController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCo
       this.set('signupFailed', false);
       this.set('isProcessing', true);
       this._super(credentials);
+    },
+
+    sessionAuthenticationSucceeded: function() {
+      this.set('signupFailed', false);
+      this.set('isProcessing', false);
+      this.transitionToRoute('index');
+    },
+
+    sessionAuthenticationFailed: function(errors) {
+      console.log('errors:');
+      console.log(errors);
+      this.set('signupFailed', true);
+      this.set('isProcessing', false);
+      this.set('errors', errors);
     }
+
   }
 
 });
@@ -773,12 +792,12 @@ function program2(depth0,data) {
 
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "loginFailed", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "signupFailed", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n<form id=\"signup-form\" class=\"form-horizontal\" ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "signup", {hash:{
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{
     'on': ("submit")
   },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n  <legend>Signup</legend>\n  <div class=\"form-group\">\n    <label for=\"email\" class=\"col-sm-3 control-label\">Email</label>\n    <div class=\"col-sm-7\">\n      ");
@@ -818,7 +837,7 @@ function program2(depth0,data) {
   data.buffer.push("\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <div class=\"col-sm-offset-3 col-sm-7\">\n      <button type=\"submit\" class=\"btn btn-success\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "signup", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "STRING"};

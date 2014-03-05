@@ -14,7 +14,22 @@ var SignupController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCo
       this.set('signupFailed', false);
       this.set('isProcessing', true);
       this._super(credentials);
+    },
+
+    sessionAuthenticationSucceeded: function() {
+      this.set('signupFailed', false);
+      this.set('isProcessing', false);
+      this.transitionToRoute('index');
+    },
+
+    sessionAuthenticationFailed: function(errors) {
+      console.log('errors:');
+      console.log(errors);
+      this.set('signupFailed', true);
+      this.set('isProcessing', false);
+      this.set('errors', errors);
     }
+
   }
 
 });

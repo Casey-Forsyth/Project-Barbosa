@@ -23,7 +23,11 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
     } else {
       promise = new Ember.RSVP.Promise(function(resolve, reject) {
         $.post("/signup", credentials).done(function(data) {
-          console.log(data);
+          if(data.loggedIn) {
+            resolve(data);
+          } else {
+            reject(data);
+          }
         });
       });
     }
