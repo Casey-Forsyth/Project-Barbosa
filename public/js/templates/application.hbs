@@ -14,9 +14,12 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#login">Login</a></li>
+          {{#if session.isAuthenticated}}
 
-          <li><a href="#signup">Create Account</a></li>
+          {{else}}
+            <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+            <li>{{#link-to 'signup'}}Create Account{{/link-to}}</li>
+          {{/if}}
         </ul>
       </div>
     </div>
