@@ -113,6 +113,7 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
 
   restore: function(properties) {
     return new Ember.RSVP.Promise(function(resolve, reject) {
+      console.log(properties);
       resolve(properties);
     });
   },
@@ -784,7 +785,7 @@ function program2(depth0,data) {
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{
     'on': ("submit")
   },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n    <legend>Login</legend>\n    <div class=\"form-group\">\n      <div class=\"btn-group btn-group-justified\">\n        <a href=\"/auth/facebook\" class=\"btn btn-facebook\"><i class=\"fa fa-facebook\"></i>Facebook</a>\n        <a href=\"/auth/twitter\" class=\"btn btn-twitter\"><i class=\"fa fa-twitter\"></i>Twitter</a>\n        <a href=\"/auth/google\" class=\"btn btn-google-plus\"><i class=\"fa fa-google-plus\"></i>Google</a>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"email\" class=\"control-label\">Email</label>\n      ");
+  data.buffer.push(">\n    <legend>Login</legend>\n    <div class=\"form-group\">\n      <label for=\"email\" class=\"control-label\">Email</label>\n      ");
   hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0};
   hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING"};
   options = {hash:{

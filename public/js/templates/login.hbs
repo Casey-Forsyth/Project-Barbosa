@@ -9,13 +9,6 @@
   <form {{action 'authenticate' on="submit"}}>
     <legend>Login</legend>
     <div class="form-group">
-      <div class="btn-group btn-group-justified">
-        <a href="/auth/facebook" class="btn btn-facebook"><i class="fa fa-facebook"></i>Facebook</a>
-        <a href="/auth/twitter" class="btn btn-twitter"><i class="fa fa-twitter"></i>Twitter</a>
-        <a href="/auth/google" class="btn btn-google-plus"><i class="fa fa-google-plus"></i>Google</a>
-      </div>
-    </div>
-    <div class="form-group">
       <label for="email" class="control-label">Email</label>
       {{input type="text" name="email" id="email" placeholder="email" class="form-control"}}
     </div>
