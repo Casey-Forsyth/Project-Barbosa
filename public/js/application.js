@@ -508,14 +508,35 @@ module.exports = TripRoute;
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n            <li class=\"dropdown\">\n              <a href=\"#\" data-toggle=\"dropdown\" class=\"dropdown-toggle\">\n                ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "session.name", {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n                &nbsp;<i class=\"caret\"></i>\n              </a>\n              <ul class=\"dropdown-menu\">\n                <li><a href=\"/account\">My Account</a></li>\n                <li class=\"divider\"></li><li>\n                <a ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "invalidateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Logout</a></li>\n              </ul>\n            </li>\n          ");
+  return buffer;
+  }
+function program2(depth0,data) {
   
-  data.buffer.push("\n\n          ");
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n                  ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n                ");
+  return buffer;
   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -531,30 +552,66 @@ function program1(depth0,data) {
 >>>>>>> Login HTML
 =======
 function program3(depth0,data) {
+=======
+function program4(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n                  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "session.email", {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n                ");
+  return buffer;
+  }
+function program5(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n                    ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.email", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n                  ");
+  return buffer;
+  }
+
+function program7(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n                    ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.id", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n                  ");
+  return buffer;
+  }
+
+function program9(depth0,data) {
+>>>>>>> User greeting
   
   var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
   data.buffer.push("\n            <li>");
   hashTypes = {};
   hashContexts = {};
-  options = {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  options = {hash:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "login", options) : helperMissing.call(depth0, "link-to", "login", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("</li>\n            <li>");
   hashTypes = {};
   hashContexts = {};
-  options = {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  options = {hash:{},inverse:self.noop,fn:self.program(12, program12, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "signup", options) : helperMissing.call(depth0, "link-to", "signup", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("</li>\n          ");
   return buffer;
   }
-function program4(depth0,data) {
+function program10(depth0,data) {
   
   
   data.buffer.push("Login");
   }
 
-function program6(depth0,data) {
+function program12(depth0,data) {
   
   
   data.buffer.push("Create Account");
@@ -563,7 +620,7 @@ function program6(depth0,data) {
   data.buffer.push("<div id=\"wrap\">\n  <div class=\"navbar navbar-default navbar-fixed-top\">\n    <div class=\"container\">\n      <div class=\"navbar-header\">\n        <button class=\"navbar-toggle\" data-target=\".navbar-collapse\"\n        data-toggle=\"collapse\" type=\"button\"><span class=\"sr-only\">Toggle\n        navigation</span></button><a class=\"navbar-brand\" href=\"/\">Project\n        Barbosa</a>\n      </div>\n\n      <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n          <li class=\"active\"><a href=\"/\">Home</a></li>\n        </ul>\n\n        <ul class=\"nav navbar-nav navbar-right\">\n          ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "session.isAuthenticated", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "session.isAuthenticated", {hash:{},inverse:self.program(9, program9, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container\">\n    ");
 >>>>>>> Added template ifs for login
