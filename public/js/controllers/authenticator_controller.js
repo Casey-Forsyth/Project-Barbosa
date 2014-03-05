@@ -8,31 +8,23 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
 
   authenticate: function(credentials) {
     var _this = this;
-    var promise = null;
+    var path = null;
 
     if(credentials.action == 'login') {
-      promise = new Ember.RSVP.Promise(function(resolve, reject) {
-        $.post("/login", credentials).done(function(data) {
-          if(data.loggedIn) {
-            resolve(data);
-          } else {
-            reject(data);
-          }
-        });
-      });
+      path = '/login';
     } else {
-      promise = new Ember.RSVP.Promise(function(resolve, reject) {
-        $.post("/signup", credentials).done(function(data) {
-          if(data.loggedIn) {
-            resolve(data);
-          } else {
-            reject(data);
-          }
-        });
-      });
+      path = '/signup';
     }
 
-    return promise;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      $.post(path, credentials).done(function(data) {
+        if(data.loggedIn) {
+          resolve(data);
+        } else {
+          reject(data);
+        }
+      });
+    });
   },
 
   invalidate: function() {
