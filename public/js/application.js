@@ -12,39 +12,12 @@ App = Ember.Application.create({
   LOG_TRANSITIONS: true
 });
 
-var CustomAuthenticator = Ember.SimpleAuth.Authenticators.Base.extend({
-  restore: function(properties) {
-    console.log('restore called:');
-    console.log(properties);
-  },
-  authenticate: function(credentials) {
-    console.log('auth called with options');
-    console.log(credentials);
-    var _this = this;
-    
-    return new Ember.RSVP.Promise(function(resolve, reject) {
-      $.post("/login", credentials).done(function(data) {
-        console.log(data);
-
-        if(data.loggedIn) {
-          resolve(data);
-        } else {
-          reject(data);
-        }
-
-        //resolve({loggedin: true});
-      });
-    });
-  },
-  invalidate: function() {
-    console.log('invalidate called');
-  }
-});
+var AuthenticatorController = module.exports.AuthenticatorController;
 
 App.initializer({
   name: 'authentication',
   initialize: function(container, application) {
-    container.register('app:authenticators:custom', CustomAuthenticator);
+    container.register('app:authenticators:custom', AuthenticatorController);
     Ember.SimpleAuth.setup(container, application, {
       store: Ember.SimpleAuth.Stores.Cookie
     });
@@ -74,6 +47,7 @@ module.exports = App;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../vendor/ember":13,"../vendor/ember-data":12,"../vendor/handlebars":14,"../vendor/jquery":15,"./store":3}],2:[function(require,module,exports){
 =======
 },{"../vendor/ember":15,"../vendor/ember-data":14,"../vendor/handlebars":16,"../vendor/jquery":17,"./store":3}],2:[function(require,module,exports){
@@ -81,6 +55,9 @@ module.exports = App;
 =======
 },{"../vendor/ember":16,"../vendor/ember-data":14,"../vendor/ember-simple-auth":15,"../vendor/handlebars":17,"../vendor/jquery":18,"./store":3}],2:[function(require,module,exports){
 >>>>>>> Added simple auth
+=======
+},{"../vendor/ember":17,"../vendor/ember-data":15,"../vendor/ember-simple-auth":16,"../vendor/handlebars":18,"../vendor/jquery":19,"./store":3}],2:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 var App = require('./app');
 
 App.Router.map(function() {
@@ -120,6 +97,38 @@ module.exports = DS.Store.extend({
 
 
 },{}],4:[function(require,module,exports){
+var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
+  restore: function(properties) {
+    console.log('restore called:');
+    console.log(properties);
+  },
+  authenticate: function(credentials) {
+    var _this = this;
+
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      $.post("/login", credentials).done(function(data) {
+        console.log('authenticate result:');
+        console.log(data);
+
+        if(data.loggedIn) {
+          resolve(data);
+        } else {
+          console.log('reject');
+          reject(data);
+        }
+
+        //resolve({loggedin: true});
+      });
+    });
+  },
+  invalidate: function() {
+    console.log('invalidate called');
+  }
+});
+
+module.exports = AuthenticatorController;
+
+},{}],5:[function(require,module,exports){
 var EditTripController = Ember.ObjectController.extend({
 
   save: function() {
@@ -138,7 +147,7 @@ var EditTripController = Ember.ObjectController.extend({
 module.exports = EditTripController;
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationControllerMixin, {
   authenticator: 'app:authenticators:custom',
   email: '',
@@ -158,26 +167,15 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
       this._super(options);
     },
 
-    loginEmail: function() {
+    // display an error when logging in fails
+    sessionAuthenticationFailed: function(message) {
+      console.log('auth error:');
+      console.log(message);
+    },
 
-      this.loginFailed = false;
-      this.isProcessing = true;
-
-      console.log('loginFailed: ' + this.loginFailed);
-      console.log('isProcessing: ' + this.isProcessing);
-      console.log('email: ' + this.get("email"));
-      console.log('password: ' + this.password);
-
-      //this.set('timeout', setTimeout(this.slowConnection.bind(this), 5000));
-
-      //var request = $.post('/login'
-
-      $.post("/login", {
-        email: this.email,
-        password: this.password
-      }).done(function(data) {
-        console.log(data);
-      });
+    // handle login success
+    sessionAuthenticationSucceeded: function() {
+      console.log('auth succ');
     }
   }
 
@@ -186,7 +184,7 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
 module.exports = LoginController;
 
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var EditTripController = require('./edit_trip_controller');
 
 // inherit from edit controller
@@ -195,7 +193,7 @@ var NewTripController = EditTripController.extend();
 module.exports = NewTripController;
 
 
-},{"./edit_trip_controller":4}],7:[function(require,module,exports){
+},{"./edit_trip_controller":5}],8:[function(require,module,exports){
 var TripController = Ember.ObjectController.extend({
 
   destroy: function() {
@@ -267,8 +265,12 @@ module.exports = TripController;
 },{}],7:[function(require,module,exports){
 =======
 
+<<<<<<< HEAD
 },{}],8:[function(require,module,exports){
 >>>>>>> Basic setup for login
+=======
+},{}],9:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 // This file is auto-generated by `ember build`.
 // You should not modify it.
 
@@ -276,6 +278,7 @@ var App = window.App = require('./config/app');
 require('./templates');
 
 
+App.AuthenticatorController = require('./controllers/authenticator_controller');
 App.EditTripController = require('./controllers/edit_trip_controller');
 <<<<<<< HEAD
 App.NewTripController = require('./controllers/new_trip_controller');
@@ -299,6 +302,7 @@ module.exports = App;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./config/app":1,"./config/routes":2,"./controllers/edit_trip_controller":4,"./controllers/new_trip_controller":5,"./controllers/trip_controller":6,"./models/trip":8,"./routes/new_trip_route":9,"./routes/trips_route":10,"./templates":11}],8:[function(require,module,exports){
 =======
 },{"./config/app":1,"./config/routes":2,"./controllers/edit_trip_controller":4,"./controllers/login_controller":5,"./controllers/new_trip_controller":6,"./controllers/trip_controller":7,"./models/trip":9,"./routes/login_route":10,"./routes/new_trip_route":11,"./routes/trips_route":12,"./templates":13}],9:[function(require,module,exports){
@@ -309,6 +313,9 @@ module.exports = App;
 =======
 },{"./config/app":1,"./config/routes":2,"./controllers/edit_trip_controller":4,"./controllers/login_controller":5,"./controllers/new_trip_controller":6,"./controllers/trip_controller":7,"./models/trip":9,"./routes/login_route":10,"./routes/new_trip_route":11,"./routes/trips_route":12,"./templates":13}],9:[function(require,module,exports){
 >>>>>>> Initial rough work
+=======
+},{"./config/app":1,"./config/routes":2,"./controllers/authenticator_controller":4,"./controllers/edit_trip_controller":5,"./controllers/login_controller":6,"./controllers/new_trip_controller":7,"./controllers/trip_controller":8,"./models/trip":10,"./routes/login_route":11,"./routes/new_trip_route":12,"./routes/trips_route":13,"./templates":14}],10:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
@@ -321,9 +328,13 @@ module.exports = Trip;
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],9:[function(require,module,exports){
 =======
 },{}],10:[function(require,module,exports){
+=======
+},{}],11:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 var LoginRoute = Ember.Route.extend({
 
 });
@@ -331,8 +342,12 @@ var LoginRoute = Ember.Route.extend({
 module.exports = LoginRoute;
 
 
+<<<<<<< HEAD
 },{}],11:[function(require,module,exports){
 >>>>>>> Basic setup for login
+=======
+},{}],12:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 var trip = require('../models/trip');
 
 var NewTripRoute = Ember.Route.extend({
@@ -358,10 +373,14 @@ module.exports = NewTripRoute;
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../models/trip":8}],10:[function(require,module,exports){
 =======
 },{"../models/trip":9}],12:[function(require,module,exports){
 >>>>>>> Basic setup for login
+=======
+},{"../models/trip":10}],13:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 var Trip = require('../models/trip');
 
 var TripRoute = Ember.Route.extend({
@@ -376,10 +395,14 @@ module.exports = TripRoute;
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../models/trip":8}],11:[function(require,module,exports){
 =======
 },{"../models/trip":9}],13:[function(require,module,exports){
 >>>>>>> Basic setup for login
+=======
+},{"../models/trip":10}],14:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
@@ -689,10 +712,14 @@ function program4(depth0,data) {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],12:[function(require,module,exports){
 =======
 },{}],14:[function(require,module,exports){
 >>>>>>> Basic setup for login
+=======
+},{}],15:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 // Version: v0.13-102-g6bdebe7
 // Last commit: 6bdebe7 (2013-08-14 00:51:19 -0500)
 
@@ -10897,12 +10924,16 @@ DS.Model.reopen({
 })();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],13:[function(require,module,exports){
 =======
 },{}],15:[function(require,module,exports){
 <<<<<<< HEAD
 >>>>>>> Basic setup for login
 =======
+=======
+},{}],16:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
  // Version: 0.1.3
 
 (function() {
@@ -12414,8 +12445,12 @@ Ember.SimpleAuth.ApplicationRouteMixin = Ember.Mixin.create({
 })();
 
 
+<<<<<<< HEAD
 },{}],16:[function(require,module,exports){
 >>>>>>> Added simple auth
+=======
+},{}],17:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 // Version: v1.0.0
 // Last commit: e2ea0cf (2013-08-31 23:47:39 -0700)
 
@@ -48889,6 +48924,7 @@ Ember.State = generateRemovedClass("Ember.State");
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],14:[function(require,module,exports){
 =======
 },{}],16:[function(require,module,exports){
@@ -48896,6 +48932,9 @@ Ember.State = generateRemovedClass("Ember.State");
 =======
 },{}],17:[function(require,module,exports){
 >>>>>>> Added simple auth
+=======
+},{}],18:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 /*
 
 Copyright (C) 2011 by Yehuda Katz
@@ -49261,6 +49300,7 @@ Handlebars.template = Handlebars.VM.template;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],15:[function(require,module,exports){
 =======
 },{}],17:[function(require,module,exports){
@@ -49268,6 +49308,9 @@ Handlebars.template = Handlebars.VM.template;
 =======
 },{}],18:[function(require,module,exports){
 >>>>>>> Added simple auth
+=======
+},{}],19:[function(require,module,exports){
+>>>>>>> Renamed and moved the auth controller
 /*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
@@ -58868,6 +58911,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}]},{},[7])
 =======
 =======
@@ -58884,4 +58928,7 @@ module.exports = LoginView;
 >>>>>>> Initial rough work
 },{}]},{},[8])
 >>>>>>> Basic setup for login
+=======
+},{}]},{},[9])
+>>>>>>> Renamed and moved the auth controller
 ;

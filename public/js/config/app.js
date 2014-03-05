@@ -11,39 +11,12 @@ App = Ember.Application.create({
   LOG_TRANSITIONS: true
 });
 
-var CustomAuthenticator = Ember.SimpleAuth.Authenticators.Base.extend({
-  restore: function(properties) {
-    console.log('restore called:');
-    console.log(properties);
-  },
-  authenticate: function(credentials) {
-    console.log('auth called with options');
-    console.log(credentials);
-    var _this = this;
-    
-    return new Ember.RSVP.Promise(function(resolve, reject) {
-      $.post("/login", credentials).done(function(data) {
-        console.log(data);
-
-        if(data.loggedIn) {
-          resolve(data);
-        } else {
-          reject(data);
-        }
-
-        //resolve({loggedin: true});
-      });
-    });
-  },
-  invalidate: function() {
-    console.log('invalidate called');
-  }
-});
+var AuthenticatorController = module.exports.AuthenticatorController;
 
 App.initializer({
   name: 'authentication',
   initialize: function(container, application) {
-    container.register('app:authenticators:custom', CustomAuthenticator);
+    container.register('app:authenticators:custom', AuthenticatorController);
     Ember.SimpleAuth.setup(container, application, {
       store: Ember.SimpleAuth.Stores.Cookie
     });

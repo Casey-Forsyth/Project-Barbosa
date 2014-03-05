@@ -17,26 +17,15 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
       this._super(options);
     },
 
-    loginEmail: function() {
+    // display an error when logging in fails
+    sessionAuthenticationFailed: function(message) {
+      console.log('auth error:');
+      console.log(message);
+    },
 
-      this.loginFailed = false;
-      this.isProcessing = true;
-
-      console.log('loginFailed: ' + this.loginFailed);
-      console.log('isProcessing: ' + this.isProcessing);
-      console.log('email: ' + this.get("email"));
-      console.log('password: ' + this.password);
-
-      //this.set('timeout', setTimeout(this.slowConnection.bind(this), 5000));
-
-      //var request = $.post('/login'
-
-      $.post("/login", {
-        email: this.email,
-        password: this.password
-      }).done(function(data) {
-        console.log(data);
-      });
+    // handle login success
+    sessionAuthenticationSucceeded: function() {
+      console.log('auth succ');
     }
   }
 
