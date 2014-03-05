@@ -81,7 +81,11 @@ App.Router.map(function() {
 
 =======
   this.route('login', {path: '/login'});
+<<<<<<< HEAD
 >>>>>>> Basic setup for login
+=======
+  this.route('signup', {path: '/signup'});
+>>>>>>> Signup route
 });
 
 

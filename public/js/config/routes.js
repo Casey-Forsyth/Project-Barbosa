@@ -10,5 +10,6 @@ App.Router.map(function() {
   // end generated routes
 
   this.route('login', {path: '/login'});
+  this.route('signup', {path: '/signup'});
 });
 
