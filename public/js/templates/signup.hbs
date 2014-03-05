@@ -1,3 +1,10 @@
+{{#if loginFailed}}
+  <div class="alert alert-danger animated fadeIn">
+    {{#each errors}}
+      <div>{{this.msg}}</div>
+    {{/each}}
+  </div>
+{{/if}}
 <form id="signup-form" class="form-horizontal" {{action 'signup' on="submit"}}>
   <legend>Signup</legend>
   <div class="form-group">
