@@ -16,19 +16,19 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
       this._super(credentials);
     },
 
+    // handle login success
+    sessionAuthenticationSucceeded: function() {
+      this.transitionToRoute('index');
+    },
+
     // display an error when logging in fails
     sessionAuthenticationFailed: function(message) {
       console.log('auth error:');
       console.log(message);
-    },
-
-    // handle login success
-    sessionAuthenticationSucceeded: function() {
-      console.log('auth succ');
     }
+
   }
 
 });
 
 module.exports = LoginController;
-
