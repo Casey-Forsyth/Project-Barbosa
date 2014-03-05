@@ -11,7 +11,7 @@ App = Ember.Application.create({
   LOG_TRANSITIONS: true
 });
 
-var AuthenticatorController = module.exports.AuthenticatorController;
+var AuthenticatorController = require('../controllers/authenticator_controller');
 
 App.initializer({
   name: 'authentication',

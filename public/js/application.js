@@ -12,7 +12,7 @@ App = Ember.Application.create({
   LOG_TRANSITIONS: true
 });
 
-var AuthenticatorController = module.exports.AuthenticatorController;
+var AuthenticatorController = require('../controllers/authenticator_controller');
 
 App.initializer({
   name: 'authentication',
@@ -48,6 +48,7 @@ module.exports = App;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../vendor/ember":13,"../vendor/ember-data":12,"../vendor/handlebars":14,"../vendor/jquery":15,"./store":3}],2:[function(require,module,exports){
 =======
 },{"../vendor/ember":15,"../vendor/ember-data":14,"../vendor/handlebars":16,"../vendor/jquery":17,"./store":3}],2:[function(require,module,exports){
@@ -58,6 +59,9 @@ module.exports = App;
 =======
 },{"../vendor/ember":17,"../vendor/ember-data":15,"../vendor/ember-simple-auth":16,"../vendor/handlebars":18,"../vendor/jquery":19,"./store":3}],2:[function(require,module,exports){
 >>>>>>> Renamed and moved the auth controller
+=======
+},{"../controllers/authenticator_controller":4,"../vendor/ember":17,"../vendor/ember-data":15,"../vendor/ember-simple-auth":16,"../vendor/handlebars":18,"../vendor/jquery":19,"./store":3}],2:[function(require,module,exports){
+>>>>>>> Changed to require()
 var App = require('./app');
 
 App.Router.map(function() {
@@ -157,14 +161,13 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
   isProcessing: false,
 
   actions: {
-
+    // Called via form submit
     authenticate: function() {
-      console.log('authenticate');
-      var options = {
+      var credentials = {
         email: this.email,
         password: this.password
       };
-      this._super(options);
+      this._super(credentials);
     },
 
     // display an error when logging in fails

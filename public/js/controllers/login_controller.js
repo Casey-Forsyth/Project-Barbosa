@@ -7,14 +7,13 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
   isProcessing: false,
 
   actions: {
-
+    // Called via form submit
     authenticate: function() {
-      console.log('authenticate');
-      var options = {
+      var credentials = {
         email: this.email,
         password: this.password
       };
-      this._super(options);
+      this._super(credentials);
     },
 
     // display an error when logging in fails
