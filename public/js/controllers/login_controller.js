@@ -8,6 +8,7 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
     // Called via form submit
     authenticate: function() {
       var credentials = {
+        action: 'login',
         email: $('#email').val(),
         password: $('#password').val()
       };
