@@ -181,6 +181,7 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
     // Called via form submit
     authenticate: function() {
       var credentials = {
+        action: 'login',
         email: $('#email').val(),
         password: $('#password').val()
       };
@@ -219,7 +220,24 @@ module.exports = NewTripController;
 
 
 },{"./edit_trip_controller":5}],8:[function(require,module,exports){
-var SignupController = Ember.ObjectController.extend({
+var SignupController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationControllerMixin, {
+  authenticator: 'app:authenticators:custom',
+  signupFailed: false,
+  isProcessing: false,
+
+  actions: {
+    authenticate: function() {
+      var credentials = {
+        action: 'signup',
+        email: $('#email').val(),
+        password: $('#password').val(),
+        confirmPassword: $('#confirmPassword').val()
+      };
+      this.set('signupFailed', false);
+      this.set('isProcessing', true);
+      this._super(credentials);
+    }
+  }
 
 });
 
