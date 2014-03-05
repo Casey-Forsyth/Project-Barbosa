@@ -1,5 +1,5 @@
 <div class container="col-sm-8 col-sm-offset-2">
-  <form method="POST" action="#login">
+  <form {{action 'authenticate' on="submit"}}>
     <legend>Login</legend>
     <div class="form-group">
       <div class="btn-group btn-group-justified">
@@ -10,14 +10,14 @@
     </div>
     <div class="form-group">
       <label for="email" class="control-label">Email</label>
-      <input type="text" name="email" id="email" placeholder="Email" autofocus="" class="form-control">
+      {{input type="text" name="email" id="email" placeholder="email" class="form-control" value=email}}
     </div>
     <div class="form-group">
       <label for="username" class="control-label">Password</label>
-      <input type="password" name="password" id="password" placeholder="Password" class="form-control">
+      {{input type="password" name="password" id="password" placeholder="password" class="form-control" value=password}}
     </div>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary"><i class="fa fa-unlock-alt"></i>Login</button>
+      <button type="submit" class="btn btn-primary" {{action 'authenticate'}}><i class="fa fa-unlock-alt"></i>Login</button>
     </div>
   </form>
 </div>

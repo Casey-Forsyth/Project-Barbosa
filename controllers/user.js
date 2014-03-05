@@ -57,21 +57,27 @@ exports.postLogin = function(req, res, next) {
   var errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/login');
+    console.log(errors);
+    return res.json(errors);
   }
 
   passport.authenticate('local', function(err, user, info) {
-    if (err) return next(err);
+    if (err) {
+      console.log('first error');
+      console.log(err);
+      return next(err);
+    }
 
     if (!user) {
-      req.flash('errors', { msg: info.message });
-      return res.redirect('/login');
+      console.log(info.message);
+      return res.json([{param: 'password', msg: info.message}]);
     }
 
     req.logIn(user, function(err) {
       if (err) return next(err);
-      return res.redirect('/');
+      console.log('login error');
+      console.log(err);
+      return res.json({loggedIn: true});
     });
   })(req, res, next);
 };
