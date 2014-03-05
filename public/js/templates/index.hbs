@@ -1,9 +1,9 @@
 <h2>Index</h2>
 
-
-{{ session.loggedIn }}
-
 {{#if session.isAuthenticated}}
+  Welcome {{ session.name }}<br>
+  ID: {{ session.id }}<br>
+  Email: {{ session.email }}<br>
   <a {{ action 'invalidateSession' }}>Logout</a>
 {{else}}
   <a {{ action 'authenticateSession' }}>Login</a>

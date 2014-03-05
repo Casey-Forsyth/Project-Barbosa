@@ -129,7 +129,7 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
 
     return new Ember.RSVP.Promise(function(resolve, reject) {
       $.post(path, credentials).done(function(data) {
-        if(data.loggedIn) {
+        if(data.isAuthenticated) {
           resolve(data);
         } else {
           reject(data);
@@ -141,13 +141,9 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
   invalidate: function() {
     return new Ember.RSVP.Promise(function(resolve, reject) {
       $.get("/logout").done(function(data) {
-        console.log('invalidate result:');
-        console.log(data);
-
         if(data.loggedOut) {
           resolve(data);
         } else {
-          console.log('reject');
           reject(data);
         }
       });
@@ -157,6 +153,7 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
 });
 
 module.exports = AuthenticatorController;
+
 
 },{}],5:[function(require,module,exports){
 var EditTripController = Ember.ObjectController.extend({
@@ -185,7 +182,7 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
   errors: [],
 
   actions: {
-    // Called via form submit
+
     authenticate: function() {
       var credentials = {
         action: 'login',
@@ -197,14 +194,12 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
       this._super(credentials);
     },
 
-    // Send user to index on success.
     sessionAuthenticationSucceeded: function() {
       this.set('loginFailed', false);
       this.set('isProcessing', false);
       this.transitionToRoute('index');
     },
 
-    // Display errors on login fail.
     sessionAuthenticationFailed: function(errors) {
       this.set('loginFailed', true);
       this.set('isProcessing', false);
@@ -216,6 +211,7 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
 });
 
 module.exports = LoginController;
+
 
 },{}],7:[function(require,module,exports){
 var EditTripController = require('./edit_trip_controller');
@@ -625,7 +621,19 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n  <a ");
+  data.buffer.push("\n  Welcome ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\n  ID: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.id", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\n  Email: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.email", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\n  <a ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "invalidateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -646,6 +654,7 @@ function program3(depth0,data) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   data.buffer.push("<h2>Index</h2>\r\n\r\n");
 =======
   data.buffer.push("<h2>Index</h2>\n\n");
@@ -656,6 +665,9 @@ function program3(depth0,data) {
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.loggedIn", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n\n");
 >>>>>>> Login error messages
+=======
+  data.buffer.push("<h2>Index</h2>\n\n");
+>>>>>>> Cleanup and session variables
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "session.isAuthenticated", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});

@@ -77,7 +77,7 @@ exports.postLogin = function(req, res, next) {
         console.log(err);
         return next(err);
       }
-      return res.json({loggedIn: true});
+      return res.json({isAuthenticated: true, id: user._id, email: user.email, name: user.profile.name});
     });
   })(req, res, next);
 };
@@ -122,7 +122,7 @@ exports.postSignup = function(req, res, next) {
         console.log(err);
         return next(err);
       }
-      return res.json({loggedIn: true});
+      return res.json({isAuthenticated: true, account: user});
     });
   });
 };

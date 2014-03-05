@@ -18,7 +18,7 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
 
     return new Ember.RSVP.Promise(function(resolve, reject) {
       $.post(path, credentials).done(function(data) {
-        if(data.loggedIn) {
+        if(data.isAuthenticated) {
           resolve(data);
         } else {
           reject(data);
@@ -30,13 +30,9 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
   invalidate: function() {
     return new Ember.RSVP.Promise(function(resolve, reject) {
       $.get("/logout").done(function(data) {
-        console.log('invalidate result:');
-        console.log(data);
-
         if(data.loggedOut) {
           resolve(data);
         } else {
-          console.log('reject');
           reject(data);
         }
       });
@@ -46,3 +42,4 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
 });
 
 module.exports = AuthenticatorController;
+

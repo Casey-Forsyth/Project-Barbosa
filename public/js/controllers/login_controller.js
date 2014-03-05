@@ -5,7 +5,7 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
   errors: [],
 
   actions: {
-    // Called via form submit
+
     authenticate: function() {
       var credentials = {
         action: 'login',
@@ -17,14 +17,12 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
       this._super(credentials);
     },
 
-    // Send user to index on success.
     sessionAuthenticationSucceeded: function() {
       this.set('loginFailed', false);
       this.set('isProcessing', false);
       this.transitionToRoute('index');
     },
 
-    // Display errors on login fail.
     sessionAuthenticationFailed: function(errors) {
       this.set('loginFailed', true);
       this.set('isProcessing', false);
@@ -36,3 +34,4 @@ var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCon
 });
 
 module.exports = LoginController;
+
