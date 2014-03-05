@@ -181,32 +181,33 @@ module.exports = EditTripController;
 },{}],6:[function(require,module,exports){
 var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationControllerMixin, {
   authenticator: 'app:authenticators:custom',
-  email: '',
-  password: '',
-
   loginFailed: false,
   isProcessing: false,
   errors: [],
 
   actions: {
-
     // Called via form submit
     authenticate: function() {
       var credentials = {
-        email: this.get('email'),
-        password: this.get('password')
+        email: $('#email').val(),
+        password: $('#password').val()
       };
+      this.set('loginFailed', false);
+      this.set('isProcessing', true);
       this._super(credentials);
     },
 
     // Send user to index on success.
     sessionAuthenticationSucceeded: function() {
+      this.set('loginFailed', false);
+      this.set('isProcessing', false);
       this.transitionToRoute('index');
     },
 
     // Display errors on login fail.
     sessionAuthenticationFailed: function(errors) {
       this.set('loginFailed', true);
+      this.set('isProcessing', false);
       this.set('errors', errors);
     }
 
@@ -685,33 +686,37 @@ function program2(depth0,data) {
     'on': ("submit")
   },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n    <legend>Login</legend>\n    <div class=\"form-group\">\n      <div class=\"btn-group btn-group-justified\">\n        <a href=\"/auth/facebook\" class=\"btn btn-facebook\"><i class=\"fa fa-facebook\"></i>Facebook</a>\n        <a href=\"/auth/twitter\" class=\"btn btn-twitter\"><i class=\"fa fa-twitter\"></i>Twitter</a>\n        <a href=\"/auth/google\" class=\"btn btn-google-plus\"><i class=\"fa fa-google-plus\"></i>Google</a>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"email\" class=\"control-label\">Email</label>\n      ");
-  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0,'value': depth0};
-  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING",'value': "ID"};
+  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING"};
   options = {hash:{
     'type': ("text"),
     'name': ("email"),
     'id': ("email"),
     'placeholder': ("email"),
-    'class': ("form-control"),
-    'value': ("email")
+    'class': ("form-control")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
   data.buffer.push("\n    </div>\n    <div class=\"form-group\">\n      <label for=\"username\" class=\"control-label\">Password</label>\n      ");
-  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0,'value': depth0};
-  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING",'value': "ID"};
+  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING"};
   options = {hash:{
     'type': ("password"),
     'name': ("password"),
     'id': ("password"),
     'placeholder': ("password"),
-    'class': ("form-control"),
-    'value': ("password")
+    'class': ("form-control")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
   data.buffer.push("\n    </div>\n    <div class=\"form-group\">\n      <button type=\"submit\" class=\"btn btn-primary\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "STRING"};
+  data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
+    'disabled': ("isProcessing")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("><i class=\"fa fa-unlock-alt\"></i>Login</button>\n    </div>\n  </form>\n</div>");
   return buffer;
 >>>>>>> Added simple auth
