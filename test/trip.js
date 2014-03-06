@@ -17,7 +17,7 @@ describe('GET /trips/:id', function() {
 
   it('should 404 with a missing id', function(done) {
     request(app)
-      .get('/trips/notarealmongoid')
+      .get('/trips/5310bc1553dbeb2728f5a000')
       .end(function(err, res){
         res.should.have.status(404).and.throw()
         done()
@@ -43,42 +43,46 @@ describe('GET /trips/:id', function() {
 })
 
 describe('POST /trips', function() {
-  it('should respond with json', function(done) {
+  it('should create a new trip', function(done) {
+    tripname = "TEST_TRIP"
     request(app)
       .post('/trips')
-      .send({trip:{name: "TEST_TRIP"}})
-      .set('Accept','application/json')
-      .expect('Content-Type', /json/)
-      .expect(200, done);
-	})
-});
+      .send({trip:{name: tripname}})
+      .end(function(err, res){
+        res.should.have.status(200)
+        res.body.should.have.property('trip')
+        res.body.trip.should.have.property('name', tripname)
+        // make sure the trip actually exists in the DB
+        Trip.findById(trip.id, function(err, trip){
+          trip.should.have.property('name', tripname)
+        })
+        done()
+      })
+  })
 
-describe('POST /trips/invalidLocation', function() {
-  it('should return 404', function(done) {
+  it('should 404 is there is a /:tripid', function(done) {
     request(app)
       .post('/trips/invalidLocation')
-      .send({trip:{name: "TEST_TRIP2"}})
-      .set('Accept','application/json')
       .expect('Content-Type', /html/)
       .expect(404, done);
-	})
-});
+  })
 
-describe('POST /api', function() {
-  it('should return 404', function(done) {
+  it('should set a default name of "My Trip"', function(done) {
     request(app)
-      .post('/api')
-      .send({trip:{name: "TEST_TRIP3"}})
-      .set('Accept','application/json')
-      .expect('Content-Type', /html/)
-      .expect(404, done);
-	})
-});
+      .post('/trips')
+      .end(function(err, res){
+        res.should.have.status(200)
+        res.body.should.have.property('trip')
+        res.body.trip.should.have.property('name', 'My Trip')
+        done()
+      })
+  })
+})
 
 describe('DELETE /trips/:tripid', function(){
   it('should 404 on a missing trip', function(done){
     request(app)
-      .del('/trips/foobarbaz')
+      .del('/trips/5310bc1553dbeb2728f5a000')
       .end(function(err, res){
         res.should.have.status(404)
         done()

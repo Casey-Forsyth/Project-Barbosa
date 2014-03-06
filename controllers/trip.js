@@ -24,20 +24,14 @@ exports.load = function(req, res, next, tripid){
  */
 
 exports.updateTrip = function(req, res){
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-    if (err) {
-      res.status(500).json(null);
-    } else {
-      trip = extend(trip, req.body.trip)
-      trip.save(function (err) {
-        if (err) {
-          res.status(500).json(null);
-        };
-        res.json({trip:trip});
-      })
-    }
-  });
+  if (!req.trip) return res.status(404).json(null);
+  res.json({trip: req.trip})
+
+  updated_trip = extend(req.trip, req.body.trip)
+  updated_trip.save(function (err) {
+    if (err) res.status(500).json(null)
+    res.json( { trip: updated_trip } );
+  })
 }
 
 /**
@@ -88,7 +82,9 @@ exports.listTrips = function(req, res) {
 exports.createTrip = function(req, res) {
   trip = new Trip(req.body.trip)
   trip.save(function(err, trip){
-    if(err) return console.error(err);
-  });
-  res.json({trip:trip})
+    if(err)
+      res.status(500).json(null)
+    else
+      res.json({trip:trip})
+  })
 };
