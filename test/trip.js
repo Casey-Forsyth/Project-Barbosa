@@ -3,13 +3,42 @@ var assert = require("assert");
 var express = require('express');
 var app = require('../app.js');
 var request = require('supertest');
+var Trip = require('../models/Trip');
 
-describe('GET /trips/:badid', function() {
-  it('should return json with a 500 error', function(done) {
+describe('GET /trips/:id', function() {
+  it('should 404 with an invalid id', function(done) {
     request(app)
-      .get('/trips/:badid')
-      .expect('Content-Type', /json/)
-      .expect(500, done);
+      .get('/trips/notarealmongoid')
+      .end(function(err, res){
+        res.should.have.status(404).and.throw()
+        done()
+      })
+  })
+
+  it('should 404 with a missing id', function(done) {
+    request(app)
+      .get('/trips/notarealmongoid')
+      .end(function(err, res){
+        res.should.have.status(404).and.throw()
+        done()
+      })
+  })
+
+  it('should return valid json for a valid id', function(done) {
+    tripname = 'my test trip'
+    trip = new Trip({
+      name: tripname
+    })
+    trip.save(function(){
+      request(app)
+        .get('/trips/' + trip.id)
+        .end(function(err, res){
+          res.should.have.status(200)
+          res.body.should.have.property('trip')
+          res.body.trip.should.have.property('name', tripname)
+          done()
+        })
+    })
   })
 })
 

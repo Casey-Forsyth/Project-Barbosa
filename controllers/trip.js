@@ -68,14 +68,8 @@ exports.deleteTrip = function(req, res){
  */
 
 exports.showTrip = function(req, res) {
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trips) {
-            if (err) {
-                res.status(500).json(null);
-            } else {
-                res.json({trip:trips});
-            }
-        });
+  if (!req.trip) return res.status(404).json(null);
+  res.json({trip: req.trip})
 };
 
 /**
