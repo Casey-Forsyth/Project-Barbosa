@@ -62,8 +62,6 @@ exports.postLogin = function(req, res, next) {
 
   passport.authenticate('local', function(err, user, info) {
     if (err) {
-      console.log('first error');
-      console.log(err);
       return next(err);
     }
 
@@ -73,8 +71,6 @@ exports.postLogin = function(req, res, next) {
 
     req.logIn(user, function(err) {
       if (err) {
-        console.log('login error');
-        console.log(err);
         return next(err);
       }
       return res.json({isAuthenticated: true, userID: user._id, email: user.email, name: user.profile.name});
