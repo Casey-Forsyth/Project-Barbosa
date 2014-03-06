@@ -77,7 +77,7 @@ exports.postLogin = function(req, res, next) {
         console.log(err);
         return next(err);
       }
-      return res.json({isAuthenticated: true, id: user._id, email: user.email, name: user.profile.name});
+      return res.json({isAuthenticated: true, userID: user._id, email: user.email, name: user.profile.name});
     });
   })(req, res, next);
 };
@@ -118,11 +118,9 @@ exports.postSignup = function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) {
-        console.log('signup error');
-        console.log(err);
         return next(err);
       }
-      return res.json({isAuthenticated: true, account: user});
+      return res.json({isAuthenticated: true, userID: user._id, email: user.email, name: user.profile.name});
     });
   });
 };
