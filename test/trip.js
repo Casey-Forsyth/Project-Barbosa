@@ -74,3 +74,32 @@ describe('POST /api', function() {
       .expect(404, done);
 	})
 });
+
+describe('DELETE /trips/:tripid', function(){
+  it('should 404 on a missing trip', function(done){
+    request(app)
+      .del('/trips/foobarbaz')
+      .end(function(err, res){
+        res.should.have.status(404)
+        done()
+      })
+    })
+
+  it('should delete a trip', function(done){
+    trip = new Trip()
+    trip.save(function(){
+      request(app)
+        .del('/trips/' + trip.id)
+        .end(function(err, res){
+          // test that it claims to have worked
+          res.should.have.status(200)
+          res.body.should.be.empty
+          // make sure it actually worked
+          Trip.findById(trip.id, function(err, trip){
+            (trip == null).should.be.true
+          })
+          done()
+        })
+    })
+  })
+})

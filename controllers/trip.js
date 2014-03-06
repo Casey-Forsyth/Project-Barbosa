@@ -7,8 +7,7 @@ var extend = require('util')._extend;
  */
 
 exports.load = function(req, res, next, tripid){
-  var Trip = mongoose.model('Trip');
-  Trip.findById(tripid).exec(function(err, trip) {
+  Trip.findById(tripid, function(err, trip) {
     if (err)
       req.err = err
     else if (!trip)
@@ -47,19 +46,12 @@ exports.updateTrip = function(req, res){
  */
 
 exports.deleteTrip = function(req, res){
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-    if (err) {
-      res.status(500).json(null);
-    } else {
-      trip.remove(function (err) {
-        if (err) {
-          res.status(500).json(null);
-        };
-        res.json({});
-      })
-    }
-  });
+  if (!req.trip) return res.status(404).json(null);
+
+  trip.remove(function (err) {
+    if (err) res.status(500).json(null)
+    res.json({})
+  })
 }
 
 /**
@@ -86,17 +78,6 @@ exports.listTrips = function(req, res) {
                 res.json({'trips':trips});
             }
         });
-};
-
-/**
- * GET /trips/create
- * Show the new trip page.
- */
-
-exports.renderCreate = function(req, res) {
-  res.render('trips/create', {
-    title: 'Create new Trip'
-  });
 };
 
 /**
