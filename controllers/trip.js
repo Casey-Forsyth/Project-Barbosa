@@ -3,6 +3,23 @@ var Trip = require('../models/Trip');
 var extend = require('util')._extend;
 
 /**
+ * Load a trip.
+ */
+
+exports.load = function(req, res, next, tripid){
+  var Trip = mongoose.model('Trip');
+  Trip.findById(tripid).exec(function(err, trip) {
+    if (err)
+      req.err = err
+    else if (!trip)
+      req.err = new Error('Trip not found')
+    else
+      req.trip = trip
+    next()
+  })
+ }
+
+/**
  * PUT /trips/:id
  * Update a trip.
  */
