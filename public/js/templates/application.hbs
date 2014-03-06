@@ -20,18 +20,12 @@
                 {{#if session.name}}
                   {{session.name}}
                 {{else}}
-                  {{#if session.email}}
-                    {{session.email}}
-                  {{else}}
-                    {{session.id}}
-                  {{/if}}
+                  {{session.email}}
                 {{/if}}
                 &nbsp;<i class="caret"></i>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="/account">My Account</a></li>
-                <li class="divider"></li><li>
-                <a {{ action 'invalidateSession' }}>Logout</a></li>
+                <li><a {{ action 'invalidateSession' }}>Logout</a></li>
               </ul>
             </li>
           {{else}}
