@@ -86,16 +86,10 @@ app.get('/signup', userController.getSignup);
 app.post('/signup', userController.postSignup);
 
 app.post('/trips', tripController.createTrip);
-app.get( '/trips', tripController.listTrips);
-app.get( '/trips/:tripid', tripController.showTrip);
-app.put( '/trips/:tripid', tripController.updateTrip);
-app.delete( '/trips/:tripid', tripController.deleteTrip);
-
-app.get('/account', passportConf.isAuthenticated, userController.getAccount);
-app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);
-app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
-app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
-app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
+app.get('/trips', tripController.listTrips);
+app.get('/trips/:tripid', tripController.showTrip);
+app.put('/trips/:tripid', tripController.updateTrip);
+app.delete('/trips/:tripid', tripController.deleteTrip);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
