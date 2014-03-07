@@ -5,150 +5,153 @@ var app = require('../app.js');
 var request = require('supertest');
 var Trip = require('../models/Trip');
 
-describe('GET /trips/:id', function() {
-  it('should 404 with an invalid id', function(done) {
-    request(app)
-      .get('/trips/notarealmongoid')
-      .end(function(err, res){
-        res.should.have.status(404).and.throw()
-        done()
-      })
-  })
+describe('Trip Controller', function(){
 
-  it('should 404 with a missing id', function(done) {
-    request(app)
-      .get('/trips/5310bc1553dbeb2728f5a000')
-      .end(function(err, res){
-        res.should.have.status(404).and.throw()
-        done()
-      })
-  })
-
-  it('should return valid json for a valid id', function(done) {
-    tripname = 'my test trip'
-    trip = new Trip({
-      name: tripname
-    })
-    trip.save(function(){
+  describe('GET /trips/:id', function() {
+    it('should 404 with an invalid id', function(done) {
       request(app)
-        .get('/trips/' + trip.id)
+        .get('/trips/notarealmongoid')
+        .end(function(err, res){
+          res.should.have.status(404).and.throw()
+          done()
+        })
+    })
+
+    it('should 404 with a missing id', function(done) {
+      request(app)
+        .get('/trips/5310bc1553dbeb2728f5a000')
+        .end(function(err, res){
+          res.should.have.status(404).and.throw()
+          done()
+        })
+    })
+
+    it('should return valid json for a valid id', function(done) {
+      tripname = 'my test trip'
+      trip = new Trip({
+        name: tripname
+      })
+      trip.save(function(){
+        request(app)
+          .get('/trips/' + trip.id)
+          .end(function(err, res){
+            res.should.have.status(200)
+            res.body.should.have.property('trip')
+            res.body.trip.should.have.property('name', tripname)
+            done()
+          })
+      })
+    })
+  })
+
+  describe('GET /trips', function(){
+    it('should only show trips for the current user')
+    it('should require a logged in user')
+    it('should list all trips [for now]', function(){
+      request(app)
+        .get('/trips')
+        .end(function(err, res){
+          res.should.have.status(200)
+
+          res.body.should.have.property('trips')
+            .and.should.not.be.empty
+
+          res.body.trips[0].should.have.properties('name', '_id')
+        })
+    })
+  })
+
+  describe('POST /trips', function() {
+    it('should create a new trip', function(done) {
+      tripname = "TEST_TRIP"
+      request(app)
+        .post('/trips')
+        .send({trip:{name: tripname}})
         .end(function(err, res){
           res.should.have.status(200)
           res.body.should.have.property('trip')
           res.body.trip.should.have.property('name', tripname)
-          done()
-        })
-    })
-  })
-})
-
-describe('GET /trips', function(){
-  it('should only show trips for the current user')
-  it('should require a logged in user')
-  it('should list all trips [for now]', function(){
-    request(app)
-      .get('/trips')
-      .end(function(err, res){
-        res.should.have.status(200)
-
-        res.body.should.have.property('trips')
-          .and.should.not.be.empty
-
-        res.body.trips[0].should.have.properties('name', '_id')
-      })
-  })
-})
-
-describe('POST /trips', function() {
-  it('should create a new trip', function(done) {
-    tripname = "TEST_TRIP"
-    request(app)
-      .post('/trips')
-      .send({trip:{name: tripname}})
-      .end(function(err, res){
-        res.should.have.status(200)
-        res.body.should.have.property('trip')
-        res.body.trip.should.have.property('name', tripname)
-        // make sure the trip actually exists in the DB
-        Trip.findById(trip.id, function(err, trip){
-          trip.should.have.property('name', tripname)
-        })
-        done()
-      })
-  })
-
-  it('should 404 is there is a /:tripid', function(done) {
-    request(app)
-      .post('/trips/invalidLocation')
-      .expect('Content-Type', /html/)
-      .expect(404, done);
-  })
-
-  it('should set a default name of "My Trip"', function(done) {
-    request(app)
-      .post('/trips')
-      .end(function(err, res){
-        res.should.have.status(200)
-        res.body.should.have.property('trip')
-        res.body.trip.should.have.property('name', 'My Trip')
-        done()
-      })
-  })
-})
-
-describe('PUT /trips/:tripid', function(){
-  it('should 404 on a missing trip', function(done){
-    request(app)
-      .put('/trips/5310bc1553dbeb2728f5a000')
-      .end(function(err, res){
-        res.should.have.status(404)
-        done()
-      })
-  })
-
-  it('should update a trip', function(done){
-    n1 = 'original name'
-    n2 = 'updated name'
-    trip = new Trip({name: n1})
-    trip.save(function(){
-      request(app)
-        .put('/trips/' + trip.id)
-        .send({trip:{name:n2}})
-        .end(function(err, res){
-          res.should.have.status(200)
-          res.body.should.have.property('trip')
-          res.body.trip.should.have.property('name', n2)
-          done()
-        })
-    })
-  })
-})
-
-describe('DELETE /trips/:tripid', function(){
-  it('should 404 on a missing trip', function(done){
-    request(app)
-      .del('/trips/5310bc1553dbeb2728f5a000')
-      .end(function(err, res){
-        res.should.have.status(404)
-        done()
-      })
-    })
-
-  it('should delete a trip', function(done){
-    trip = new Trip()
-    trip.save(function(){
-      request(app)
-        .del('/trips/' + trip.id)
-        .end(function(err, res){
-          // test that it claims to have worked
-          res.should.have.status(200)
-          res.body.should.be.empty
-          // make sure it actually worked
+          // make sure the trip actually exists in the DB
           Trip.findById(trip.id, function(err, trip){
-            (trip == null).should.be.true
+            trip.should.have.property('name', tripname)
           })
           done()
         })
+    })
+
+    it('should 404 is there is a /:tripid', function(done) {
+      request(app)
+        .post('/trips/invalidLocation')
+        .expect('Content-Type', /html/)
+        .expect(404, done);
+    })
+
+    it('should set a default name of "My Trip"', function(done) {
+      request(app)
+        .post('/trips')
+        .end(function(err, res){
+          res.should.have.status(200)
+          res.body.should.have.property('trip')
+          res.body.trip.should.have.property('name', 'My Trip')
+          done()
+        })
+    })
+  })
+
+  describe('PUT /trips/:tripid', function(){
+    it('should 404 on a missing trip', function(done){
+      request(app)
+        .put('/trips/5310bc1553dbeb2728f5a000')
+        .end(function(err, res){
+          res.should.have.status(404)
+          done()
+        })
+    })
+
+    it('should update a trip', function(done){
+      n1 = 'original name'
+      n2 = 'updated name'
+      trip = new Trip({name: n1})
+      trip.save(function(){
+        request(app)
+          .put('/trips/' + trip.id)
+          .send({trip:{name:n2}})
+          .end(function(err, res){
+            res.should.have.status(200)
+            res.body.should.have.property('trip')
+            res.body.trip.should.have.property('name', n2)
+            done()
+          })
+      })
+    })
+  })
+
+  describe('DELETE /trips/:tripid', function(){
+    it('should 404 on a missing trip', function(done){
+      request(app)
+        .del('/trips/5310bc1553dbeb2728f5a000')
+        .end(function(err, res){
+          res.should.have.status(404)
+          done()
+        })
+      })
+
+    it('should delete a trip', function(done){
+      trip = new Trip()
+      trip.save(function(){
+        request(app)
+          .del('/trips/' + trip.id)
+          .end(function(err, res){
+            // test that it claims to have worked
+            res.should.have.status(200)
+            res.body.should.be.empty
+            // make sure it actually worked
+            Trip.findById(trip.id, function(err, trip){
+              (trip == null).should.be.true
+            })
+            done()
+          })
+      })
     })
   })
 })
