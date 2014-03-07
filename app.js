@@ -18,6 +18,7 @@ var expressValidator = require('express-validator');
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var tripController = require('./controllers/trip');
+var itineraryItemController = require('./controllers/itinerary_item');
 
 /**
  * API keys + Passport configuration.
@@ -91,6 +92,11 @@ app.get( '/trips/:tripid', tripController.showTrip);
 app.put( '/trips/:tripid', tripController.updateTrip);
 app.delete( '/trips/:tripid', tripController.deleteTrip);
 
+app.get('/trip/:tripid/items', itineraryItemController.listTripItinerary);
+app.post('/trips/:tripid/items', itineraryItemController.createItineraryItem);
+app.get('/trip/:tripid/items/:itemid', itineraryItemController.showItineraryItem);
+app.put('/trip/:tripid/items/:itemid', itineraryItemController.updateItineraryItem);
+app.delete('/trip/:tripid/items/:itemid', itineraryItemController.deleteItineraryItem);
 
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);
