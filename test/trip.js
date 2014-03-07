@@ -42,6 +42,23 @@ describe('GET /trips/:id', function() {
   })
 })
 
+describe('GET /trips', function(){
+  it('should only show trips for the current user')
+  it('should require a logged in user')
+  it('should list all trips [for now]', function(){
+    request(app)
+      .get('/trips')
+      .end(function(err, res){
+        res.should.have.status(200)
+
+        res.body.should.have.property('trips')
+          .and.should.not.be.empty
+
+        res.body.trips[0].should.have.properties('name', '_id')
+      })
+  })
+})
+
 describe('POST /trips', function() {
   it('should create a new trip', function(done) {
     tripname = "TEST_TRIP"
