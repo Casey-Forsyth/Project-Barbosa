@@ -96,6 +96,34 @@ describe('POST /trips', function() {
   })
 })
 
+describe('PUT /trips/:tripid', function(){
+  it('should 404 on a missing trip', function(done){
+    request(app)
+      .put('/trips/5310bc1553dbeb2728f5a000')
+      .end(function(err, res){
+        res.should.have.status(404)
+        done()
+      })
+  })
+
+  it('should update a trip', function(done){
+    n1 = 'original name'
+    n2 = 'updated name'
+    trip = new Trip({name: n1})
+    trip.save(function(){
+      request(app)
+        .put('/trips/' + trip.id)
+        .send({trip:{name:n2}})
+        .end(function(err, res){
+          res.should.have.status(200)
+          res.body.should.have.property('trip')
+          res.body.trip.should.have.property('name', n2)
+          done()
+        })
+    })
+  })
+})
+
 describe('DELETE /trips/:tripid', function(){
   it('should 404 on a missing trip', function(done){
     request(app)
