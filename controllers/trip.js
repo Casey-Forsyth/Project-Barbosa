@@ -25,7 +25,6 @@ exports.load = function(req, res, next, tripid){
 
 exports.updateTrip = function(req, res){
   if (!req.trip) return res.status(404).json(null);
-  res.json({trip: req.trip})
 
   updated_trip = extend(req.trip, req.body.trip)
   updated_trip.save(function (err) {
