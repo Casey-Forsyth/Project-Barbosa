@@ -11,12 +11,17 @@
   <thead>
     <th>ID</th>
     <th>Name</th>
+	<th>Itinerary</th>
   </thead>
   <tbody>
     {{#each trip in controller}}
     <tr>
       <td>{{#linkTo "trip" trip}}{{ trip.id }}{{/linkTo}}</td>
       <td>{{ trip.name }}</td>
+	  <td>
+	    <div class="col-md-6">
+          {{#linkTo "itinerary" classNames="btn btn-primary pull-left"}}View Itinerary{{/linkTo}}
+        </div>  
     </tr>
     {{/each}}
   </tbody>
