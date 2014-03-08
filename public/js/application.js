@@ -28,7 +28,7 @@ App.Router.map(function() {
   this.resource('trip', {path: '/trips/:trip_id'});
   this.route('edit_trip', {path: '/trips/:trip_id/edit'});
   this.route('new_trip', {path: '/trips/new'});
-  this.route('itinerary');
+  this.route('itinerary', {path: '/trips/:trip_id/itinerary'});
   // end generated routes
 
 
@@ -332,15 +332,13 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</td>\r\n	  <td>\r\n	    <div class=\"col-md-6\">\r\n          ");
-  hashContexts = {'classNames': depth0};
-  hashTypes = {'classNames': "STRING"};
-  options = {hash:{
-    'classNames': ("btn btn-primary pull-left")
-  },inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "itinerary", options) : helperMissing.call(depth0, "linkTo", "itinerary", options));
+  data.buffer.push("</td>\r\n	  <td>");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "itinerary", "trip", options) : helperMissing.call(depth0, "linkTo", "itinerary", "trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\r\n        </div>  \r\n    </tr>\r\n    ");
+  data.buffer.push("</td>\r\n\r\n    </tr>\r\n    ");
   return buffer;
   }
 function program4(depth0,data) {

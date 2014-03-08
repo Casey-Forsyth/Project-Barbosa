@@ -18,10 +18,8 @@
     <tr>
       <td>{{#linkTo "trip" trip}}{{ trip.id }}{{/linkTo}}</td>
       <td>{{ trip.name }}</td>
-	  <td>
-	    <div class="col-md-6">
-          {{#linkTo "itinerary" classNames="btn btn-primary pull-left"}}View Itinerary{{/linkTo}}
-        </div>  
+	  <td>{{#linkTo "itinerary" trip}}View Itinerary{{/linkTo}}</td>
+
     </tr>
     {{/each}}
   </tbody>
