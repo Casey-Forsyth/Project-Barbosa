@@ -45,70 +45,61 @@ describe('Trip Controller', function(){
   })
 
   describe('GET /trips', function(){
-    it('should only show trips for the current user')
-    it('should require a logged in user')
+    describe('by default', function(){
+      it('should only show trips for the current user')
+      it('should require a logged in user')
 
-    it('should filter out archived trips', function(done){
-      archived_trip = new Trip({archived: true})
-      archived_trip.save(function(){
+      it('should filter out archived trips', function(done){
+        archived_trip = new Trip({archived: true})
+        archived_trip.save(function(){
+          request(app)
+            .get('/trips')
+            .end(function(err, res){
+              res.should.have.status(200)
+              res.body.should.have.property('trips')
+                .and.should.not.be.empty
+
+              res.body.trips.should.matchEach(function(it){
+                it.should.have.property('archived', false)
+              })
+              done()
+            })
+        })
+      })
+
+      it('should list all users\' trips [for now]', function(done){
         request(app)
           .get('/trips')
           .end(function(err, res){
             res.should.have.status(200)
+
             res.body.should.have.property('trips')
               .and.should.not.be.empty
 
-            trips = res.body.trips
-            for(var i = 0; i < trips.length; i++) {
-              trips[i].should.have.property('archived', false)
-            }
+            res.body.trips[0].should.have.properties('name', '_id')
             done()
           })
       })
     })
 
-    it('should list all trips [for now]', function(done){
-      request(app)
-        .get('/trips')
-        .end(function(err, res){
-          res.should.have.status(200)
+    describe('with archived=true as a query param', function(){
+      it('should return only archived trips ', function(done){
+        request(app)
+          .get('/trips?archived=true')
+          .end(function(err, res){
+            res.should.have.status(200)
 
-          res.body.should.have.property('trips')
-            .and.should.not.be.empty
+            res.body.should.have.property('trips')
+              .and.should.not.be.empty
 
-          res.body.trips[0].should.have.properties('name', '_id')
-          done()
+            res.body.trips.should.matchEach(function(it){
+              return it.should.have.property('archived', true)
+            })
+            done()
         })
+      })
     })
   })
-
-  describe('GET /trips/archives', function(){
-
-      before(function(done){
-          trip = new Trip({
-            name: "testArchiveTrip",
-            archived: true
-          })
-          trip.save()
-          done()
-      })//before
-
-      it('should return only archived trips', function(done){
-      request(app)
-        .get('/trips/archives')
-        .end(function(err, res){
-          res.should.have.status(200)
-
-          res.body.should.have.property('trips')
-            .and.should.not.be.empty
-
-          res.body.trips[0].should.have.properties('name', '_id')
-          trips = res.body.trips;
-          trips.should.matchEach(function(it){return it.should.have.property('archived', true)})
-          done() 
-        })
-      })//it
-  })//descrive
 
   describe('POST /trips', function() {
     it('should create a new trip', function(done) {

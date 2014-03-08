@@ -64,31 +64,16 @@ exports.showTrip = function(req, res) {
  */
 
 exports.listTrips = function(req, res) {
-  var Trip = mongoose.model('Trip');
-  Trip.find({archived: false}).exec(function(err, trips) {
-            if (err) {
-                res.status(500).json(null);
-            } else {
-                res.json({'trips':trips});
-            }
-        });
-};
-
-/**
- * GET /trips/archives
- * Get all trips
- */
-
-exports.listArchivedTrips = function(req, res) {
-  var Trip = mongoose.model('Trip');
-  Trip.find({archived: true}).exec(function(err, trips) {
-            if (err) {
-                res.status(500).json(null);
-            } else {
-                res.json({'trips':trips});
-            }
-        });
-};
+  var Trip = mongoose.model('Trip')
+  archived = req.query.archived || false
+  Trip.find({archived: archived}).exec(function(err, trips) {
+    if (err) {
+      res.status(500).json(null);
+    } else {
+      res.json({'trips':trips});
+    }
+  })
+}
 
 /**
  * POST /trips
