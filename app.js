@@ -90,6 +90,7 @@ app.post('/signup', userController.postSignup);
 app.param('tripid', tripController.load)
 app.post('/trips', tripController.createTrip);
 app.get( '/trips', tripController.listTrips);
+app.get( '/trips/archives', tripController.listArchivedTrips);
 app.get( '/trips/:tripid', tripController.showTrip);
 app.put( '/trips/:tripid', tripController.updateTrip);
 app.delete( '/trips/:tripid', tripController.deleteTrip);

@@ -75,6 +75,22 @@ exports.listTrips = function(req, res) {
 };
 
 /**
+ * GET /trips/archives
+ * Get all trips
+ */
+
+exports.listArchivedTrips = function(req, res) {
+  var Trip = mongoose.model('Trip');
+  Trip.find({archived: true}).exec(function(err, trips) {
+            if (err) {
+                res.status(500).json(null);
+            } else {
+                res.json({'trips':trips});
+            }
+        });
+};
+
+/**
  * POST /trips
  * Create a new trip!
  */
