@@ -244,13 +244,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<h2>Trip Itinerary</h2>\r\n\r\n<form ");
-  hashContexts = {'on': depth0};
-  hashTypes = {'on': "STRING"};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "save", {hash:{
-    'on': ("submit")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\r\n\r\n  <div class='form-group'>\r\n    <label for=\"itin-name\">Itinerary Item</label><br>\r\n    ");
+  data.buffer.push("<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Itinerary</h2>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table table-hover\">\r\n  <thead>\r\n    <th>Activity</th>\r\n    <th>Date</th>\r\n	<th>Time</th>\r\n  </thead>\r\n  <tbody>    \r\n    <tr>\r\n      <td>Insert_Activity</td>\r\n      <td>Insert_Date</td>\r\n	  <td>Insert_Time</td>\r\n    </tr>\r\n  </tbody>\r\n</table>\r\n\r\n<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h3>Add New Itinerary Item:</h3>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table\">\r\n  <thead>\r\n    <th>Activity</th>\r\n    <th>Date</th>\r\n	<th>Time</th>\r\n  </thead>\r\n  <tbody>\r\n    <tr>\r\n    <td>");
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
@@ -258,7 +252,23 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("itin-name"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n  </div>\r\n\r\n  <button type=\"submit\" class='btn btn-default'>Save</button>\r\n\r\n</form>\r\n\r\n");
+  data.buffer.push("</td>\r\n    <td>");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("itin-name"),
+    'id': ("itin-name"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</td>\r\n    <td>");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("itin-name"),
+    'id': ("itin-name"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</td>\r\n</table>\r\n  <button type=\"submit\" class='btn btn-default'>Add</button>\r\n\r\n\r\n\r\n");
   return buffer;
   
 });
