@@ -18,15 +18,11 @@
 
 <table class="table table-hover">
   <thead>
-    <th>Activity</th>
-    <th>Date</th>
-	<th>Time</th>
+    <th>Itinerary Name</th>
   </thead>
   <tbody>    
     <tr>
-      <td>Insert_Activity</td>
-      <td>Insert_Date</td>
-	  <td>Insert_Time</td>
+      <td>Insert_Itinerary_Modal_Link/Button</td>
     </tr>
   </tbody>
 </table>
@@ -39,15 +35,13 @@
 
 <table class="table">
   <thead>
-    <th>Activity</th>
-    <th>Date</th>
-	<th>Time</th>
+    <th>Itinerary Name</th>
+	<th>Location</th>
   </thead>
   <tbody>
     <tr>
       <td>{{view Ember.TextField valueBinding="itin-name" id="itin-name" classNames='form-control'}}</td>
-      <td>{{view Ember.TextField valueBinding="itin-date" id="itin-date" classNames='form-control'}}</td>
-      <td>{{view Ember.TextField valueBinding="itin-time" id="itin-time" classNames='form-control'}}</td>
+      <td>{{view Ember.TextField valueBinding="itin-location" id="itin-location" classNames='form-control'}}</td>
 	</tr>
   </tbody>
 </table>
