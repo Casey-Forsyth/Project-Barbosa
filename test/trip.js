@@ -1,47 +1,26 @@
 //requires
-var assert = require("assert");
 var express = require('express');
 var app = require('../app.js');
 var request = require('supertest');
+var Trip = require('../models/Trip');
 
-describe('GET /trips/:badid', function() {
-  it('should return json with a 500 error', function(done) {
-    request(app)
-      .get('/trips/:badid')
-      .expect('Content-Type', /json/)
-      .expect(500, done);
+describe('Trip Model', function(){
+  it('should have a name', function(){
+    n1 = 'MEXICO!!!'
+    n2 = 'CUBA!!!!!'
+    t = new Trip({name: n2})
+    t.should.have.property('name', n2)
+    t.name = n2
+    t.should.have.property('name', n2)
+  })
+
+  it('should have a default `name` of "My Trip"', function(){
+    t = new Trip()
+    t.should.have.property('name', 'My Trip')
+  })
+
+  it('should have a default `archived` flag of false', function(){
+    t = new Trip()
+    t.should.have.property('archived', false)
   })
 })
-
-describe('POST /trips', function() {
-  it('should respond with json', function(done) {
-    request(app)
-      .post('/trips')
-      .send({trip:{name: "TEST_TRIP"}})
-      .set('Accept','application/json')
-      .expect('Content-Type', /json/)
-      .expect(200, done);
-	})
-});
-
-describe('POST /trips/invalidLocation', function() {
-  it('should return 404', function(done) {
-    request(app)
-      .post('/trips/invalidLocation')
-      .send({trip:{name: "TEST_TRIP2"}})
-      .set('Accept','application/json')
-      .expect('Content-Type', /html/)
-      .expect(404, done);
-	})
-});
-
-describe('POST /api', function() {
-  it('should return 404', function(done) {
-    request(app)
-      .post('/api')
-      .send({trip:{name: "TEST_TRIP3"}})
-      .set('Accept','application/json')
-      .expect('Content-Type', /html/)
-      .expect(404, done);
-	})
-});

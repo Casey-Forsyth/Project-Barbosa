@@ -3,25 +3,34 @@ var Trip = require('../models/Trip');
 var extend = require('util')._extend;
 
 /**
+ * Load a trip.
+ */
+
+exports.load = function(req, res, next, tripid){
+  Trip.findById(tripid, function(err, trip) {
+    if (err)
+      req.err = err
+    else if (!trip)
+      req.err = new Error('Trip not found')
+    else
+      req.trip = trip
+    next()
+  })
+ }
+
+/**
  * PUT /trips/:id
  * Update a trip.
  */
 
 exports.updateTrip = function(req, res){
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-    if (err) {
-      res.status(500).json(null);
-    } else {
-      trip = extend(trip, req.body.trip)
-      trip.save(function (err) {
-        if (err) {
-          res.status(500).json(null);
-        };
-        res.json({trip:trip});
-      })
-    }
-  });
+  if (!req.trip) return res.status(404).json(null);
+
+  updated_trip = extend(req.trip, req.body.trip)
+  updated_trip.save(function (err) {
+    if (err) res.status(500).json(null)
+    res.json( { trip: updated_trip } );
+  })
 }
 
 /**
@@ -30,19 +39,13 @@ exports.updateTrip = function(req, res){
  */
 
 exports.deleteTrip = function(req, res){
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-    if (err) {
-      res.status(500).json(null);
-    } else {
-      trip.remove(function (err) {
-        if (err) {
-          res.status(500).json(null);
-        };
-        res.json({});
-      })
-    }
-  });
+  if (!req.trip) return res.status(404).json(null);
+
+  trip.archived = true
+  trip.save(function (err) {
+    if (err) res.status(500).json(null)
+    res.json({})
+  })
 }
 
 /**
@@ -51,14 +54,8 @@ exports.deleteTrip = function(req, res){
  */
 
 exports.showTrip = function(req, res) {
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trips) {
-            if (err) {
-                res.status(500).json(null);
-            } else {
-                res.json({trip:trips});
-            }
-        });
+  if (!req.trip) return res.status(404).json(null);
+  res.json({trip: req.trip})
 };
 
 /**
@@ -67,26 +64,16 @@ exports.showTrip = function(req, res) {
  */
 
 exports.listTrips = function(req, res) {
-  var Trip = mongoose.model('Trip');
-  Trip.find().exec(function(err, trips) {
-            if (err) {
-                res.status(500).json(null);
-            } else {
-                res.json({'trips':trips});
-            }
-        });
-};
-
-/**
- * GET /trips/create
- * Show the new trip page.
- */
-
-exports.renderCreate = function(req, res) {
-  res.render('trips/create', {
-    title: 'Create new Trip'
-  });
-};
+  var Trip = mongoose.model('Trip')
+  archived = req.query.archived || false
+  Trip.find({archived: archived}).exec(function(err, trips) {
+    if (err) {
+      res.status(500).json(null);
+    } else {
+      res.json({'trips':trips});
+    }
+  })
+}
 
 /**
  * POST /trips
@@ -96,7 +83,9 @@ exports.renderCreate = function(req, res) {
 exports.createTrip = function(req, res) {
   trip = new Trip(req.body.trip)
   trip.save(function(err, trip){
-    if(err) return console.error(err);
-  });
-  res.json({trip:trip})
+    if(err)
+      res.status(500).json(null)
+    else
+      res.json({trip:trip})
+  })
 };

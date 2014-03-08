@@ -51,7 +51,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.compress());
 app.use(express.favicon());
-app.use(express.logger('dev'));
+if (process.env.NODE_ENV=='development' || !process.env.NODE_ENV)
+  app.use(express.logger('dev'));
 app.use(express.cookieParser());
 app.use(express.json());
 app.use(express.urlencoded());
@@ -86,6 +87,7 @@ app.get('/logout', userController.logout);
 app.get('/signup', userController.getSignup);
 app.post('/signup', userController.postSignup);
 
+app.param('tripid', tripController.load)
 app.post('/trips', tripController.createTrip);
 app.get( '/trips', tripController.listTrips);
 app.get( '/trips/:tripid', tripController.showTrip);
