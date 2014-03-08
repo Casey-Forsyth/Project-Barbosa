@@ -8,6 +8,7 @@ App.Router.map(function() {
   this.route('edit_trip', {path: '/trips/:trip_id/edit'});
   this.route('new_trip', {path: '/trips/new'});
   this.route('itinerary', {path: '/trips/:trip_id/itinerary'});
+  this.route('add_itinerary', {path: '/trips/:trip_id/add'});
   // end generated routes
 
 

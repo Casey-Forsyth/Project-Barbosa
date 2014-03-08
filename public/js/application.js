@@ -18,7 +18,7 @@ App.Store = require('./store'); // delete if you don't want ember-data
 module.exports = App;
 
 
-},{"../vendor/ember":14,"../vendor/ember-data":13,"../vendor/handlebars":15,"../vendor/jquery":16,"./store":3}],2:[function(require,module,exports){
+},{"../vendor/ember":15,"../vendor/ember-data":14,"../vendor/handlebars":16,"../vendor/jquery":17,"./store":3}],2:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -29,6 +29,7 @@ App.Router.map(function() {
   this.route('edit_trip', {path: '/trips/:trip_id/edit'});
   this.route('new_trip', {path: '/trips/new'});
   this.route('itinerary', {path: '/trips/:trip_id/itinerary'});
+  this.route('add_itinerary', {path: '/trips/:trip_id/add'});
   // end generated routes
 
 
@@ -112,6 +113,7 @@ App.EditTripController = require('./controllers/edit_trip_controller');
 App.NewTripController = require('./controllers/new_trip_controller');
 App.TripController = require('./controllers/trip_controller');
 App.Trip = require('./models/trip');
+App.AddItineraryRoute = require('./routes/add_itinerary_route');
 App.ItineraryRoute = require('./routes/itinerary_route');
 App.NewTripRoute = require('./routes/new_trip_route');
 App.TripsRoute = require('./routes/trips_route');
@@ -121,7 +123,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./config/app":1,"./config/routes":2,"./controllers/edit_trip_controller":4,"./controllers/new_trip_controller":5,"./controllers/trip_controller":6,"./models/trip":8,"./routes/itinerary_route":9,"./routes/new_trip_route":10,"./routes/trips_route":11,"./templates":12}],8:[function(require,module,exports){
+},{"./config/app":1,"./config/routes":2,"./controllers/edit_trip_controller":4,"./controllers/new_trip_controller":5,"./controllers/trip_controller":6,"./models/trip":8,"./routes/add_itinerary_route":9,"./routes/itinerary_route":10,"./routes/new_trip_route":11,"./routes/trips_route":12,"./templates":13}],8:[function(require,module,exports){
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
@@ -136,6 +138,20 @@ module.exports = Trip;
 },{}],9:[function(require,module,exports){
 var Trip = require('../models/trip');
 
+var AddItineraryRoute = Ember.Route.extend({
+
+  model: function() {
+    return AddItinerary;
+  }
+
+});
+
+module.exports = AddItineraryRoute;
+
+
+},{"../models/trip":8}],10:[function(require,module,exports){
+var Trip = require('../models/trip');
+
 var ItineraryRoute = Ember.Route.extend({
 
   model: function() {
@@ -147,7 +163,7 @@ var ItineraryRoute = Ember.Route.extend({
 module.exports = ItineraryRoute;
 
 
-},{"../models/trip":8}],10:[function(require,module,exports){
+},{"../models/trip":8}],11:[function(require,module,exports){
 var trip = require('../models/trip');
 
 var NewTripRoute = Ember.Route.extend({
@@ -172,7 +188,7 @@ var NewTripRoute = Ember.Route.extend({
 module.exports = NewTripRoute;
 
 
-},{"../models/trip":8}],11:[function(require,module,exports){
+},{"../models/trip":8}],12:[function(require,module,exports){
 var Trip = require('../models/trip');
 
 var TripRoute = Ember.Route.extend({
@@ -186,7 +202,42 @@ var TripRoute = Ember.Route.extend({
 module.exports = TripRoute;
 
 
-},{"../models/trip":8}],12:[function(require,module,exports){
+},{"../models/trip":8}],13:[function(require,module,exports){
+
+Ember.TEMPLATES['add_itinerary'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
+
+
+  data.buffer.push("<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Add New Itinerary Item:</h2>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table\">\r\n  <thead>\r\n    <th>Activity</th>\r\n    <th>Date</th>\r\n	<th>Time</th>\r\n  </thead>\r\n  <tbody>\r\n    <tr>\r\n    <td>");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("itin-name"),
+    'id': ("itin-name"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</td>\r\n    <td>");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("itin-date"),
+    'id': ("itin-date"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</td>\r\n    <td>");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("itin-time"),
+    'id': ("itin-time"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</td>\r\n</table>\r\n  <button type=\"submit\" class='btn btn-default'>Add</button>\r\n\r\n\r\n\r\n\r\n\r\n");
+  return buffer;
+  
+});
 
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
@@ -241,35 +292,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['itinerary'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
+  
 
 
-  data.buffer.push("<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Itinerary</h2>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table table-hover\">\r\n  <thead>\r\n    <th>Activity</th>\r\n    <th>Date</th>\r\n	<th>Time</th>\r\n  </thead>\r\n  <tbody>    \r\n    <tr>\r\n      <td>Insert_Activity</td>\r\n      <td>Insert_Date</td>\r\n	  <td>Insert_Time</td>\r\n    </tr>\r\n  </tbody>\r\n</table>\r\n\r\n<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h3>Add New Itinerary Item:</h3>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table\">\r\n  <thead>\r\n    <th>Activity</th>\r\n    <th>Date</th>\r\n	<th>Time</th>\r\n  </thead>\r\n  <tbody>\r\n    <tr>\r\n    <td>");
-  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
-  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
-    'valueBinding': ("itin-name"),
-    'id': ("itin-name"),
-    'classNames': ("form-control")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</td>\r\n    <td>");
-  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
-  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
-    'valueBinding': ("itin-name"),
-    'id': ("itin-name"),
-    'classNames': ("form-control")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</td>\r\n    <td>");
-  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
-  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
-    'valueBinding': ("itin-name"),
-    'id': ("itin-name"),
-    'classNames': ("form-control")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</td>\r\n</table>\r\n  <button type=\"submit\" class='btn btn-default'>Add</button>\r\n\r\n\r\n\r\n");
-  return buffer;
+  data.buffer.push("<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Itinerary</h2>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table table-hover\">\r\n  <thead>\r\n    <th>Activity</th>\r\n    <th>Date</th>\r\n	<th>Time</th>\r\n  </thead>\r\n  <tbody>    \r\n    <tr>\r\n      <td>Insert_Activity</td>\r\n      <td>Insert_Date</td>\r\n	  <td>Insert_Time</td>\r\n    </tr>\r\n  </tbody>\r\n</table>\r\n\r\n\r\n\r\n\r\n");
   
 });
 
@@ -348,6 +374,12 @@ function program3(depth0,data) {
   options = {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "itinerary", "trip", options) : helperMissing.call(depth0, "linkTo", "itinerary", "trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("</td>\r\n	  <td>");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "add_itinerary", "trip", options) : helperMissing.call(depth0, "linkTo", "add_itinerary", "trip", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("</td>\r\n\r\n    </tr>\r\n    ");
   return buffer;
   }
@@ -365,6 +397,12 @@ function program6(depth0,data) {
   data.buffer.push("View Itinerary");
   }
 
+function program8(depth0,data) {
+  
+  
+  data.buffer.push("Add Itinerary");
+  }
+
   data.buffer.push("<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Trips</h2>\r\n  </div>\r\n  <div class=\"col-md-6\">\r\n    ");
   hashContexts = {'classNames': depth0};
   hashTypes = {'classNames': "STRING"};
@@ -373,7 +411,7 @@ function program6(depth0,data) {
   },inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "new_trip", options) : helperMissing.call(depth0, "linkTo", "new_trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table table-hover\">\r\n  <thead>\r\n    <th>ID</th>\r\n    <th>Name</th>\r\n	<th>Itinerary</th>\r\n  </thead>\r\n  <tbody>\r\n    ");
+  data.buffer.push("\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table table-hover\">\r\n  <thead>\r\n    <th>ID</th>\r\n    <th>Name</th>\r\n	<th>Itinerary</th>\r\n	<th>Add Itinerary</th>\r\n  </thead>\r\n  <tbody>\r\n    ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "trip", "in", "controller", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -385,7 +423,7 @@ function program6(depth0,data) {
 
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // Version: v0.13-102-g6bdebe7
 // Last commit: 6bdebe7 (2013-08-14 00:51:19 -0500)
 
@@ -10589,7 +10627,7 @@ DS.Model.reopen({
 
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 // Version: v1.0.0
 // Last commit: e2ea0cf (2013-08-31 23:47:39 -0700)
 
@@ -47061,7 +47099,7 @@ Ember.State = generateRemovedClass("Ember.State");
 
 })();
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /*
 
 Copyright (C) 2011 by Yehuda Katz
@@ -47425,7 +47463,7 @@ Handlebars.template = Handlebars.VM.template;
 })(Handlebars);
 ;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/

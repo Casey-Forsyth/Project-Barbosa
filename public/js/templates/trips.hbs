@@ -12,6 +12,7 @@
     <th>ID</th>
     <th>Name</th>
 	<th>Itinerary</th>
+	<th>Add Itinerary</th>
   </thead>
   <tbody>
     {{#each trip in controller}}
@@ -19,6 +20,7 @@
       <td>{{#linkTo "trip" trip}}{{ trip.id }}{{/linkTo}}</td>
       <td>{{ trip.name }}</td>
 	  <td>{{#linkTo "itinerary" trip}}View Itinerary{{/linkTo}}</td>
+	  <td>{{#linkTo "add_itinerary" trip}}Add Itinerary{{/linkTo}}</td>
 
     </tr>
     {{/each}}
