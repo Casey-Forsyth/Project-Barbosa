@@ -1,5 +1,7 @@
 Project-Barbosa
 ===============
+[![Build Status](https://travis-ci.org/caseyvill/Project-Barbosa.png?branch=master)](https://travis-ci.org/caseyvill/Project-Barbosa)
+
 [Live Demo/Production server](http://project-barbosa.herokuapp.com/)
 
 #Installation:
