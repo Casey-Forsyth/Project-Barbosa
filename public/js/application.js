@@ -262,7 +262,23 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Destroy</a>\r\n");
+  data.buffer.push(">Destroy</a>\r\n\r\n<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Itinerary</h2>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table table-hover\">\r\n  <thead>\r\n    <th>Itinerary Name</th>\r\n  </thead>\r\n  <tbody>    \r\n    <tr>\r\n      <td>Insert_Itinerary_Modal_Link/Button</td>\r\n    </tr>\r\n  </tbody>\r\n</table>\r\n\r\n<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Add New Itinerary Item:</h2>\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table\">\r\n  <thead>\r\n    <th>Itinerary Name</th>\r\n	<th>Location</th>\r\n  </thead>\r\n  <tbody>\r\n    <tr>\r\n      <td>");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("itin-name"),
+    'id': ("itin-name"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</td>\r\n      <td>");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("itin-location"),
+    'id': ("itin-location"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</td>\r\n	</tr>\r\n  </tbody>\r\n</table>\r\n  <button type=\"submit\" class='btn btn-default'>Add</button>\r\n");
   return buffer;
   
 });
@@ -291,7 +307,7 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</td>\r\n    </tr>\r\n    ");
+  data.buffer.push("</td>	\r\n    </tr>\r\n    ");
   return buffer;
   }
 function program4(depth0,data) {
