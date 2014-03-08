@@ -41,7 +41,8 @@ exports.updateTrip = function(req, res){
 exports.deleteTrip = function(req, res){
   if (!req.trip) return res.status(404).json(null);
 
-  trip.remove(function (err) {
+  trip.archived = true
+  trip.save(function (err) {
     if (err) res.status(500).json(null)
     res.json({})
   })
@@ -64,7 +65,7 @@ exports.showTrip = function(req, res) {
 
 exports.listTrips = function(req, res) {
   var Trip = mongoose.model('Trip');
-  Trip.find().exec(function(err, trips) {
+  Trip.find({archived: false}).exec(function(err, trips) {
             if (err) {
                 res.status(500).json(null);
             } else {

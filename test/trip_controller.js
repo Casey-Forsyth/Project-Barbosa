@@ -47,7 +47,27 @@ describe('Trip Controller', function(){
   describe('GET /trips', function(){
     it('should only show trips for the current user')
     it('should require a logged in user')
-    it('should list all trips [for now]', function(){
+
+    it('should filter out archived trips', function(done){
+      archived_trip = new Trip({archived: true})
+      archived_trip.save(function(){
+        request(app)
+          .get('/trips')
+          .end(function(err, res){
+            res.should.have.status(200)
+            res.body.should.have.property('trips')
+              .and.should.not.be.empty
+
+            trips = res.body.trips
+            for(var i = 0; i < trips.length; i++) {
+              trips[i].should.have.property('archived', false)
+            }
+            done()
+          })
+      })
+    })
+
+    it('should list all trips [for now]', function(done){
       request(app)
         .get('/trips')
         .end(function(err, res){
@@ -57,6 +77,7 @@ describe('Trip Controller', function(){
             .and.should.not.be.empty
 
           res.body.trips[0].should.have.properties('name', '_id')
+          done()
         })
     })
   })
@@ -136,7 +157,7 @@ describe('Trip Controller', function(){
         })
       })
 
-    it('should delete a trip', function(done){
+    it('should just archive a trip', function(done){
       trip = new Trip()
       trip.save(function(){
         request(app)
@@ -145,9 +166,10 @@ describe('Trip Controller', function(){
             // test that it claims to have worked
             res.should.have.status(200)
             res.body.should.be.empty
-            // make sure it actually worked
+            // test that it just set the deleted flag
             Trip.findById(trip.id, function(err, trip){
-              (trip == null).should.be.true
+              (trip == null).should.be.false
+              trip.archived.should.be.true
             })
             done()
           })
