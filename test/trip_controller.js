@@ -82,6 +82,34 @@ describe('Trip Controller', function(){
     })
   })
 
+  describe('GET /trips/archives', function(){
+
+      before(function(done){
+          trip = new Trip({
+            name: "testArchiveTrip",
+            archived: true
+          })
+          trip.save()
+          done()
+      })//before
+
+      it('should return only archived trips', function(done){
+      request(app)
+        .get('/trips/archives')
+        .end(function(err, res){
+          res.should.have.status(200)
+
+          res.body.should.have.property('trips')
+            .and.should.not.be.empty
+
+          res.body.trips[0].should.have.properties('name', '_id')
+          trips = res.body.trips;
+          trips.should.matchEach(function(it){return it.should.have.property('archived', true)})
+          done() 
+        })
+      })//it
+  })//descrive
+
   describe('POST /trips', function() {
     it('should create a new trip', function(done) {
       tripname = "TEST_TRIP"
