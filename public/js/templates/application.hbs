@@ -14,9 +14,24 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/login">Login</a></li>
-
-          <li><a href="/signup">Create Account</a></li>
+          {{#if session.isAuthenticated}}
+            <li class="dropdown">
+              <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                {{#if session.name}}
+                  {{session.name}}
+                {{else}}
+                  {{session.email}}
+                {{/if}}
+                &nbsp;<i class="caret"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a {{ action 'invalidateSession' }}>Logout</a></li>
+              </ul>
+            </li>
+          {{else}}
+            <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+            <li>{{#link-to 'signup'}}Create Account{{/link-to}}</li>
+          {{/if}}
         </ul>
       </div>
     </div>

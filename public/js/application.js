@@ -6,19 +6,36 @@ require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
 require('../vendor/ember-data'); // delete if you don't want ember-data
+require('../vendor/ember-simple-auth'); //for login
 
-var App = Ember.Application.create();
+App = Ember.Application.create({
+  LOG_TRANSITIONS: true
+});
+
+var AuthenticatorController = require('../controllers/authenticator_controller');
+
+App.initializer({
+  name: 'authentication',
+  initialize: function(container, application) {
+    container.register('app:authenticators:custom', AuthenticatorController);
+    Ember.SimpleAuth.setup(container, application, {
+      store: Ember.SimpleAuth.Stores.Cookie
+    });
+  }
+});
+
+App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin);
+
 App.ApplicationSerializer = DS.RESTSerializer.extend({
   primaryKey: function(){return '_id'},
 });
-
 
 App.Store = require('./store'); // delete if you don't want ember-data
 
 module.exports = App;
 
 
-},{"../vendor/ember":13,"../vendor/ember-data":12,"../vendor/handlebars":14,"../vendor/jquery":15,"./store":3}],2:[function(require,module,exports){
+},{"../controllers/authenticator_controller":4,"../vendor/ember":19,"../vendor/ember-data":17,"../vendor/ember-simple-auth":18,"../vendor/handlebars":20,"../vendor/jquery":21,"./store":3}],2:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -30,7 +47,8 @@ App.Router.map(function() {
   this.route('new_trip', {path: '/trips/new'});
   // end generated routes
 
-
+  this.route('login', {path: '/login'});
+  this.route('signup', {path: '/signup'});
 });
 
 
@@ -52,6 +70,54 @@ module.exports = DS.Store.extend({
 
 
 },{}],4:[function(require,module,exports){
+var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
+
+  restore: function(properties) {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      console.log(properties);
+      resolve(properties);
+    });
+  },
+
+  authenticate: function(credentials) {
+    var _this = this;
+    var path = null;
+
+    if(credentials.action == 'login') {
+      path = '/login';
+    } else {
+      path = '/signup';
+    }
+
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      $.post(path, credentials).done(function(data) {
+        if(data.isAuthenticated) {
+          resolve(data);
+        } else {
+          reject(data);
+        }
+      });
+    });
+  },
+
+  invalidate: function() {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      $.get("/logout").done(function(data) {
+        if(data.loggedOut) {
+          resolve(data);
+        } else {
+          reject(data);
+        }
+      });
+    });
+  }
+
+});
+
+module.exports = AuthenticatorController;
+
+
+},{}],5:[function(require,module,exports){
 var EditTripController = Ember.ObjectController.extend({
 
   save: function() {
@@ -70,7 +136,46 @@ var EditTripController = Ember.ObjectController.extend({
 module.exports = EditTripController;
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+var LoginController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationControllerMixin, {
+  authenticator: 'app:authenticators:custom',
+  loginFailed: false,
+  isProcessing: false,
+  errors: [],
+
+  actions: {
+
+    authenticate: function() {
+      var credentials = {
+        action: 'login',
+        email: $('#email').val(),
+        password: $('#password').val()
+      };
+      this.set('loginFailed', false);
+      this.set('isProcessing', true);
+      this._super(credentials);
+    },
+
+    sessionAuthenticationSucceeded: function() {
+      this.set('loginFailed', false);
+      this.set('isProcessing', false);
+      this.transitionToRoute('index');
+    },
+
+    sessionAuthenticationFailed: function(errors) {
+      this.set('loginFailed', true);
+      this.set('isProcessing', false);
+      this.set('errors', errors);
+    }
+
+  }
+
+});
+
+module.exports = LoginController;
+
+
+},{}],7:[function(require,module,exports){
 var EditTripController = require('./edit_trip_controller');
 
 // inherit from edit controller
@@ -79,7 +184,45 @@ var NewTripController = EditTripController.extend();
 module.exports = NewTripController;
 
 
-},{"./edit_trip_controller":4}],6:[function(require,module,exports){
+},{"./edit_trip_controller":5}],8:[function(require,module,exports){
+var SignupController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationControllerMixin, {
+  authenticator: 'app:authenticators:custom',
+  signupFailed: false,
+  isProcessing: false,
+
+  actions: {
+    authenticate: function() {
+      var credentials = {
+        action: 'signup',
+        email: $('#email').val(),
+        password: $('#password').val(),
+        confirmPassword: $('#confirmPassword').val()
+      };
+      this.set('signupFailed', false);
+      this.set('isProcessing', true);
+      this._super(credentials);
+    },
+
+    sessionAuthenticationSucceeded: function() {
+      this.set('signupFailed', false);
+      this.set('isProcessing', false);
+      this.transitionToRoute('index');
+    },
+
+    sessionAuthenticationFailed: function(errors) {
+      this.set('signupFailed', true);
+      this.set('isProcessing', false);
+      this.set('errors', errors);
+    }
+
+  }
+
+});
+
+module.exports = SignupController;
+
+
+},{}],9:[function(require,module,exports){
 var TripController = Ember.ObjectController.extend({
 
   destroy: function() {
@@ -99,7 +242,7 @@ var TripController = Ember.ObjectController.extend({
 module.exports = TripController;
 
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 // This file is auto-generated by `ember build`.
 // You should not modify it.
 
@@ -107,11 +250,16 @@ var App = window.App = require('./config/app');
 require('./templates');
 
 
+App.AuthenticatorController = require('./controllers/authenticator_controller');
 App.EditTripController = require('./controllers/edit_trip_controller');
+App.LoginController = require('./controllers/login_controller');
 App.NewTripController = require('./controllers/new_trip_controller');
+App.SignupController = require('./controllers/signup_controller');
 App.TripController = require('./controllers/trip_controller');
 App.Trip = require('./models/trip');
+App.LoginRoute = require('./routes/login_route');
 App.NewTripRoute = require('./routes/new_trip_route');
+App.SignupRoute = require('./routes/signup_route');
 App.TripsRoute = require('./routes/trips_route');
 
 require('./config/routes');
@@ -119,7 +267,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./config/app":1,"./config/routes":2,"./controllers/edit_trip_controller":4,"./controllers/new_trip_controller":5,"./controllers/trip_controller":6,"./models/trip":8,"./routes/new_trip_route":9,"./routes/trips_route":10,"./templates":11}],8:[function(require,module,exports){
+},{"./config/app":1,"./config/routes":2,"./controllers/authenticator_controller":4,"./controllers/edit_trip_controller":5,"./controllers/login_controller":6,"./controllers/new_trip_controller":7,"./controllers/signup_controller":8,"./controllers/trip_controller":9,"./models/trip":11,"./routes/login_route":12,"./routes/new_trip_route":13,"./routes/signup_route":14,"./routes/trips_route":15,"./templates":16}],11:[function(require,module,exports){
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
@@ -131,7 +279,15 @@ var Trip = DS.Model.extend({
 module.exports = Trip;
 
 
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+var LoginRoute = Ember.Route.extend({
+
+});
+
+module.exports = LoginRoute;
+
+
+},{}],13:[function(require,module,exports){
 var trip = require('../models/trip');
 
 var NewTripRoute = Ember.Route.extend({
@@ -156,7 +312,15 @@ var NewTripRoute = Ember.Route.extend({
 module.exports = NewTripRoute;
 
 
-},{"../models/trip":8}],10:[function(require,module,exports){
+},{"../models/trip":11}],14:[function(require,module,exports){
+var SignupRoute = Ember.Route.extend({
+
+});
+
+module.exports = SignupRoute;
+
+
+},{}],15:[function(require,module,exports){
 var Trip = require('../models/trip');
 
 var TripRoute = Ember.Route.extend({
@@ -170,19 +334,90 @@ var TripRoute = Ember.Route.extend({
 module.exports = TripRoute;
 
 
-},{"../models/trip":8}],11:[function(require,module,exports){
+},{"../models/trip":11}],16:[function(require,module,exports){
 
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n            <li class=\"dropdown\">\n              <a href=\"#\" data-toggle=\"dropdown\" class=\"dropdown-toggle\">\n                ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "session.name", {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n                &nbsp;<i class=\"caret\"></i>\n              </a>\n              <ul class=\"dropdown-menu\">\n                <li><a ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "invalidateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Logout</a></li>\n              </ul>\n            </li>\n          ");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n                  ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n                ");
+  return buffer;
+  }
 
-  data.buffer.push("<div id=\"wrap\">\r\n  <div class=\"navbar navbar-default navbar-fixed-top\">\r\n    <div class=\"container\">\r\n      <div class=\"navbar-header\">\r\n        <button class=\"navbar-toggle\" data-target=\".navbar-collapse\"\r\n        data-toggle=\"collapse\" type=\"button\"><span class=\"sr-only\">Toggle\r\n        navigation</span></button><a class=\"navbar-brand\" href=\"/\">Project\r\n        Barbosa</a>\r\n      </div>\r\n\r\n      <div class=\"collapse navbar-collapse\">\r\n        <ul class=\"nav navbar-nav\">\r\n          <li class=\"active\"><a href=\"/\">Home</a></li>\r\n        </ul>\r\n\r\n        <ul class=\"nav navbar-nav navbar-right\">\r\n          <li><a href=\"/login\">Login</a></li>\r\n\r\n          <li><a href=\"/signup\">Create Account</a></li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"container\">\r\n    ");
+function program4(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n                  ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.email", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n                ");
+  return buffer;
+  }
+
+function program6(depth0,data) {
+  
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
+  data.buffer.push("\n            <li>");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "login", options) : helperMissing.call(depth0, "link-to", "login", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("</li>\n            <li>");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "signup", options) : helperMissing.call(depth0, "link-to", "signup", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("</li>\n          ");
+  return buffer;
+  }
+function program7(depth0,data) {
+  
+  
+  data.buffer.push("Login");
+  }
+
+function program9(depth0,data) {
+  
+  
+  data.buffer.push("Create Account");
+  }
+
+  data.buffer.push("<div id=\"wrap\">\n  <div class=\"navbar navbar-default navbar-fixed-top\">\n    <div class=\"container\">\n      <div class=\"navbar-header\">\n        <button class=\"navbar-toggle\" data-target=\".navbar-collapse\"\n        data-toggle=\"collapse\" type=\"button\"><span class=\"sr-only\">Toggle\n        navigation</span></button><a class=\"navbar-brand\" href=\"/\">Project\n        Barbosa</a>\n      </div>\n\n      <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n          <li class=\"active\"><a href=\"/\">Home</a></li>\n        </ul>\n\n        <ul class=\"nav navbar-nav navbar-right\">\n          ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "session.isAuthenticated", {hash:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container\">\n    ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n  </div>\r\n</div>\r\n\r\n<div id=\"footer\">\r\n  <div class=\"container text-center\">\r\n    <div>\r\n      © 2014 Group 3 · Project Barbosa\r\n    </div>\r\n\r\n    <div>\r\n      Created by Michael Cook, Yuriy Dyrenko, Casey Forsyth,\r\n    </div>\r\n\r\n    <div>\r\n      James Firth, William Humphreys-Cloutier, Barret Monchka\r\n    </div>\r\n\r\n    <div>\r\n      Code licensed under <a href=\r\n      \"http://opensource.org/licenses/mit-license.html\">MIT License</a>\r\n    </div>\r\n\r\n    <div>\r\n      Built with <a href=\r\n      \"https://github.com/sahat/hackathon-starter\">hackathon-starter</a>and\r\n      <a href=\"http://expressjs.com/\">Express.js</a>.\r\n    </div>\r\n  </div>\r\n</div>");
+  data.buffer.push("\n  </div>\n</div>\n\n<div id=\"footer\">\n  <div class=\"container text-center\">\n    <div>\n      © 2014 Group 3 · Project Barbosa\n    </div>\n\n    <div>\n      Created by Michael Cook, Yuriy Dyrenko, Casey Forsyth,\n    </div>\n\n    <div>\n      James Firth, William Humphreys-Cloutier, Barret Monchka\n    </div>\n\n    <div>\n      Code licensed under <a href=\n      \"http://opensource.org/licenses/mit-license.html\">MIT License</a>\n    </div>\n\n    <div>\n      Built with <a href=\n      \"https://github.com/sahat/hackathon-starter\">hackathon-starter</a>and\n      <a href=\"http://expressjs.com/\">Express.js</a>.\n    </div>\n  </div>\n</div>");
   return buffer;
   
 });
@@ -193,13 +428,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<h2>Trip</h2>\r\n\r\n<form ");
+  data.buffer.push("<h2>Trip</h2>\n\n<form ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "save", {hash:{
     'on': ("submit")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\r\n\r\n  <div class='form-group'>\r\n    <label for=\"name\">Name</label><br>\r\n    ");
+  data.buffer.push(">\n\n  <div class='form-group'>\n    <label for=\"name\">Name</label><br>\n    ");
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
@@ -207,7 +442,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("name"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n  </div>\r\n\r\n  <button type=\"submit\" class='btn btn-default'>Save</button>\r\n\r\n</form>\r\n\r\n");
+  data.buffer.push("\n  </div>\n\n  <button type=\"submit\" class='btn btn-default'>Save</button>\n\n</form>\n\n");
   return buffer;
   
 });
@@ -215,10 +450,210 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['index'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
   
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  Welcome ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\n  ID: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.userID", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\n  Email: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.email", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\n  <a ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "invalidateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Logout</a>\n");
+  return buffer;
+  }
 
+function program3(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <a ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Login</a>\n");
+  return buffer;
+  }
 
-  data.buffer.push("<h2>Index</h2>\r\n\r\n");
+  data.buffer.push("<h2>Index</h2>\n\n");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "session.isAuthenticated", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['login'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n    <div class=\"alert alert-danger animated fadeIn\">\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "errors", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    </div>\n  ");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n        <div>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "msg", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</div>\n      ");
+  return buffer;
+  }
+
+  data.buffer.push("<div class=\"col-sm-8 col-sm-offset-2\">\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "loginFailed", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    <legend>Login</legend>\n    <div class=\"form-group\">\n      <label for=\"email\" class=\"control-label\">Email</label>\n      ");
+  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING"};
+  options = {hash:{
+    'type': ("text"),
+    'name': ("email"),
+    'id': ("email"),
+    'placeholder': ("email"),
+    'class': ("form-control")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </div>\n    <div class=\"form-group\">\n      <label for=\"username\" class=\"control-label\">Password</label>\n      ");
+  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING"};
+  options = {hash:{
+    'type': ("password"),
+    'name': ("password"),
+    'id': ("password"),
+    'placeholder': ("password"),
+    'class': ("form-control")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </div>\n    <div class=\"form-group\">\n      <button type=\"submit\" class=\"btn btn-primary\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "STRING"};
+  data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
+    'disabled': ("isProcessing")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("><i class=\"fa fa-unlock-alt\"></i>Login</button>\n    </div>\n  </form>\n</div>");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['signup'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n  <div class=\"alert alert-danger animated fadeIn\">\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "errors", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  </div>\n");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n      <div>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "msg", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</div>\n    ");
+  return buffer;
+  }
+
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "signupFailed", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n<form id=\"signup-form\" class=\"form-horizontal\" ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n  <legend>Signup</legend>\n  <div class=\"form-group\">\n    <label for=\"email\" class=\"col-sm-3 control-label\">Email</label>\n    <div class=\"col-sm-7\">\n      ");
+  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'autofocus': depth0,'class': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'autofocus': "STRING",'class': "STRING"};
+  options = {hash:{
+    'type': ("text"),
+    'name': ("email"),
+    'id': ("email"),
+    'placeholder': ("email"),
+    'autofocus': (""),
+    'class': ("form-control")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"password\" class=\"col-sm-3 control-label\">Password</label>\n    <div class=\"col-sm-7\">\n      ");
+  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING"};
+  options = {hash:{
+    'type': ("password"),
+    'name': ("password"),
+    'id': ("password"),
+    'placeholder': ("password"),
+    'class': ("form-control")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"password\" class=\"col-sm-3 control-label\">Confirm Password</label>\n    <div class=\"col-sm-7\">\n      ");
+  hashContexts = {'type': depth0,'name': depth0,'id': depth0,'placeholder': depth0,'class': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'id': "STRING",'placeholder': "STRING",'class': "STRING"};
+  options = {hash:{
+    'type': ("password"),
+    'name': ("confirmPassword"),
+    'id': ("confirmPassword"),
+    'placeholder': ("Confirm Password"),
+    'class': ("form-control")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <div class=\"col-sm-offset-3 col-sm-7\">\n      <button type=\"submit\" class=\"btn btn-success\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "STRING"};
+  data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
+    'disabled': ("isProcessing")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("><i class=\"fa fa-check\"></i>Signup</button>\n    </div>\n  </div>\n</form>");
+  return buffer;
   
 });
 
@@ -244,25 +679,25 @@ function program3(depth0,data) {
   options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trips", options) : helperMissing.call(depth0, "linkTo", "trips", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\r\n\r\n<h2>");
+  data.buffer.push("\n\n<h2>");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</h2>\r\n\r\n<p>\r\n  <b> id:</b> ");
+  data.buffer.push("</h2>\n\n<p>\n  <b> id:</b> ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "id", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n</p>\r\n\r\n");
+  data.buffer.push("\n</p>\n\n");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "edit_trip", "model", options) : helperMissing.call(depth0, "linkTo", "edit_trip", "model", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\r\n|\r\n<a href=\"#\" ");
+  data.buffer.push("\n|\n<a href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Destroy</a>\r\n");
+  data.buffer.push(">Destroy</a>\n");
   return buffer;
   
 });
@@ -281,17 +716,17 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
-  data.buffer.push("\r\n    <tr>\r\n      <td>");
+  data.buffer.push("\n    <tr>\n      <td>");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trip", "trip", options) : helperMissing.call(depth0, "linkTo", "trip", "trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("</td>\r\n      <td>");
+  data.buffer.push("</td>\n      <td>");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</td>\r\n    </tr>\r\n    ");
+  data.buffer.push("</td>\n    </tr>\n    ");
   return buffer;
   }
 function program4(depth0,data) {
@@ -302,7 +737,7 @@ function program4(depth0,data) {
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.id", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   }
 
-  data.buffer.push("<div class='row'>\r\n  <div class=\"col-md-6\">\r\n    <h2>Trips</h2>\r\n  </div>\r\n  <div class=\"col-md-6\">\r\n    ");
+  data.buffer.push("<div class='row'>\n  <div class=\"col-md-6\">\n    <h2>Trips</h2>\n  </div>\n  <div class=\"col-md-6\">\n    ");
   hashContexts = {'classNames': depth0};
   hashTypes = {'classNames': "STRING"};
   options = {hash:{
@@ -310,19 +745,19 @@ function program4(depth0,data) {
   },inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "new_trip", options) : helperMissing.call(depth0, "linkTo", "new_trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\r\n  </div>\r\n</div>\r\n\r\n<table class=\"table table-hover\">\r\n  <thead>\r\n    <th>ID</th>\r\n    <th>Name</th>\r\n  </thead>\r\n  <tbody>\r\n    ");
+  data.buffer.push("\n  </div>\n</div>\n\n<table class=\"table table-hover\">\n  <thead>\n    <th>ID</th>\n    <th>Name</th>\n  </thead>\n  <tbody>\n    ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "trip", "in", "controller", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\r\n  </tbody>\r\n</table>\r\n\r\n\r\n");
+  data.buffer.push("\n  </tbody>\n</table>\n\n\n");
   return buffer;
   
 });
 
 
 
-},{}],12:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 // Version: v0.13-102-g6bdebe7
 // Last commit: 6bdebe7 (2013-08-14 00:51:19 -0500)
 
@@ -10526,7 +10961,1519 @@ DS.Model.reopen({
 
 })();
 
-},{}],13:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
+ // Version: 0.1.3
+
+(function() {
+'use strict';
+
+function extractLocationOrigin(location) {
+  if (Ember.typeOf(location) === 'string') {
+    var link = document.createElement('a');
+    link.href = location;
+    //IE requires the following line when url is relative.
+    //First assignment of relative url to link.href results in absolute url on link.href but link.hostname and other properties are not set
+    //Second assignment of absolute url to link.href results in link.hostname and other properties being set as expected
+    link.href = link.href;
+    location = link;
+  }
+  var port = location.port;
+  if (Ember.isEmpty(port)) {
+    //need to include the port whether its actually present or not as some versions of IE will always set it
+    port = location.protocol === 'http:' ? '80' : (location.protocol === 'https:' ? '443' : '');
+  }
+  return location.protocol + '//' + location.hostname + (port !== '' ? ':' + port : '');
+}
+
+/**
+  The main namespace for Ember.SimpleAuth.
+
+  __For a general overview of how Ember.SimpleAuth works, see the
+  [README](https://github.com/simplabs/ember-simple-auth#readme).__
+
+  @class SimpleAuth
+  @namespace Ember
+**/
+Ember.SimpleAuth = Ember.Namespace.create({
+  Authenticators: Ember.Namespace.create(),
+  Authorizers:    Ember.Namespace.create(),
+  Stores:         Ember.Namespace.create(),
+
+  /**
+    The route to transition to for authentication; can be set through
+    [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup).
+
+    @property authenticationRoute
+    @readOnly
+    @static
+    @type String
+    @default 'login'
+  */
+  authenticationRoute: 'login',
+  /**
+    The route to transition to after successful authentication; can be set
+    through [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup).
+
+    @property routeAfterAuthentication
+    @readOnly
+    @static
+    @type String
+    @default 'index'
+  */
+  routeAfterAuthentication: 'index',
+  /**
+    The route to transition to after session invalidation; can be set through
+    [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup).
+
+    @property routeAfterInvalidation
+    @readOnly
+    @static
+    @type String
+    @default 'index'
+  */
+  routeAfterInvalidation: 'index',
+
+  /**
+    Sets up Ember.SimpleAuth for the application; this method __should be invoked in a custom
+    initializer__ like this:
+
+    ```javascript
+    Ember.Application.initializer({
+      name: 'authentication',
+      initialize: function(container, application) {
+        Ember.SimpleAuth.setup(container, application);
+      }
+    });
+    ```
+
+    @method setup
+    @static
+    @param {Container} container The Ember.js application's dependency injection container
+    @param {Ember.Application} application The Ember.js application instance
+    @param {Object} [options]
+      @param {String} [options.authenticationRoute] route to transition to for authentication - defaults to `'login'`
+      @param {String} [options.routeAfterAuthentication] route to transition to after successful authentication - defaults to `'index'`
+      @param {String} [options.routeAfterInvalidation] route to transition to after session invalidation - defaults to `'index'`
+      @param {Array[String]} [options.crossOriginWhitelist] Ember.SimpleAuth will never authorize requests going to a different origin than the one the Ember.js application was loaded from; to explicitely enable authorization for additional origins, whitelist those origins - defaults to `[]` _(beware that origins consist of protocol, host and port (port can be left out when it is 80))_
+      @param {Object} [options.authorizer] The authorizer _class_ to use; must extend `Ember.SimpleAuth.Authorizers.Base` - defaults to `Ember.SimpleAuth.Authorizers.OAuth2`
+      @param {Object} [options.store] The store _class_ to use; must extend `Ember.SimpleAuth.Stores.Base` - defaults to `Ember.SimpleAuth.Stores.LocalStorage`
+  **/
+  setup: function(container, application, options) {
+    options                       = options || {};
+    this.routeAfterAuthentication = options.routeAfterAuthentication || this.routeAfterAuthentication;
+    this.routeAfterInvalidation   = options.routeAfterInvalidation || this.routeAfterInvalidation;
+    this.authenticationRoute      = options.authenticationRoute || this.authenticationRoute;
+    this._crossOriginWhitelist    = Ember.A(options.crossOriginWhitelist || []).map(function(origin) {
+      return extractLocationOrigin(origin);
+    });
+
+    container.register('ember-simple-auth:authenticators:oauth2', Ember.SimpleAuth.Authenticators.OAuth2);
+
+    var store      = (options.store || Ember.SimpleAuth.Stores.LocalStorage).create();
+    var session    = Ember.SimpleAuth.Session.create({ store: store, container: container });
+    var authorizer = (options.authorizer || Ember.SimpleAuth.Authorizers.OAuth2).create({ session: session });
+
+    container.register('ember-simple-auth:session:current', session, { instantiate: false });
+    Ember.A(['model', 'controller', 'view', 'route']).forEach(function(component) {
+      container.injection(component, 'session', 'ember-simple-auth:session:current');
+    });
+
+    Ember.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+      if (Ember.SimpleAuth.shouldAuthorizeRequest(options.url)) {
+        authorizer.authorize(jqXHR, options);
+      }
+    });
+  },
+
+  /**
+    @method shouldAuthorizeRequest
+    @private
+    @static
+  */
+  shouldAuthorizeRequest: function(url) {
+    this._urlOrigins     = this._urlOrigins || {};
+    this._documentOrigin = this._documentOrigin || extractLocationOrigin(window.location);
+    var urlOrigin        = this._urlOrigins[url] = this._urlOrigins[url] || extractLocationOrigin(url);
+    return this._crossOriginWhitelist.indexOf(urlOrigin) > -1 || urlOrigin === this._documentOrigin;
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  __The session provides access to the current authentication state as well as
+  any properties resolved by the authenticator__ (see
+  [Ember.SimpleAuth.Authenticators.Base#authenticate](#Ember-SimpleAuth-Authenticators-Base-authenticate)).
+  It is created when Ember.SimpleAuth is set up (see
+  [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup)) and __injected into all
+  models, controllers, routes and views so that all parts of the application
+  can always access the current authentication state and other properties__,
+  depending on the used authenticator (see
+  [Ember.SimpleAuth.Authenticators.Base](#Ember-SimpleAuth-Authenticators-Base))).
+
+  The session also provides methods to authenticate the user and to invalidate
+  itself (see
+  [Ember.SimpleAuth.Session#authenticate](#Ember-SimpleAuth-Session-authenticate),
+  [Ember.SimpleAuth.Session#invaldiate](#Ember-SimpleAuth-Session-invaldiate)
+  These methods are usually invoked through actions from routes or controllers.
+
+  @class Session
+  @namespace Ember.SimpleAuth
+  @extends Ember.ObjectProxy
+*/
+Ember.SimpleAuth.Session = Ember.ObjectProxy.extend({
+  /**
+    The authenticator factory used to authenticate the session. This is only
+    set when the session is currently authenticated.
+
+    @property authenticator
+    @type String
+    @readOnly
+    @default null
+  */
+  authenticatorFactory: null,
+  /**
+    The store used to persist session properties. This is assigned during
+    Ember.SimpleAuth's setup and can be specified there
+    (see [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup)).
+
+    @property store
+    @type Ember.SimpleAuth.Stores.Base
+    @readOnly
+    @default null
+  */
+  store: null,
+  /**
+    Returns whether the session is currently authenticated.
+
+    @property isAuthenticated
+    @type Boolean
+    @readOnly
+    @default false
+  */
+  isAuthenticated: false,
+  /**
+    @property attemptedTransition
+    @private
+  */
+  attemptedTransition: null,
+  /**
+    @property content
+    @private
+  */
+  content: null,
+
+  /**
+    @method init
+    @private
+  */
+  init: function() {
+    var _this = this;
+    this.bindToStoreEvents();
+    var restoredContent      = this.store.restore();
+    var authenticatorFactory = restoredContent.authenticatorFactory;
+    if (!!authenticatorFactory) {
+      delete restoredContent.authenticatorFactory;
+      this.container.lookup(authenticatorFactory).restore(restoredContent).then(function(content) {
+        _this.setup(authenticatorFactory, content);
+      }, function() {
+        _this.store.clear();
+      });
+    } else {
+      this.store.clear();
+    }
+  },
+
+  /**
+    Authentices the session with an `authenticator` and appropriate `options`.
+    __This delegates the actual authentication work to the `authenticator`__
+    and handles the returned promise accordingly (see
+    [Ember.SimpleAuth.Authenticators.Base#authenticate](#Ember-SimpleAuth-Authenticators-Base-authenticate)).
+
+    __This method returns a promise itself. A resolving promise indicates that
+    the session was successfully authenticated__ while a rejecting promise
+    indicates that authentication failed and the session remains
+    unauthenticated.
+
+    @method authenticate
+    @param {String} authenticatorFactory The authenticator factory to use as it is registered with Ember's container, see [Ember's API docs](http://emberjs.com/api/classes/Ember.Application.html#method_register)
+    @param {Object} options The options to pass to the authenticator; depending on the type of authenticator these might be a set of credentials etc.
+    @return {Ember.RSVP.Promise} A promise that resolves when the session was authenticated successfully
+  */
+  authenticate: function(authenticatorFactory, options) {
+    var _this = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      _this.container.lookup(authenticatorFactory).authenticate(options).then(function(content) {
+        _this.setup(authenticatorFactory, content);
+        resolve();
+      }, function(error) {
+        _this.clear();
+        reject(error);
+      });
+    });
+  },
+
+  /**
+    Invalidates the session with the current `authenticator`. __This invokes
+    the `authenticator`'s `invalidate` hook and handles the returned promise
+    accordingly__ (see
+    [Ember.SimpleAuth.Authenticators.Base#invalidate](#Ember-SimpleAuth-Authenticators-Base-invalidate)).
+
+    __This method returns a promise itself. A resolving promise indicates that
+    the session was successfully invalidated__ while a rejecting promise
+    indicates that the promise returned by the `authenticator` rejected and
+    thus invalidation was cancelled. In that case the session remains
+    authenticated.
+
+    @method invalidate
+    @return {Ember.RSVP.Promise} A promise that resolves when the session was invalidated successfully
+  */
+  invalidate: function() {
+    var _this = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      var authenticator = _this.container.lookup(_this.authenticatorFactory);
+      authenticator.invalidate(_this.content).then(function() {
+        authenticator.off('ember-simple-auth:session-updated');
+        _this.clear();
+        resolve();
+      }, function(error) {
+        reject(error);
+      });
+    });
+  },
+
+  /**
+    @method setup
+    @private
+  */
+  setup: function(authenticatorFactory, content) {
+    this.setProperties({
+      isAuthenticated:   true,
+      authenticatorFactory: authenticatorFactory,
+      content:           content
+    });
+    this.bindToAuthenticatorEvents();
+    var data = Ember.$.extend({ authenticatorFactory: authenticatorFactory }, this.content);
+    this.store.clear();
+    this.store.persist(data);
+  },
+
+  /**
+    @method clear
+    @private
+  */
+  clear: function() {
+    this.setProperties({
+      isAuthenticated:   false,
+      authenticatorFactory: null,
+      content:           null
+    });
+    this.store.clear();
+  },
+
+  /**
+    @method bindToAuthenticatorEvents
+    @private
+  */
+  bindToAuthenticatorEvents: function() {
+    var _this = this;
+    var authenticator = this.container.lookup(this.authenticatorFactory);
+    authenticator.off('ember-simple-auth:session-updated');
+    authenticator.on('ember-simple-auth:session-updated', function(content) {
+      _this.setup(_this.authenticatorFactory, content);
+    });
+  },
+
+  /**
+    @method bindToStoreEvents
+    @private
+  */
+  bindToStoreEvents: function() {
+    var _this = this;
+    this.store.on('ember-simple-auth:session-updated', function(content) {
+      var authenticatorFactory = content.authenticatorFactory;
+      if (!!authenticatorFactory) {
+        delete content.authenticatorFactory;
+        _this.container.lookup(authenticatorFactory).restore(content).then(function(content) {
+          _this.setup(authenticatorFactory, content);
+        }, function() {
+          _this.clear();
+        });
+      } else {
+        _this.clear();
+      }
+    });
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  The base for all authorizers. __This serves as a starting point for
+  implementing custom authorizers and must not be used directly.__
+
+  __The authorizer preprocesses all XHR requests__ (expect ones to 3rd party
+  origins, see [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup)) and makes
+  sure they have the required data attached that allows the server to identify
+  the user making the request. This data might be a specific header, data in
+  the query part of the URL, cookies etc. __The authorizer has to fit the
+  authenticator__ (see
+  [Ember.SimpleAuth.Authenticators.Base](#Ember-SimpleAuth-Authenticators-Base))
+  as it usually relies on data that the authenticator retrieves during
+  authentication and that it makes available through the session.
+
+  @class Base
+  @namespace Ember.SimpleAuth.Authorizers
+  @extends Ember.Object
+*/
+Ember.SimpleAuth.Authorizers.Base = Ember.Object.extend({
+  /**
+    The session the authorizer gets the data it needs to authorize requests
+    from (see [Ember.SimpleAuth.Session](#Ember-SimpleAuth-Session)).
+
+    @property session
+    @readOnly
+    @type Ember.SimpleAuth.Session
+    @default null
+  */
+  session: null,
+
+  /**
+    Authorizes an XHR request by adding some sort of secret information that
+    allows the server to identify the user making the request (e.g. a token in
+    the `Authorization` header or some other secret in the query string etc.).
+
+    `Ember.SimpleAuth.Authorizers.Base`'s implementation does nothing as
+    there's no reasonable default behavior (for Ember.SimpleAuth's default
+    authorizer see
+    [Ember.SimpleAuth.Authorizers.OAuth2](#Ember-SimpleAuth-Authorizers-OAuth2)).
+
+    @method authorize
+    @param {jqXHR} jqXHR The XHR request to authorize (see http://api.jquery.com/jQuery.ajax/#jqXHR)
+    @param {Object} requestOptions The options as provided to the `$.ajax` method (see http://api.jquery.com/jQuery.ajaxPrefilter/)
+  */
+  authorize: function(jqXHR, requestOptions) {
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  Authorizer that conforms to OAuth 2
+  ([RFC 6749](http://tools.ietf.org/html/rfc6749)) by adding bearer tokens
+  ([RFC 6749](http://tools.ietf.org/html/rfc6750)).
+
+  @class OAuth2
+  @namespace Ember.SimpleAuth.Authorizers
+  @extends Ember.SimpleAuth.Authorizers.Base
+*/
+Ember.SimpleAuth.Authorizers.OAuth2 = Ember.SimpleAuth.Authorizers.Base.extend({
+  /**
+    Authorizes an XHR request by adding the `access_token` property from the
+    session as a bearer token in the `Authorization` header:
+
+    ```
+    Authorization: Bearer <token>
+    ```
+
+    @method authorize
+    @param {jqXHR} jqXHR The XHR request to authorize (see http://api.jquery.com/jQuery.ajax/#jqXHR)
+    @param {Object} requestOptions The options as provided to the `$.ajax` method (see http://api.jquery.com/jQuery.ajaxPrefilter/)
+  */
+  authorize: function(jqXHR, requestOptions) {
+    if (!Ember.isEmpty(this.get('session.access_token'))) {
+      jqXHR.setRequestHeader('Authorization', 'Bearer ' + this.get('session.access_token'));
+    }
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  The base for all authenticators. __This serves as a starting point for
+  implementing custom authenticators and must not be used directly.__
+
+  The authenticator acquires all data that makes up the session. The actual
+  mechanism used to do this might e.g. be posting a set of credentials to a
+  server and in exchange retrieving an access token, initiating authentication
+  against an external provider like Facebook etc. and depends on the specific
+  authenticator. Any data that the authenticator receives upon successful
+  authentication is stored in the session and can then be used by the
+  authorizer (see
+  [Ember.SimpleAuth.Authorizers.Base](#Ember-SimpleAuth-Authorizers-Base)).
+
+  Authenticators may trigger the `'ember-simple-auth:session-updated'` event
+  when any of the session properties change. The session listens to that event
+  and will handle the changes accordingly.
+
+  __Custom authenticators have to be registered with Ember's dependency
+  injection container__ so that the session can retrieve an instance, e.g.:
+
+  ```javascript
+  var CustomAuthenticator = Ember.SimpleAuth.Authenticators.Base.extend({
+    ...
+  });
+  Ember.Application.initializer({
+    name: 'authentication',
+    initialize: function(container, application) {
+      container.register('app:authenticators:custom', CustomAuthenticator);
+      Ember.SimpleAuth.setup(container, application);
+    }
+  });
+  ```
+
+  @class Base
+  @namespace Ember.SimpleAuth.Authenticators
+  @extends Ember.Object
+  @uses Ember.Evented
+*/
+Ember.SimpleAuth.Authenticators.Base = Ember.Object.extend(Ember.Evented, {
+  /**
+    Restores the session from a set of properties. __This method is invoked by
+    the session either after the applciation starts up and session properties
+    where restored from the store__ or when properties in the store have
+    changed due to external events (e.g. in another tab).
+
+    __This method returns a promise. A resolving promise will result in the
+    session being authenticated.__ Any properties the promise resolves with
+    will be saved by and accessible via the session. In most cases the
+    `properties` argument will simply be forwarded through the promise. A
+    rejecting promise indicates that authentication failed and the session
+    will remain unchanged.
+
+    `Ember.SimpleAuth.Authenticators.Base`'s always rejects as there's no
+    reasonable default implementation.
+
+    @method restore
+    @param {Object} properties The properties to restore the session from
+    @return {Ember.RSVP.Promise} A promise that when it resolves results in the session being authenticated
+  */
+  restore: function(properties) {
+    return new Ember.RSVP.Promise(function(resolve, reject) { reject(); });
+  },
+
+  /**
+    Authenticates the session with the specified `options`. These options vary
+    depending on the actual authentication mechanism the authenticator uses
+    (e.g. a set of credentials or a Facebook account id etc.). __The session
+    will invoke this method when an action in the appliaction triggers
+    authentication__ (see
+    [Ember.SimpleAuth.AuthenticationControllerMixin.actions#authenticate](#Ember-SimpleAuth-AuthenticationControllerMixin-authenticate)).
+
+    __This method returns a promise. A resolving promise will result in the
+    session being authenticated.__ Any properties the promise resolves with
+    will be saved by and accessible via the session. A rejecting promise
+    indicates that authentication failed and the session will remain unchanged.
+
+    `Ember.SimpleAuth.Authenticators.Base`'s implementation always returns a
+    rejecting promise and thus never authenticates the session as there's no
+    reasonable default behavior (for Ember.SimpleAuth's default authenticator
+    see
+    [Ember.SimpleAuth.Authenticators.OAuth2](#Ember-SimpleAuth-Authenticators-OAuth2)).
+
+    @method authenticate
+    @param {Object} options The options to authenticate the session with
+    @return {Ember.RSVP.Promise} A promise that when it resolves results in the session being authenticated
+  */
+  authenticate: function(options) {
+    return new Ember.RSVP.Promise(function(resolve, reject) { reject(); });
+  },
+
+  /**
+    Invalidation callback that is invoked when the session is invalidated.
+    While the session will invalidate itself and clear all session properties,
+    it might be necessary for some authenticators to perform additional tasks
+    (e.g. invalidating an access token on the server), which should be done in
+    this method.
+
+    __This method returns a promise. A resolving promise will result in the
+    session being invalidated.__ A rejecting promise will result in the session
+    invalidation being intercepted and the session being left authenticated.
+
+    `Ember.SimpleAuth.Authenticators.Base`'s implementation always returns a
+    resolving promise and thus always invalidates the session without doing
+    anything.
+
+    @method invalidate
+    @return {Ember.RSVP.Promise} A promise that when it resolves results in the session being invalidated
+  */
+  invalidate: function() {
+    return new Ember.RSVP.Promise(function(resolve) { resolve(); });
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  Authenticator that conforms to OAuth 2
+  ([RFC 6749](http://tools.ietf.org/html/rfc6749)), specifically the _"Resource
+  Owner Password Credentials Grant Type"_.
+
+  This authenticator supports refreshing the access token automatically and
+  will trigger the `'ember-simple-auth:session-updated'` event each time the
+  token was refreshed.
+
+  @class OAuth2
+  @namespace Ember.SimpleAuth.Authenticators
+  @extends Ember.SimpleAuth.Authenticators.Base
+*/
+Ember.SimpleAuth.Authenticators.OAuth2 = Ember.SimpleAuth.Authenticators.Base.extend({
+  /**
+    The endpoint on the server the authenticator acquires the access token
+    from.
+
+    @property serverTokenEndpoint
+    @type String
+    @default '/token'
+  */
+  serverTokenEndpoint: '/token',
+  /**
+    Sets whether the authenticator automatically refreshes access tokens.
+
+    @property refreshAccessTokens
+    @type Boolean
+    @default true
+  */
+  refreshAccessTokens: true,
+  /**
+    @property _refreshTokenTimeout
+    @private
+  */
+  _refreshTokenTimeout: null,
+
+  /**
+    Restores the session from a set of session properties; __will return a
+    resolving promise when there's a non-empty `access_token` in the
+    `properties`__ and a rejecting promise otherwise.
+
+    This method also schedules automatic token refreshing when there are values
+    for `refresh_token` and `expires_in` in the `properties` and automatic
+    token refreshing isn't disabled (see
+    [Ember.SimpleAuth.Authenticators.OAuth2#refreshAccessTokens](#Ember-SimpleAuth-Authenticators-OAuth2-refreshAccessTokens)).
+
+    @method restore
+    @param {Object} properties The properties to restore the session from
+    @return {Ember.RSVP.Promise} A promise that when it resolves results in the session being authenticated
+  */
+  restore: function(properties) {
+    var _this = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      if (!Ember.isEmpty(properties.access_token)) {
+        _this.scheduleAccessTokenRefresh(properties.expires_in, properties.expires_at, properties.refresh_token);
+        resolve(properties);
+      } else {
+        reject();
+      }
+    });
+  },
+
+  /**
+    Authenticates the session with the specified `credentials`; the credentials
+    are `POST`ed to the `serverTokenEndpoint` and if they are valid the server
+    returns an access token in response (see
+    http://tools.ietf.org/html/rfc6749#section-4.3). __If the credentials are
+    valid and authentication succeeds, a promise that resolves with the
+    server's response is returned__, otherwise a promise that rejects with the
+    error is returned.
+
+    This method also schedules automatic token refreshing when there are values
+    for `refresh_token` and `expires_in` in the server response and automatic
+    token refreshing isn't disabled (see
+    [Ember.SimpleAuth.Authenticators.OAuth2#refreshAccessTokens](#Ember-SimpleAuth-Authenticators-OAuth2-refreshAccessTokens)).
+
+    @method authenticate
+    @param {Object} options The credentials to authenticate the session with
+    @return {Ember.RSVP.Promise} A promise that resolves when an access token is successfully acquired from the server and rejects otherwise
+  */
+  authenticate: function(credentials) {
+    var _this = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      var data = { grant_type: 'password', username: credentials.identification, password: credentials.password };
+      _this.makeRequest(data).then(function(response) {
+        Ember.run(function() {
+          var expiresAt = _this.absolutizeExpirationTime(response.expires_in);
+          _this.scheduleAccessTokenRefresh(response.expires_in, expiresAt, response.refresh_token);
+          resolve(Ember.$.extend(response, { expires_at: expiresAt }));
+        });
+      }, function(xhr, status, error) {
+        Ember.run(function() {
+          reject(xhr.responseText);
+        });
+      });
+    });
+  },
+
+  /**
+    Cancels any outstanding automatic token refreshes.
+
+    @method invalidate
+    @return {Ember.RSVP.Promise} A resolving promise
+  */
+  invalidate: function() {
+    Ember.run.cancel(this._refreshTokenTimeout);
+    delete this._refreshTokenTimeout;
+    return new Ember.RSVP.Promise(function(resolve) { resolve(); });
+  },
+
+  /**
+    Sends an `AJAX` request to the `serverTokenEndpoint`. This will always be a
+    _"POST_" request with content type _"application/x-www-form-urlencoded"_ as
+    specified in [RFC 6749](http://tools.ietf.org/html/rfc6749).
+
+    This method is not meant to be used directly but serves as an extension
+    point to e.g. add _"Client Credentials"_ (see
+    [RFC 6749, section 2.3](http://tools.ietf.org/html/rfc6749#section-2.3)).
+
+    @method makeRequest
+    @param {Object} data The data to send with the request, e.g. username and password or the refresh token
+    @return {Deferred object} A Deferred object (see [the jQuery docs](http://api.jquery.com/category/deferred-object/)) that is compatible to Ember.RSVP.Promise; will resolve if the request succeeds, reject otherwise
+    @protected
+  */
+  makeRequest: function(data) {
+    return Ember.$.ajax({
+      url:         this.serverTokenEndpoint,
+      type:        'POST',
+      data:        data,
+      dataType:    'json',
+      contentType: 'application/x-www-form-urlencoded'
+    });
+  },
+
+  /**
+    @method scheduleAccessTokenRefresh
+    @private
+  */
+  scheduleAccessTokenRefresh: function(expiresIn, expiresAt, refreshToken) {
+    var _this = this;
+    if (this.refreshAccessTokens) {
+      Ember.run.cancel(this._refreshTokenTimeout);
+      delete this._refreshTokenTimeout;
+      var now = new Date();
+      if (Ember.isEmpty(expiresAt) && !Ember.isEmpty(expiresIn)) {
+        expiresAt = new Date(now.getTime() + (expiresIn - 5) * 1000).getTime();
+      }
+      if (!Ember.isEmpty(refreshToken) && !Ember.isEmpty(expiresAt) && expiresAt > now) {
+        var waitTime = expiresAt - now.getTime();
+        this._refreshTokenTimeout = Ember.run.later(this, this.refreshAccessToken, expiresIn, refreshToken, waitTime);
+      }
+    }
+  },
+
+  /**
+    @method refreshAccessToken
+    @private
+  */
+  refreshAccessToken: function(expiresIn, refreshToken) {
+    var _this = this;
+    var data  = { grant_type: 'refresh_token', refresh_token: refreshToken };
+    this.makeRequest(data).then(function(response) {
+      Ember.run(function() {
+        expiresIn     = response.expires_in || expiresIn;
+        refreshToken  = response.refresh_token || refreshToken;
+        var expiresAt = _this.absolutizeExpirationTime(expiresIn);
+        _this.scheduleAccessTokenRefresh(expiresIn, null, refreshToken);
+        _this.trigger('ember-simple-auth:session-updated', Ember.$.extend(response, { expires_in: expiresIn, expires_at: expiresAt, refresh_token: refreshToken }));
+      });
+    }, function(xhr, status, error) {
+      Ember.Logger.warn('Access token could not be refreshed - server responded with ' + error + '.');
+    });
+  },
+
+  /**
+    @method absolutizeExpirationTime
+    @private
+  */
+  absolutizeExpirationTime: function(expiresIn) {
+    if (!Ember.isEmpty(expiresIn)) {
+      return new Date((new Date().getTime()) + (expiresIn - 5) * 1000).getTime();
+    }
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  The base for all store types. __This serves as a starting point for
+  implementing custom stores and must not be used directly.__
+
+  Stores may trigger the `'ember-simple-auth:session-updated'` event when
+  any of the stored properties changes due to external actions (e.g. from
+  another tab). The session listens to that event and will handle the changes
+  accordingly. Whenever the event is triggered by the store, the session will
+  forward all properties to its authenticator which might lead to the session
+  being invalidated (see
+  [Ember.SimpleAuth.Authenticators.Base#restore](#Ember-SimpleAuth-Authenticators-Base-restore)).
+
+  @class Base
+  @namespace Ember.SimpleAuth.Stores
+  @extends Ember.Object
+  @uses Ember.Evented
+*/
+Ember.SimpleAuth.Stores.Base = Ember.Object.extend(Ember.Evented, {
+  /**
+    Persists the `properties` in the store.
+
+    `Ember.SimpleAuth.Stores.Base`'s implementation does nothing.
+
+    @method persist
+    @param {Object} properties The properties to persist
+  */
+  persist: function(properties) {
+  },
+
+  /**
+    Restores all properties currently saved in the store.
+
+    `Ember.SimpleAuth.Stores.Base`'s implementation always returns an empty
+    plain Object.
+
+    @method restore
+    @return {Object} All properties currently persisted in the store.
+  */
+  restore: function() {
+    return {};
+  },
+
+  /**
+    Clears the store.
+
+    `Ember.SimpleAuth.Stores.Base`'s implementation does nothing.
+
+    @method clear
+  */
+  clear: function() {
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  Store that saves its data in session cookies.
+
+  __In order to keep multiple tabs/windows of your application in sync, this
+  store has to periodically (every 500ms) check the cookies__ for changes as
+  there are no events that notify of changes in cookies. The recommended
+  alternative is
+  [Ember.SimpleAuth.Stores.LocalStorage](#Ember-SimpleAuth-Stores-LocalStorage)
+  that also persistently stores data but instead of cookies relies on the
+  `localStorage` API and does not need to poll for external changes.
+
+  This store will trigger the `'ember-simple-auth:session-updated'` event when
+  any of its cookies is changed from another tab or window.
+
+  @class Cookie
+  @namespace Ember.SimpleAuth.Stores
+  @extends Ember.SimpleAuth.Stores.Base
+*/
+Ember.SimpleAuth.Stores.Cookie = Ember.SimpleAuth.Stores.Base.extend({
+  /**
+    The prefix to use for the store's cookie names so they can be distinguished
+    from other cookies.
+
+    @property cookieNamePrefix
+    @type String
+    @default 'ember_simple_auth:'
+  */
+  cookieNamePrefix: 'ember_simple_auth:',
+  /**
+    @property _secureCookies
+    @private
+  */
+  _secureCookies: window.location.protocol === 'https:',
+  /**
+    @property _syncPropertiesTimeout
+    @private
+  */
+  _syncPropertiesTimeout: null,
+
+  /**
+    @method init
+    @private
+  */
+  init: function() {
+    this.syncProperties();
+  },
+
+  /**
+    Persists the `properties` in session cookies.
+
+    @method persist
+    @param {Object} properties The properties to persist
+  */
+  persist: function(properties) {
+    for (var property in properties) {
+      this.write(property, properties[property], null);
+    }
+    this._lastProperties = JSON.stringify(this.restore());
+  },
+
+  /**
+    Restores all properties currently saved in the session cookies identified
+    by the `cookieNamePrefix`.
+
+    @method restore
+    @return {Object} All properties currently persisted in the session cookies
+  */
+  restore: function() {
+    var _this      = this;
+    var properties = {};
+    this.knownCookies().forEach(function(cookie) {
+      properties[cookie] = _this.read(cookie);
+    });
+    return properties;
+  },
+
+  /**
+    Clears the store by deleting all session cookies prefixed with the
+    `cookieNamePrefix`.
+
+    @method clear
+  */
+  clear: function() {
+    var _this = this;
+    this.knownCookies().forEach(function(cookie) {
+      _this.write(cookie, null, (new Date(0)).toGMTString());
+    });
+    this._lastProperties = null;
+  },
+
+  /**
+    @method read
+    @private
+  */
+  read: function(name) {
+    var value = document.cookie.match(new RegExp(this.cookieNamePrefix + name + '=([^;]+)')) || [];
+    return decodeURIComponent(value[1] || '');
+  },
+
+  /**
+    @method write
+    @private
+  */
+  write: function(name, value, expiration) {
+    var expires = Ember.isEmpty(expiration) ? '' : '; expires=' + expiration;
+    var secure  = !!this._secureCookies ? ';secure' : '';
+    document.cookie = this.cookieNamePrefix + name + '=' + encodeURIComponent(value) + expires + secure;
+  },
+
+  /**
+    @method knownCookies
+    @private
+  */
+  knownCookies: function() {
+    var _this = this;
+    return Ember.A(document.cookie.split(/[=;\s]+/)).filter(function(element) {
+      return new RegExp('^' + _this.cookieNamePrefix).test(element);
+    }).map(function(cookie) {
+      return cookie.replace(_this.cookieNamePrefix, '');
+    });
+  },
+
+  /**
+    @method syncProperties
+    @private
+  */
+  syncProperties: function() {
+    var properties        = this.restore();
+    var encodedProperties = JSON.stringify(properties);
+    if (encodedProperties !== this._lastProperties) {
+      this._lastProperties = encodedProperties;
+      this.trigger('ember-simple-auth:session-updated', properties);
+    }
+    if (!Ember.testing) {
+      Ember.run.cancel(this._syncPropertiesTimeout);
+      this._syncPropertiesTimeout = Ember.run.later(this, this.syncProperties, 500);
+    }
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  Store that saves its data in memory and thus __is not actually persistent__.
+
+  @class Ephemeral
+  @namespace Ember.SimpleAuth.Stores
+  @extends Ember.SimpleAuth.Stores.Base
+*/
+Ember.SimpleAuth.Stores.Ephemeral = Ember.SimpleAuth.Stores.Base.extend({
+  /**
+    @method init
+    @private
+  */
+  init: function() {
+    this.clear();
+  },
+
+  /**
+    Persists the `properties`.
+
+    @method persist
+    @param {Object} properties The properties to persist
+  */
+  persist: function(properties) {
+    this._data = Ember.$.extend(properties, this._data);
+  },
+
+  /**
+    Restores all properties currently saved.
+
+    @method restore
+    @return {Object} All properties currently persisted
+  */
+  restore: function() {
+    return Ember.$.extend({}, this._data);
+  },
+
+  /**
+    Clears the store.
+
+    @method clear
+  */
+  clear: function() {
+    delete this._data;
+    this._data = {};
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  Store that saves its data in the browser's `localStorage`.
+
+  This store will trigger the `'ember-simple-auth:session-updated'` event when
+  any of its keys is changed from another tab or window.
+
+  @class LocalStorage
+  @namespace Ember.SimpleAuth.Stores
+  @extends Ember.SimpleAuth.Stores.Base
+*/
+Ember.SimpleAuth.Stores.LocalStorage = Ember.SimpleAuth.Stores.Base.extend({
+  /**
+    The prefix to use for the store's keys so they can be distinguished from
+    other keys.
+
+    @property keyPrefix
+    @type String
+    @default 'ember_simple_auth:'
+  */
+  keyPrefix: 'ember_simple_auth:',
+
+  /**
+    @property _triggerChangeEventTimeout
+    @private
+  */
+  _triggerChangeEventTimeout: null,
+
+  /**
+    @method init
+    @private
+  */
+  init: function() {
+    this.bindToStorageEvents();
+  },
+
+  /**
+    Persists the `properties` in the `localStorage`.
+
+    @method persist
+    @param {Object} properties The properties to persist
+  */
+  persist: function(properties) {
+    for (var property in properties) {
+      var key = this.buildStorageKey(property);
+      localStorage.setItem(key, properties[property]);
+    }
+    this._lastProperties = JSON.stringify(this.restore());
+  },
+
+  /**
+    Restores all properties currently saved in the `localStorage` identified by
+    the `keyPrefix`.
+
+    @method restore
+    @return {Object} All properties currently persisted in the session cookies
+  */
+  restore: function() {
+    var _this = this;
+    var properties = {};
+    this.knownKeys().forEach(function(key) {
+      var originalKey = key.replace(_this.keyPrefix, '');
+      properties[originalKey] = localStorage.getItem(key);
+    });
+    return properties;
+  },
+
+  /**
+    Clears the store by deleting all `localStorage` keys prefixed with the
+    `keyPrefix`.
+
+    @method clear
+  */
+  clear: function() {
+    this.knownKeys().forEach(function(key) {
+      localStorage.removeItem(key);
+    });
+    this._lastProperties = null;
+  },
+
+  /**
+    @method buildStorageKey
+    @private
+  */
+  buildStorageKey: function(property) {
+    return this.keyPrefix + property;
+  },
+
+  /**
+    @method knownKeys
+    @private
+  */
+  knownKeys: function(callback) {
+    var keys = Ember.A([]);
+    for (var i = 0, l = localStorage.length; i < l; i++) {
+      var key = localStorage.key(i);
+      if (key.indexOf(this.keyPrefix) === 0) {
+        keys.push(key);
+      }
+    }
+    return keys;
+  },
+
+  /**
+    @method bindToStorageEvents
+    @private
+  */
+  bindToStorageEvents: function() {
+    var _this = this;
+    Ember.$(window).bind('storage', function(e) {
+      var properties        = _this.restore();
+      var encodedProperties = JSON.stringify(properties);
+      if (encodedProperties !== _this._lastProperties) {
+        _this._lastProperties = encodedProperties;
+        Ember.run.cancel(_this._triggerChangeEventTimeout);
+        _this._triggerChangeEventTimeout = Ember.run.next(_this, function() {
+          this.trigger('ember-simple-auth:session-updated', properties);
+        });
+      }
+    });
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  The mixin for routes that require the session to be authenticated in order to
+  be accessible. Including this mixin in a route will automatically add hooks
+  that enforce the session to be authenticated and redirect to
+  the `authenticationRoute` specified in
+  [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup) if not.
+
+  `Ember.SimpleAuth.AuthenticatedRouteMixin` performs the redirect in the
+  `beforeModel` method so that in all methods executed after that the session
+  is guaranteed to be authenticated. __If `beforeModel` is overridden, ensure
+  that the custom implementation calls `this._super(transition)`__ so that the
+  session enforcement code is actually executed.
+
+  @class AuthenticatedRouteMixin
+  @namespace Ember.SimpleAuth
+  @extends Ember.Mixin
+  @static
+*/
+Ember.SimpleAuth.AuthenticatedRouteMixin = Ember.Mixin.create({
+  /**
+    This method implements the enforcement of the session being authenticated.
+    If the session is not authenticated, the current transition will be aborted
+    and a redirect will be triggered to the `authenticationRoute` specified in
+    [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup). The method also saves
+    the intercepted transition so that it can be retried after the session has
+    been authenticated (see
+    [Ember.SimpleAuth.ApplicationRouteMixin#sessionAuthenticationSucceeded](#Ember-SimpleAuth-ApplicationRouteMixin-sessionAuthenticationSucceeded)).
+
+    @method beforeModel
+    @param {Transition} transition The transition that lead to this route
+  */
+  beforeModel: function(transition) {
+    if (!this.get('session.isAuthenticated')) {
+      transition.abort();
+      this.triggerSessionAuthentication(transition);
+    }
+  },
+
+  /**
+    @method triggerSessionAuthentication
+    @private
+  */
+  triggerSessionAuthentication: function(transition) {
+    this.set('session.attemptedTransition', transition);
+    transition.send('authenticateSession');
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  The mixin for the controller that handles the `authenticationRoute` specified
+  in [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup)). It provides the
+  `authenticate` action that will authenticate the session with the configured
+  authenticator when invoked.
+
+  @class AuthenticationControllerMixin
+  @namespace Ember.SimpleAuth
+  @extends Ember.Mixin
+*/
+Ember.SimpleAuth.AuthenticationControllerMixin = Ember.Mixin.create({
+  /**
+    The authenticator class used to authenticate the session.
+
+    @property authenticator
+    @type Ember.SimpleAuth.Authenticators.Base
+    @default null
+  */
+  authenticator: null,
+
+  actions: {
+    /**
+      This action will authenticate the session with an instance of the
+      configured `authenticator` class.
+
+      If authentication succeeds, this method triggers the
+      `sessionAuthenticationSucceeded` action (see
+      [Ember.SimpleAuth.ApplicationRouteMixin#sessionAuthenticationSucceeded](#Ember-SimpleAuth-ApplicationRouteMixin-sessionAuthenticationSucceeded)).
+      If authentication fails it triggers the `sessionAuthenticationFailed`
+      action (see
+      [Ember.SimpleAuth.ApplicationRouteMixin#sessionAuthenticationFailed](#Ember-SimpleAuth-ApplicationRouteMixin-sessionAuthenticationFailed)).
+
+      @method actions.authenticate
+      @param {Object} options Any options the auhtenticator needs to authenticate the session
+    */
+    authenticate: function(options) {
+      var _this = this;
+      this.get('session').authenticate(this.get('authenticator'), options).then(function() {
+        _this.send('sessionAuthenticationSucceeded');
+      }, function(error) {
+        _this.send('sessionAuthenticationFailed', error);
+      });
+    }
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  The mixin for the authentication controller that handles the
+  `authenticationRoute` specified in
+  [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup)). It provides the
+  `authenticate` action that will authenticate the session with the configured
+  authenticator when invoked. __This is a specialization of
+  [Ember.SimpleAuth.AuthenticationControllerMixin](#Ember-SimpleAuth-AuthenticationControllerMixin)
+  for authentication mechanisms that work like a regular login with
+  credentials.__
+
+  Accompanying the controller that this mixin is mixed in the application needs
+  to have a `login` template with the fields `indentification` and `password`
+  as well as an actionable button or link that triggers the `authenticate`
+  action, e.g.:
+
+  ```handlebars
+  <form {{action 'authenticate' on='submit'}}>
+    <label for="identification">Login</label>
+    {{input id='identification' placeholder='Enter Login' value=identification}}
+    <label for="password">Password</label>
+    {{input id='password' placeholder='Enter Password' type='password' value=password}}
+    <button type="submit">Login</button>
+  </form>
+  ```
+
+  @class LoginControllerMixin
+  @namespace Ember.SimpleAuth
+  @extends Ember.SimpleAuth.AuthenticationControllerMixin
+*/
+Ember.SimpleAuth.LoginControllerMixin = Ember.Mixin.create(Ember.SimpleAuth.AuthenticationControllerMixin, {
+  /**
+    The authenticator class used to authenticate the session.
+
+    @property authenticator
+    @type Ember.SimpleAuth.Authenticators.Base
+    @default Ember.SimpleAuth.Authenticators.OAuth2
+  */
+  authenticator: 'ember-simple-auth:authenticators:oauth2',
+
+  actions: {
+    /**
+      This action will authenticate the session with an instance of the
+      configured `authenticator` class if both `identification` and `password`
+      are non-empty. It passes both values to the authenticator.
+
+      _The action also resets the `password` property so sensitive data is not
+      stored anywhere for longer than necessary._
+
+      @method actions.authenticate
+    */
+    authenticate: function() {
+      var data = this.getProperties('identification', 'password');
+      if (!Ember.isEmpty(data.identification) && !Ember.isEmpty(data.password)) {
+        this.set('password', null);
+        this._super(data);
+      }
+    }
+  }
+});
+
+})();
+
+
+
+(function() {
+'use strict';
+
+/**
+  The mixin for the application route. This defines actions to authenticate the
+  session as well as to invalidate it. These actions can be used in all
+  templates like this:
+
+  ```handlebars
+  {{#if session.isAuthenticated}}
+    <a {{ action 'invalidateSession' }}>Logout</a>
+  {{else}}
+    <a {{ action 'authenticateSession' }}>Login</a>
+  {{/if}}
+  ```
+
+  While this code works it is __preferrable to use the regular `link-to` helper
+  for the _'login'_ link__ as that will add the `'active'` class to the link.
+  For the _'logout'_ actions of course there is no route.
+
+  ```handlebars
+  {{#if session.isAuthenticated}}
+    <a {{ action 'invalidateSession' }}>Logout</a>
+  {{else}}
+    {{#link-to 'login'}}Login{{/link-to}}
+  {{/if}}
+  ```
+
+  This mixin also defines actions that are triggered whenever the session is
+  successfully authenticated or invalidated and whenever authentication or
+  invalidation fails.
+
+  @class ApplicationRouteMixin
+  @namespace Ember.SimpleAuth
+  @extends Ember.Mixin
+  @static
+*/
+Ember.SimpleAuth.ApplicationRouteMixin = Ember.Mixin.create({
+  actions: {
+    /**
+      This action triggers transition to the `authenticationRoute` specified in
+      [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup). It can be used in
+      templates as shown above. It is also triggered automatically by
+      [Ember.SimpleAuth.AuthenticatedRouteMixin](#Ember-SimpleAuth-AuthenticatedRouteMixin)
+      whenever a route that requries authentication is accessed but the session
+      is not currently authenticated.
+
+      __For an application that works without an authentication route (e.g.
+      because it opens a new window to handle authentication there), this is
+      the method to override, e.g.:__
+
+      ```javascript
+      App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin, {
+        actions: {
+          authenticateSession: function() {
+            var _this = this;
+            this.get('session').authenticate(App.MyCustomAuthenticator.create(), {}).then(function() {
+              _this.send('sessionAuthenticationSucceeded');
+            }, function(error) {
+              _this.send('sessionAuthenticationFailed', error);
+            });
+          }
+        }
+      });
+      ```
+
+      @method actions.authenticateSession
+    */
+    authenticateSession: function() {
+      this.transitionTo(Ember.SimpleAuth.authenticationRoute);
+    },
+
+    /**
+      This action is triggered whenever the session is successfully
+      authenticated. It retries a transition that was previously intercepted in
+      [AuthenticatedRouteMixin#beforeModel](#Ember-SimpleAuth-AuthenticatedRouteMixin-beforeModel).
+      If there is no intercepted transition, this action redirects to the
+      `routeAfterAuthentication` specified in
+      [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup).
+
+      @method actions.sessionAuthenticationSucceeded
+    */
+    sessionAuthenticationSucceeded: function() {
+      var attemptedTransition = this.get('session.attemptedTransition');
+      if (attemptedTransition) {
+        attemptedTransition.retry();
+        this.set('session.attemptedTransition', null);
+      } else {
+        this.transitionTo(Ember.SimpleAuth.routeAfterAuthentication);
+      }
+    },
+
+    /**
+      This action in triggered whenever session authentication fails. The
+      arguments the action is invoked with depend on the used authenticator
+      (see
+      [Ember.SimpleAuth.Authenticators.Base](#Ember-SimpleAuth-Authenticators-Base)).
+
+      It can be overridden to display error messages etc.:
+
+      ```javascript
+      App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin, {
+        actions: {
+          sessionAuthenticationFailed: function(error) {
+            this.controllerFor('application').set('loginErrorMessage', error.message);
+          }
+        }
+      });
+      ```
+
+      @method actions.sessionAuthenticationFailed
+      @param {any} arguments Any error argument the promise returned by the authenticator rejects with, see [Ember.SimpleAuth.Authenticators.Base#authenticate](#Ember-SimpleAuth-Authenticators-Base-authenticate)
+    */
+    sessionAuthenticationFailed: function() {
+    },
+
+    /**
+      This action invalidates the session (see
+      [Ember.SimpleAuth.Session#invalidate](#Ember-SimpleAuth-Session-invalidate)).
+      If invalidation succeeds, it transitions to `routeAfterInvalidation`
+      specified in [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup).
+
+      @method actions.invalidateSession
+    */
+    invalidateSession: function() {
+      var _this = this;
+      this.get('session').invalidate().then(function() {
+        _this.send('sessionInvalidationSucceeded');
+      }, function(error) {
+        _this.send('sessionInvalidationFailed', error);
+      });
+    },
+
+    /**
+      This action is invoked whenever the session is successfully invalidated.
+      It transitions to `routeAfterInvalidation` specified in
+      [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup).
+
+      @method actions.sessionInvalidationSucceeded
+    */
+    sessionInvalidationSucceeded: function() {
+      this.transitionTo(Ember.SimpleAuth.routeAfterInvalidation);
+    },
+
+    /**
+      This action is invoked whenever session invalidation fails.
+
+      @method actions.sessionInvalidationFailed
+    */
+    sessionInvalidationFailed: function(error) {
+    },
+
+    /**
+      This action is invoked when an authorization error occurs (which is
+      __when a server responds with HTTP status 401__). This will invalidate
+      the session and transitions to the `routeAfterInvalidation` specified in
+      [Ember.SimpleAuth.setup](#Ember-SimpleAuth-setup).
+
+      @method actions.authorizationFailed
+    */
+    authorizationFailed: function() {
+      var _this = this;
+      this.get('session').invalidate().then(function() {
+        _this.transitionTo(Ember.SimpleAuth.routeAfterInvalidation);
+      });
+    },
+
+    /**
+      @method actions.error
+      @private
+    */
+    error: function(reason) {
+      if (reason.status === 401) {
+        this.send('authorizationFailed');
+      }
+      return true;
+    }
+  }
+});
+
+})();
+
+
+
+(function() {
+
+})();
+
+
+},{}],19:[function(require,module,exports){
 // Version: v1.0.0
 // Last commit: e2ea0cf (2013-08-31 23:47:39 -0700)
 
@@ -46998,7 +48945,7 @@ Ember.State = generateRemovedClass("Ember.State");
 
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /*
 
 Copyright (C) 2011 by Yehuda Katz
@@ -47362,7 +49309,7 @@ Handlebars.template = Handlebars.VM.template;
 })(Handlebars);
 ;
 
-},{}],15:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
@@ -56960,5 +58907,5 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 }
 
 })( window );
-},{}]},{},[7])
+},{}]},{},[10])
 ;

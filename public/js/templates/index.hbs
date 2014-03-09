@@ -1,2 +1,10 @@
 <h2>Index</h2>
 
+{{#if session.isAuthenticated}}
+  Welcome {{ session.name }}<br>
+  ID: {{ session.userID }}<br>
+  Email: {{ session.email }}<br>
+  <a {{ action 'invalidateSession' }}>Logout</a>
+{{else}}
+  <a {{ action 'authenticateSession' }}>Login</a>
+{{/if}}

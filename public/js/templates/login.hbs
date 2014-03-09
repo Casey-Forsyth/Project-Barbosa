@@ -1,0 +1,23 @@
+<div class="col-sm-8 col-sm-offset-2">
+  {{#if loginFailed}}
+    <div class="alert alert-danger animated fadeIn">
+      {{#each errors}}
+        <div>{{this.msg}}</div>
+      {{/each}}
+    </div>
+  {{/if}}
+  <form {{action 'authenticate' on="submit"}}>
+    <legend>Login</legend>
+    <div class="form-group">
+      <label for="email" class="control-label">Email</label>
+      {{input type="text" name="email" id="email" placeholder="email" class="form-control"}}
+    </div>
+    <div class="form-group">
+      <label for="username" class="control-label">Password</label>
+      {{input type="password" name="password" id="password" placeholder="password" class="form-control"}}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" {{action 'authenticate'}} {{bindAttr disabled='isProcessing'}}><i class="fa fa-unlock-alt"></i>Login</button>
+    </div>
+  </form>
+</div>
