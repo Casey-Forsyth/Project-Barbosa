@@ -7,6 +7,7 @@ var SignupController = Ember.Controller.extend(Ember.SimpleAuth.AuthenticationCo
     authenticate: function() {
       var credentials = {
         action: 'signup',
+        name: $('#name').val(),
         email: $('#email').val(),
         password: $('#password').val(),
         confirmPassword: $('#confirmPassword').val()

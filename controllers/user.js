@@ -47,6 +47,7 @@ exports.postLogin = function(req, res, next) {
  */
 
 exports.postSignup = function(req, res, next) {
+  req.assert('name', 'Name cannot be blank').notEmpty();
   req.assert('email', 'Email cannot be blank').notEmpty();
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
@@ -61,7 +62,10 @@ exports.postSignup = function(req, res, next) {
 
   var user = new User({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    profile: {
+      name: req.body.name
+    }
   });
 
   user.save(function(err) {
