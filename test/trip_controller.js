@@ -1,9 +1,10 @@
-//requires
+  //requires
 var assert = require("assert");
 var express = require('express');
 var app = require('../app.js');
 var request = require('supertest');
 var Trip = require('../models/Trip');
+var ItineraryItem = require('../models/ItineraryItem').model;
 
 describe('Trip Controller', function(){
 
@@ -15,6 +16,22 @@ describe('Trip Controller', function(){
           res.should.have.status(404).and.throw()
           done()
         })
+    })
+
+    it('should list trip item ids', function(done){
+      item = new ItineraryItem({title: 'foo'})
+      trip = new Trip({name: 'with an itinerary', itinerary: [item]})
+      trip.save(function(){
+        request(app)
+          .get('/trips/' + trip.id)
+          .end(function(err, res){
+            res.should.have.status(200)
+            res.body.should.have.property('trip')
+            res.body.trip.itinerary_ids.should.have.lengthOf(1)
+            res.body.items.should.have.lengthOf(1)
+          })
+      })
+      done()
     })
 
     it('should 404 with a missing id', function(done) {
