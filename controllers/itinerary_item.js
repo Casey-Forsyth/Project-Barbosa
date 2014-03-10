@@ -72,7 +72,7 @@ exports.showItineraryItem = function(req, res) {
       if (itineraryItem) {
         res.json({itineraryItem:itineraryItem});
       } else {
-        res.status(500).json(null);
+        res.status(404).json(null);
       }
 
     }
@@ -110,7 +110,7 @@ exports.updateItineraryItem = function(req, res){
         });
 
 		  } else {
-			  res.status(500).json(null);
+			  res.status(404).json(null);
 		  }
 
 	  }
@@ -129,26 +129,27 @@ exports.deleteItineraryItem = function(req, res){
   var Trip = mongoose.model('Trip');
   Trip.findById(req.params.tripid).exec(function(err, trip) {
 
-	if (err) {
-		res.status(500).json(null);
-	} else {
+	  if (err) {
+		  res.status(500).json(null);
+	  } else {
 
-		var itineraryItem = trip.itinerary.id(req.params.itemid);
+		  var itineraryItem = trip.itinerary.id(req.params.itemid);
 
-		if (itineraryItem) {
+		  if (itineraryItem) {
 
-		  itineraryItem.remove(function (err) {
-			if (err) {
-			  res.status(500).json(null);
-			};
-			res.json({});
-		  })
+		    itineraryItem.remove(function (err) {
+          if (err) {
+            res.status(500).json(null);
+          } else {
+            res.json({});
+          }
+		    });
 
-		} else {
-			res.status(500).json(null);
-		}
+		  } else {
+			  res.status(404).json(null);
+		  }
 
-	}
+	  }
 
   });
 

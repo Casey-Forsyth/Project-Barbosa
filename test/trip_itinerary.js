@@ -108,7 +108,7 @@ describe('Itinerary Items', function() {
       request(app)
         .get('/trip/' + testTrip.id + '/items/' + 'invalid_itinerary_item_id')
         .set('Accept', 'application/json')
-        .expect(500, {})
+        .expect(404, {})
         .end(done)
 
     });
@@ -154,7 +154,7 @@ describe('Itinerary Items', function() {
       request(app)
         .put('/trip/' + testTrip.id + '/items/' + 'invalid_itinerary_item_id')
         .set('Accept', 'application/json')
-        .expect(500, {})
+        .expect(404, {})
         .end(done)
 
     });
@@ -170,6 +170,28 @@ describe('Itinerary Items', function() {
           res.body.itineraryItem.should.have.property('title', newTitle)
           done()
         });
+
+    });
+
+  });
+
+  describe('DELETE /trip/:tripid/items/:itemid', function() {
+
+    it('should respond with null (invalid itinerary item id)', function(done) {
+
+      request(app)
+        .del('/trip/' + testTrip.id + '/items/' + 'invalid_itinerary_item_id')
+        .expect(404, {})
+        .end(done)
+
+    });
+
+    it('should delete an itinerary item', function(done) {
+
+      request(app)
+        .del('/trip/' + testTrip.id + '/items/' + itineraryItem1.id)
+        .expect(200, {})
+        .end(done)
 
     });
 
