@@ -1,48 +1,21 @@
-{{#linkTo "trips"}}← All Trips{{/linkTo}}
-
-<h2>{{ name }}</h2>
-
-<p>
-  <b> id:</b> {{ id }}
-</p>
-
-{{#linkTo "edit_trip" model}}Edit{{/linkTo}}
-|
-<a href="#" {{action "destroy"}}>Destroy</a>
-
-<div class='row'>
-  <div class="col-md-6">
-    <h2>Itinerary</h2>
+<div id="trip" class="row">
+  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <h2>{{ name }}</h2>
+    {{#linkTo "edit_trip" model classNames='btn btn-default btn-small'}}Edit{{/linkTo}}
+    <button class='btn btn-default btn-small' {{action "destroy"}}>Delete</button>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <img class='placeholder' src="http://placehold.it/300&text=Calendar">
+    <img class='placeholder' src="http://placehold.it/300&text=Map">
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <h1 class="text-center"><small>Itinerary</small></h1>
+    <ul class='items'>
+      {{#each item in itinerary}}
+        <li>Title: "{{item.title}}"</li>
+      {{else}}
+        <li>Awwh, you don't have any itinerary items yet.</li>
+      {{/each}}
+    </ul>
   </div>
 </div>
-
-<table class="table table-hover">
-  <thead>
-    <th>Itinerary Name</th>
-  </thead>
-  <tbody>    
-    <tr>
-      <td>Insert_Itinerary_Modal_Link/Button</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class='row'>
-  <div class="col-md-6">
-    <h2>Add New Itinerary Item:</h2>
-  </div>
-</div>
-
-<table class="table">
-  <thead>
-    <th>Itinerary Name</th>
-	<th>Location</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td>{{view Ember.TextField valueBinding="itin-name" id="itin-name" classNames='form-control'}}</td>
-      <td>{{view Ember.TextField valueBinding="itin-location" id="itin-location" classNames='form-control'}}</td>
-	</tr>
-  </tbody>
-</table>
-  <button type="submit" class='btn btn-default'>Add</button>
