@@ -53,7 +53,27 @@ describe('POST /trips/:tripid/items', function() {
 		  .set('Accept','application/json')
 		  .expect('Content-Type', /json/)
 		  .expect(200, done);
-	});
+	})
+
+  it('should create a trip item', function(done){
+    trip = new Trip()
+    item = new ItineraryItem({title: 'foobar'})
+    trip.save(function(){
+      request(app)
+        .post('/trips/' + trip.id + '/items')
+        .send({itineraryItem: item})
+        .end(function(err, res){
+          res.should.have.status(200)
+          res.body.should.have.property('item')
+          res.body.item.should.have.property('title', 'foobar')
+
+          ItineraryItem.findById(item.id).exec(function(err, item){
+            (item == null).should.be.false
+            item.title.should.eql('foobar')
+          })
+        })
+    })
+  })
 
   });
 
