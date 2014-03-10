@@ -35,13 +35,6 @@ describe('Itinerary Items', function() {
       done()
     })
 
-    it('should have a updatedAt Date, defaulting to now', function(done) {
-      now = new Date()
-      itineraryItem = new ItineraryItem()
-      assert.equal(itineraryItem.updated.toISOString(), now.toISOString())
-      done()
-    })
-
     it('should have a scheduledAt Date, defaulting to null', function(done) {
       now = new Date()
       itineraryItem = new ItineraryItem()
