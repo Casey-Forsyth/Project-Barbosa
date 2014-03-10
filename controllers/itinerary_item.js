@@ -13,11 +13,13 @@ exports.listTripItinerary = function(req, res) {
   var Trip = mongoose.model('Trip');
 
   Trip.findById(req.params.tripid).exec(function(err, trip) {
-	if (err) {
-		res.status(500).json(null);
-	} else {
-		res.json({itinerary:trip.itinerary});
-	}
+
+    if (err) {
+		  res.status(500).json(null);
+	  } else {
+		  res.json({itinerary: trip.itinerary});
+	  }
+
   });
 
 };
@@ -30,19 +32,23 @@ exports.listTripItinerary = function(req, res) {
 exports.createItineraryItem = function(req, res) {
 
   Trip.findById(req.params.tripid).exec(function(err, trip) {
+
     if (err) {
       res.status(500).json(null);
     } else {
 
       trip.itinerary.push(req.body.itineraryItem);
+
       trip.save(function (err) {
         if (err) {
           res.status(500).json(null);
-        };
-        res.json({trip:trip});
-      })
+        } else {
+          res.json({trip:trip});
+        }
+      });
 
     }
+
   });
 
 };
@@ -57,19 +63,19 @@ exports.showItineraryItem = function(req, res) {
   var Trip = mongoose.model('Trip');
   Trip.findById(req.params.tripid).exec(function(err, trip) {
 
-	if (err) {
-		res.status(500).json(null);
-	} else {
+    if (err) {
+      res.status(500).json(null);
+    } else {
 
-		var itineraryItem = trip.itinerary.id(req.params.itemid);
+      var itineraryItem = trip.itinerary.id(req.params.itemid);
 
-		if (itineraryItem) {
-			res.json({itineraryItem:itineraryItem});
-		} else {
-			res.status(500).json(null);
-		}
+      if (itineraryItem) {
+        res.json({itineraryItem:itineraryItem});
+      } else {
+        res.status(500).json(null);
+      }
 
-	}
+    }
 
   });
 
@@ -85,28 +91,29 @@ exports.updateItineraryItem = function(req, res){
   var Trip = mongoose.model('Trip');
   Trip.findById(req.params.tripid).exec(function(err, trip) {
 
-	if (err) {
-		res.status(500).json(null);
-	} else {
+	  if (err) {
+	  	res.status(500).json(null);
+	  } else {
 
-		var itineraryItem = trip.itinerary.id(req.params.itemid);
+		  var itineraryItem = trip.itinerary.id(req.params.itemid);
 
-		if (itineraryItem) {
+		  if (itineraryItem) {
 
-		  itineraryItem = extend(itineraryItem, req.body.itineraryItem);
+		    itineraryItem = extend(itineraryItem, req.body.itineraryItem);
 
-		  itineraryItem.save(function (err) {
-			if (err) {
+		    itineraryItem.save(function (err) {
+			    if (err) {
+			      res.status(500).json(null);
+			    } else {
+		  	    res.json({itineraryItem: itineraryItem});
+          }
+        });
+
+		  } else {
 			  res.status(500).json(null);
-			};
-			res.json({itineraryItem:itineraryItem});
-		  })
+		  }
 
-		} else {
-			res.status(500).json(null);
-		}
-
-	}
+	  }
 
   });
 

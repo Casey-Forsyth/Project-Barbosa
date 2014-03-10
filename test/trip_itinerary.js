@@ -7,7 +7,7 @@ var Trip = require('../models/Trip');
 var app = require('../app.js');
 var request = require('supertest');
 
-var testTrip = new Trip({name: "*Test Trip*"});
+var testTrip = new Trip({name: "Test Trip"});
 
 before(function() {
   testTrip.save(function(err) {
@@ -113,7 +113,7 @@ describe('Itinerary Items', function() {
 
     });
 
-    it('should respond with a single itinerary items (first item)', function(done) {
+    it('should respond with a single itinerary item (first item)', function(done) {
 
       request(app)
         .get('/trip/' + testTrip.id + '/items/' + itineraryItem1.id)
@@ -128,7 +128,7 @@ describe('Itinerary Items', function() {
 
     });
 
-    it('should respond with a single itinerary items (second item)', function(done) {
+    it('should respond with a single itinerary item (second item)', function(done) {
 
       request(app)
         .get('/trip/' + testTrip.id + '/items/' + itineraryItem2.id)
@@ -138,6 +138,36 @@ describe('Itinerary Items', function() {
           res.should.have.status(200)
           res.body.itineraryItem.should.have.property('_id', itineraryItem2.id)
           res.body.itineraryItem.should.have.property('title', itineraryItem2.title)
+          done()
+        });
+
+    });
+
+  });
+
+  describe('PUT /trip/:tripid/items/:itemid', function() {
+
+    newTitle = "**Test Item 1**";
+
+    it('should respond with null (invalid itinerary item id)', function(done) {
+
+      request(app)
+        .put('/trip/' + testTrip.id + '/items/' + 'invalid_itinerary_item_id')
+        .set('Accept', 'application/json')
+        .expect(500, {})
+        .end(done)
+
+    });
+
+    it('should update an itinerary item', function(done) {
+
+      request(app)
+        .put('/trip/' + testTrip.id + '/items/' + itineraryItem1.id)
+        .send( {itineraryItem: {title:newTitle} } )
+        .end(function(err, res){
+          res.should.have.status(200)
+          res.body.itineraryItem.should.have.property('_id', itineraryItem1.id)
+          res.body.itineraryItem.should.have.property('title', newTitle)
           done()
         });
 
