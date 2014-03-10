@@ -92,4 +92,4 @@ describe('GET /trip/:tripid/items', function() {
 
   });
 
-});
+})
