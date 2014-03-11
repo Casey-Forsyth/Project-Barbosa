@@ -6,8 +6,10 @@ App.Router.map(function() {
   this.resource('trips');
   this.resource('trip', {path: '/trips/:trip_id'}, function(){
     this.resource('items')
+	this.resource('myModal', {path: '/:trip_id/myModal'})
     this.resource('item', {path: '/:item_id'})
   });
+  this.resource('myModal');
   this.route('edit_trip', {path: '/trips/:trip_id/edit'});
   this.route('new_trip', {path: '/trips/new'});
   // end generated routes

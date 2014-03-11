@@ -1,0 +1,29 @@
+<div class="modal-dialog">
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" {{action close target="view"}}>&times;</button>
+    <h3 class="modal-title">Temp_Itineray_Name</h3>
+  </div>
+  <div class="modal-body">
+    <div>
+      <p>Date: Temp_Itineray_Date
+	  <br/>Time: Temp_Itineray_Time
+	  <br/>Location: Temp_Itineray_Location
+	  <br/>Etc...
+	  </p>
+    </div>
+    <div>
+	  <p><U>Description:</U>
+	  <br/>
+	  Random Info about the itinerary can go here.
+	  <br/>
+	  <br/>
+	  This is just a temp, not meant to function yet.
+	  </p>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-default" {{action close target="view"}}>Close</a>
+    <a href="#" class="btn btn-primary" {{action save}}>Send</a>
+  </div>
+</div>

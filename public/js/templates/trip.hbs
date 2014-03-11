@@ -14,7 +14,7 @@
       {{#each item in itinerary}}
         <li>Title: "{{item.title}}"</li>
       {{else}}
-        <li>Awwh, you don't have any itinerary items yet.</li>
+        <li><button {{action 'openModal' 'myModal' trip}}>Temp_Itinerary_Item</button></li>
       {{/each}}
     </ul>
   </div>
