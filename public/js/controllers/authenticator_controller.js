@@ -2,7 +2,6 @@ var AuthenticatorController = Ember.SimpleAuth.Authenticators.Base.extend({
 
   restore: function(properties) {
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      console.log(properties);
       resolve(properties);
     });
   },

@@ -1,33 +1,41 @@
-{{#if signupFailed}}
-  <div class="alert alert-danger animated fadeIn">
-    {{#each errors}}
-      <div>{{this.msg}}</div>
-    {{/each}}
-  </div>
-{{/if}}
-<form id="signup-form" class="form-horizontal" {{action 'authenticate' on="submit"}}>
-  <legend>Signup</legend>
-  <div class="form-group">
-    <label for="email" class="col-sm-3 control-label">Email</label>
-    <div class="col-sm-7">
-      {{input type="text" name="email" id="email" placeholder="email" autofocus="" class="form-control"}}
+<div class="col-sm-8 col-sm-offset-2">
+  {{#if signupFailed}}
+    <div class="alert alert-danger animated fadeIn">
+      {{#each errors}}
+        <div>{{this.msg}}</div>
+      {{/each}}
     </div>
-  </div>
-  <div class="form-group">
-    <label for="password" class="col-sm-3 control-label">Password</label>
-    <div class="col-sm-7">
-      {{input type="password" name="password" id="password" placeholder="password" class="form-control"}}
+  {{/if}}
+  <form id="signup-form" class="form-horizontal" {{action 'authenticate' on="submit"}}>
+    <legend>Signup</legend>
+    <div class="form-group">
+      <label for="name" class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-7">
+        {{input type="text" name="name" id="name" placeholder="Name" autofocus="" class="form-control"}}
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="password" class="col-sm-3 control-label">Confirm Password</label>
-    <div class="col-sm-7">
-      {{input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" class="form-control"}}
+    <div class="form-group">
+      <label for="email" class="col-sm-3 control-label">Email</label>
+      <div class="col-sm-7">
+        {{input type="text" name="email" id="email" placeholder="Email" autofocus="" class="form-control"}}
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-3 col-sm-7">
-      <button type="submit" class="btn btn-success" {{action 'authenticate'}} {{bindAttr disabled='isProcessing'}}><i class="fa fa-check"></i>Signup</button>
+    <div class="form-group">
+      <label for="password" class="col-sm-3 control-label">Password</label>
+      <div class="col-sm-7">
+        {{input type="password" name="password" id="password" placeholder="Password" class="form-control"}}
+      </div>
     </div>
-  </div>
-</form>
+    <div class="form-group">
+      <label for="password" class="col-sm-3 control-label">Confirm Password</label>
+      <div class="col-sm-7">
+        {{input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" class="form-control"}}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-7">
+        <button type="submit" class="btn btn-success" {{action 'authenticate'}} {{bindAttr disabled='isProcessing'}}><i class="fa fa-check"></i>Signup</button>
+      </div>
+    </div>
+  </form>
+</div>

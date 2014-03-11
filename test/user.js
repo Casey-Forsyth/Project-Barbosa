@@ -48,7 +48,7 @@ describe('Signup', function() {
   it('should create a new user', function(done) {
     request(app)
       .post('/signup')
-      .send({email: 'newuser@test.com', password: 'test', confirmPassword: 'test'})
+      .send({name: 'Test User', email: 'newuser@test.com', password: 'test', confirmPassword: 'test'})
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function(err, res) {
@@ -63,13 +63,30 @@ describe('Signup', function() {
       })
   })
 
-  it('should return everything blank, email not valid', function(done) {
+  it('should do nothing, return errors', function(done) {
     request(app)
       .post('/signup')
-      .send({email: '', password: '', confirmPassword: ''})
       .expect('Content-Type', /json/)
       .expect(200)
       .expect([
+        {param: 'name', msg: 'Name cannot be blank'},
+        {param: 'email', msg: 'Email cannot be blank'},
+        {param: 'email', msg: 'Email is not valid'},
+        {param: 'password', msg: 'Password cannot be blank'},
+        {param: 'password', msg: 'Password must be at least 4 characters long'},
+        {param: 'confirmPassword', msg: 'Passwords do not match'}
+      ])
+      .end(done)
+  })
+
+  it('should return everything blank, email not valid', function(done) {
+    request(app)
+      .post('/signup')
+      .send({name: '', email: '', password: '', confirmPassword: ''})
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .expect([
+        {param: 'name', msg: 'Name cannot be blank', value: ''},
         {param: 'email', msg: 'Email cannot be blank', value: ''},
         {param: 'email', msg: 'Email is not valid', value: ''},
         {param: 'password', msg: 'Password cannot be blank', value: ''},
@@ -78,10 +95,22 @@ describe('Signup', function() {
       .end(done)
   })
 
+  it('should return name is blank', function(done) {
+    request(app)
+      .post('/signup')
+      .send({name: '', email: 'test@test.com', password: 'test', confirmPassword: 'test'})
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .expect([
+        {param: 'name', msg: 'Name cannot be blank', value: ''}
+      ])
+      .end(done)
+  })
+
   it('should return email blank and not valid', function(done) {
     request(app)
       .post('/signup')
-      .send({email: '', password: 'test', confirmPassword: 'test'})
+      .send({name: 'Test', email: '', password: 'test', confirmPassword: 'test'})
       .expect('Content-Type', /json/)
       .expect(200)
       .expect([
@@ -94,7 +123,7 @@ describe('Signup', function() {
   it('should return email not valid', function(done) {
     request(app)
       .post('/signup')
-      .send({email: 'notvalid', password: 'test', confirmPassword: 'test'})
+      .send({name: 'Test', email: 'notvalid', password: 'test', confirmPassword: 'test'})
       .expect('Content-Type', /json/)
       .expect(200)
       .expect([
@@ -106,7 +135,7 @@ describe('Signup', function() {
   it('should return password too short', function(done) {
     request(app)
       .post('/signup')
-      .send({email: 'test@test.com', password: '1', confirmPassword: '1'})
+      .send({name: 'Test', email: 'test@test.com', password: '1', confirmPassword: '1'})
       .expect('Content-Type', /json/)
       .expect(200)
       .expect([
@@ -118,7 +147,7 @@ describe('Signup', function() {
   it('should return password too short and do not match', function(done) {
     request(app)
       .post('/signup')
-      .send({email: 'test@test.com', password: '1', confirmPassword: 'a'})
+      .send({name: 'Test', email: 'test@test.com', password: '1', confirmPassword: 'a'})
       .expect('Content-Type', /json/)
       .expect(200)
       .expect([
@@ -131,7 +160,7 @@ describe('Signup', function() {
   it('should return passwords do not match', function(done) {
     request(app)
       .post('/signup')
-      .send({email: 'test@test.com', password: 'testtest', confirmPassword: 'testabcd'})
+      .send({name: 'Test', email: 'test@test.com', password: 'testtest', confirmPassword: 'testabcd'})
       .expect('Content-Type', /json/)
       .expect(200)
       .expect([
