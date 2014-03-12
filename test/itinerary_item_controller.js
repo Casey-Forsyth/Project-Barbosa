@@ -75,4 +75,20 @@ describe('ItineraryItem Controller', function(){
       })
     })
   })
+
+  describe('GET /items/:itemid', function(){
+    it('should get the specified trip item', function(done){
+      item = new ItineraryItem()
+      item.save(function(){
+        request(app)
+          .get('/items/'+item.id)
+          .end(function(err, res){
+            res.should.have.status(200)
+            res.body.should.have.property('item')
+            res.body.item.should.have.property('_id', item.id)
+            done()
+          })
+      })
+    })
+  })
 })

@@ -4,6 +4,21 @@ var Trip = require('../models/Trip');
 var extend = require('util')._extend;
 
 /**
+ * Load a trip item.
+ */
+
+exports.load = function(req, res, next, itemid){
+  ItineraryItem.findById(itemid, function(err, item) {
+    if (err)
+      req.err = err
+    else if (!item)
+      req.err = new Error('ItineraryItem not found')
+    else
+      req.item = item
+    next()
+  })
+ }
+/**
 * GET /items
 * Return all itinerary items matching a query string
 */
