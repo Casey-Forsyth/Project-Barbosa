@@ -91,4 +91,24 @@ describe('ItineraryItem Controller', function(){
       })
     })
   })
+
+  describe('PUT /items/:itemid', function(){
+    it('should update a trip item', function(done){
+      item = new ItineraryItem()
+      updatedTitle = 'el title'
+      item.save(function(){
+        request(app)
+          .put('/items/'+item.id)
+          .send({item: {title: updatedTitle}})
+          .end(function(err, res){
+            res.should.have.status(200)
+            res.body.item.should.have.property('title', updatedTitle)
+            ItineraryItem.findById(item.id, function(err, item){
+              item.title.should.eql(updatedTitle)
+              done()
+            })
+          })
+      })
+    })
+  })
 })

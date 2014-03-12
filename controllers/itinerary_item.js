@@ -68,11 +68,11 @@ exports.createItineraryItem = function(req, res) {
 */
 
 exports.showItineraryItem = function(req, res) {
-    if (req.item) {
-      res.json({item:req.item});
-    } else {
-      res.status(500).json(null);
-    }
+  if (req.item) {
+    res.json({item:req.item});
+  } else {
+    res.status(500).json(null);
+  }
 }
 
 /**
@@ -81,36 +81,15 @@ exports.showItineraryItem = function(req, res) {
 */
 
 exports.updateItineraryItem = function(req, res){
-
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-
-	if (err) {
-		res.status(500).json(null);
-	} else {
-
-		var itineraryItem = trip.itinerary.id(req.params.itemid);
-
-		if (itineraryItem) {
-
-		  itineraryItem = extend(itineraryItem, req.body.itineraryItem);
-
-		  itineraryItem.save(function (err) {
-			if (err) {
-			  res.status(500).json(null);
-			};
-			res.json({itineraryItem:itineraryItem});
-		  })
-
-		} else {
-			res.status(500).json(null);
-		}
-
-	}
-
-  });
-
-};
+  if (!req.item) {
+    return res.status(500).json(null)
+  }
+  updatedItem = extend(req.item, req.body.item)
+  updatedItem.save(function(err){
+    if (err)  res.status(500).json({errors: err.message})
+    else      res.json({item:updatedItem})
+  })
+}
 
 /**
 * DELETE /trip/:tripid/items/:itemid
