@@ -1,82 +1,67 @@
 var mongoose = require('mongoose');
-var ItineraryItem = require('../models/ItineraryItem');
+var ItineraryItem = require('../models/ItineraryItem').model;
 var Trip = require('../models/Trip');
 var extend = require('util')._extend;
 
 /**
-* GET /trip/:tripid/items
-* Return all itinerary items
+* GET /items
+* Return all itinerary items matching a query string
 */
 
-exports.listTripItinerary = function(req, res) {
+exports.listTripItineraryItems = function(req, res) {
+  ids = req.query.ids
+  query = ids ? { _id: { $in: ids } } : {}
 
-  var Trip = mongoose.model('Trip');
-
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-	if (err) {
-		res.status(500).json(null);
-	} else {
-		res.json({itinerary:trip.itinerary});
-	}
-  });
-
+  ItineraryItem.find(query , function(err, items){
+    if (err)  res.status(500).json({errors:[err.message]})
+    else      res.json({items: items})
+  })
 };
 
 /**
-* POST /trips/:tripid/items
+* POST /items
 * Create a new itinerary item
 */
 
 exports.createItineraryItem = function(req, res) {
-
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
+  tripid = req.body.trip_id
+  if (!tripid) {
+    res.status(500).json(null)
+    return
+  };
+  Trip.findById(tripid).exec(function(err, trip) {
     if (err) {
       res.status(500).json(null);
     } else {
-
-      trip.itinerary.push(req.body.itineraryItem);
-      trip.save(function (err) {
-        if (err) {
-          res.status(500).json(null);
-        };
-        res.json({trip:trip});
+      item = new ItineraryItem(req.body.item)
+      item.save(function(){
+        trip.itinerary.push(item)
+        trip.save(function (err) {
+          if (err) {
+            res.status(500).json(null);
+          };
+          res.json({item:item});
+        })
       })
-
     }
-  });
-
-};
+  })
+}
 
 /**
-* GET /trip/:tripid/items/:itemid
+* GET /items/:itemid
 * Return an itinerary item
 */
 
 exports.showItineraryItem = function(req, res) {
-
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-
-	if (err) {
-		res.status(500).json(null);
-	} else {
-
-		var itineraryItem = trip.itinerary.id(req.params.itemid);
-
-		if (itineraryItem) {
-			res.json({itineraryItem:itineraryItem});
-		} else {
-			res.status(500).json(null);
-		}
-
-	}
-
-  });
-
-};
+    if (req.item) {
+      res.json({item:req.item});
+    } else {
+      res.status(500).json(null);
+    }
+}
 
 /**
-* PUT /trip/:tripid/items/:itemid
+* PUT /items/:itemid
 * Update a trip.
 */
 

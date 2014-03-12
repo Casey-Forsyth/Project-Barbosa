@@ -38,30 +38,26 @@ describe('Trip items', function() {
 
 })
 
-describe('POST /trips/:tripid/items', function() {
+describe('POST /items', function() {
   it('should respond with json', function(done) {
-
-    itineraryItem = new ItineraryItem();
-    itineraryItem.name = "Test Item";
-
-    Trip.find().exec(function(err, trips){
-
-		var trip = trips[0];
-		request(app)
-		  .post('/trips/' + trip.id + '/items')
-		  .send({itineraryItem:itineraryItem})
-		  .set('Accept','application/json')
-		  .expect('Content-Type', /json/)
-		  .expect(200, done);
-	})
-
-  it('should create a trip item', function(done){
     trip = new Trip()
+    trip.save(function(){
+      item = new ItineraryItem({name: 'tripname'});
+
+      request(app)
+        .post('/items')
+        .send({item:item, trip_id:trip.id})
+        .expect(200, done);
+      })
+    })
+
+  it('should create a new trip item', function(done){
     item = new ItineraryItem({title: 'foobar'})
+    trip = new Trip()
     trip.save(function(){
       request(app)
-        .post('/trips/' + trip.id + '/items')
-        .send({itineraryItem: item})
+        .post('/items')
+        .send({item: item, trip_id: trip.id})
         .end(function(err, res){
           res.should.have.status(200)
           res.body.should.have.property('item')
@@ -71,38 +67,43 @@ describe('POST /trips/:tripid/items', function() {
             (item == null).should.be.false
             item.title.should.eql('foobar')
           })
+          done()
         })
     })
   })
-
-  });
-
 });
 
-describe('GET /trip/:tripid/items', function() {
-  it('should respond with json', function(done) {
+describe('GET /items', function() {
+  describe('with ids[] specified', function(){
+    it('should get the items specified', function(done) {
+      itemName = 'the item of awesome'
+      item = new ItineraryItem({title: itemName});
+      item.save(function(){
+        request(app)
+          .get('/items?ids[]=' + item.id)
+          .end(function(err, res){
+            (err == null).should.be.true
+            res.should.have.status(200)
+            res.body.should.have.property('items')
+            res.body.items.should.have.lengthOf(1)
+            res.body.items[0].should.have.property('title', itemName)
+            done()
+          })
+      })
+    })
+  })
 
-	var tripid;
-
-    itineraryItem = new ItineraryItem();
-    itineraryItem.name = "Test Item";
-
-    Trip.find().exec(function(err, trips){
-
-		var trip = trips[0];
-		tripid = trip.id;
-		request(app)
-		  .post('/trips/' + tripid + '/items')
-		  .send({itineraryItem:itineraryItem})
-
-	});
-
-	request(app)
-	  .get('/trip/' + trip.id + '/items')
-	  .set('Accept','application/json')
-	  .expect('Content-Type', /json/)
-	  .expect(200, done);
-
-  });
-
+  describe('without ids[] specified', function(){
+    it('should get all items', function(done){
+      request(app)
+        .get('/items')
+        .end(function(err, res){
+          (err == null).should.be.true
+          res.should.have.status(200)
+          res.body.should.have.property('items')
+          res.body.items.length.should.be.above(1)
+          done()
+        })
+    })
+  })
 });
