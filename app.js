@@ -92,11 +92,12 @@ app.get( '/trips/:tripid', tripController.showTrip);
 app.put( '/trips/:tripid', tripController.updateTrip);
 app.delete( '/trips/:tripid', tripController.deleteTrip);
 
-app.get('/trip/:tripid/items', itineraryItemController.listTripItinerary);
-app.post('/trips/:tripid/items', itineraryItemController.createItineraryItem);
-app.get('/trip/:tripid/items/:itemid', itineraryItemController.showItineraryItem);
-app.put('/trip/:tripid/items/:itemid', itineraryItemController.updateItineraryItem);
-app.delete('/trip/:tripid/items/:itemid', itineraryItemController.deleteItineraryItem);
+app.param('itemid', itineraryItemController.load)
+app.get('/items', itineraryItemController.listTripItineraryItems);
+app.post('/items', itineraryItemController.createItineraryItem);
+app.get('/items/:itemid', itineraryItemController.showItineraryItem);
+app.put('/items/:itemid', itineraryItemController.updateItineraryItem);
+app.delete('/items/:itemid', itineraryItemController.deleteItineraryItem);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));

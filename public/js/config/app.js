@@ -25,11 +25,27 @@ App.initializer({
 
 App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin);
 
-App.ApplicationSerializer = DS.RESTSerializer.extend({
+App.ApplicationSerializer = DS.RESTSerializer.extend( {
   primaryKey: function(){return '_id'},
+});
+
+App.ApplicationRoute = Ember.Route.extend( {
+  actions: {
+    openModal: function(modalName) {
+      return this.render(modalName, {
+        into: 'application',
+        outlet: 'modal'
+      });
+    },
+	closeModal: function() {
+      return this.disconnectOutlet( {
+        outlet: 'modal',
+        parentView: 'application'
+      });
+    },
+  }
 });
 
 App.Store = require('./store'); // delete if you don't want ember-data
 
 module.exports = App;
-

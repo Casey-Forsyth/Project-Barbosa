@@ -1,8 +1,8 @@
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
-
-  // "_id": DS.attr('string'),
+  "itinerary": DS.hasMany('App.Item', {async: true}),
+  "archived": DS.attr('boolean')
 
 });
 
