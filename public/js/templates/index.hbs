@@ -5,7 +5,7 @@
   Email: {{ session.email }}<br>
   <div class='row'>
 	  <div class="col-md-6">
-	    {{#linkTo "new_trip" classNames="btn btn-primary pull-left"}}My Trips{{/linkTo}}
+	    {{#linkTo "trips" classNames="btn btn-primary pull-left"}}My Trips{{/linkTo}}
 	  </div>
   </div>
   <a {{ action 'invalidateSession' }}>Logout</a>

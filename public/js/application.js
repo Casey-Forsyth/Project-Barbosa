@@ -469,7 +469,7 @@ function program1(depth0,data) {
   options = {hash:{
     'classNames': ("btn btn-primary pull-left")
   },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "new_trip", options) : helperMissing.call(depth0, "linkTo", "new_trip", options));
+  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trips", options) : helperMissing.call(depth0, "linkTo", "trips", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n	  </div>\n  </div>\n  <a ");
   hashTypes = {};
@@ -481,7 +481,7 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   
-  data.buffer.push("View My Trips");
+  data.buffer.push("My Trips");
   }
 
 function program4(depth0,data) {
