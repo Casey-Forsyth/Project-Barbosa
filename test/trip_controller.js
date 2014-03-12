@@ -20,18 +20,20 @@ describe('Trip Controller', function(){
 
     it('should list trip item ids', function(done){
       item = new ItineraryItem({title: 'foo'})
-      trip = new Trip({name: 'with an itinerary', itinerary: [item]})
-      trip.save(function(){
-        request(app)
-          .get('/trips/' + trip.id)
-          .end(function(err, res){
-            res.should.have.status(200)
-            res.body.should.have.property('trip')
-            res.body.trip.itinerary_ids.should.have.lengthOf(1)
-            res.body.items.should.have.lengthOf(1)
-          })
+      item.save(function(){
+        trip = new Trip({name: 'with an itinerary', itinerary: [item]})
+        trip.save(function(){
+          request(app)
+            .get('/trips/' + trip.id)
+            .end(function(err, res){
+              res.should.have.status(200)
+              res.body.should.have.property('trip')
+              res.body.trip.itinerary_ids.should.have.lengthOf(1)
+              res.body.items.should.have.lengthOf(1)
+              done()
+            })
+        })
       })
-      done()
     })
 
     it('should 404 with a missing id', function(done) {
