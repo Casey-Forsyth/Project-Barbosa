@@ -12,9 +12,14 @@
     <h1 class="text-center"><small>Itinerary</small></h1>
     <ul class='items'>
       {{#each item in itinerary}}
-        <li>Title: "{{item.title}}"</li>
+        <li>
+          <strong>Title: "{{item.title}}"</strong>
+          <button class='btn btn-info' {{action 'openModal' 'trip_item' item}}>
+            Edit
+          </button>
+        </li>
       {{else}}
-        <li><button {{action 'openModal' 'myModal'}}>Temp_Itinerary_Item</button></li>
+        <li>nope</li>
       {{/each}}
     </ul>
   </div>
