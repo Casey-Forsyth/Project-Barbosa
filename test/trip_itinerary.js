@@ -9,7 +9,6 @@ var request = require('supertest');
 
 var testTrip = new Trip({name: "Test Trip"});
 
-<<<<<<< HEAD
 before(function() {
   testTrip.save(function(err) {
     if (err && err.code != 11000) { //Create a test trip. If trip exists (err.code 11000 returned), do nothing.
