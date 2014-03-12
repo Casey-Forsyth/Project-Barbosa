@@ -14,8 +14,9 @@
       {{#each item in itinerary}}
         <li>
           <strong>Title: "{{item.title}}"</strong>
-          <button class='btn btn-info' {{action 'openModal' 'item' item}}>
+          <button class='btn btn-info btn-xs' {{action 'openModal' 'item' item}}>
             Edit
+            <span class='glyphicon glyphicon-edit'></span>
           </button>
         </li>
       {{else}}
