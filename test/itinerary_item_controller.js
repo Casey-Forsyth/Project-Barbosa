@@ -111,4 +111,22 @@ describe('ItineraryItem Controller', function(){
       })
     })
   })
+
+  describe('DELETE /items/:itemid', function(){
+    it('should delete a trip item', function(done){
+      item = new ItineraryItem()
+      item.save(function(){
+        request(app)
+          .del('/items/'+item.id)
+          .end(function(err, res){
+            res.should.have.status(200)
+            res.body.should.be.empty
+            ItineraryItem.findById(item.id, function(err, item){
+              (item == null).should.be.true
+              done()
+            })
+          })
+      })
+    })
+  })
 })

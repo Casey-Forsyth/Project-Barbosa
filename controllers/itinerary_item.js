@@ -97,31 +97,11 @@ exports.updateItineraryItem = function(req, res){
 */
 
 exports.deleteItineraryItem = function(req, res){
-
-  var Trip = mongoose.model('Trip');
-  Trip.findById(req.params.tripid).exec(function(err, trip) {
-
-	if (err) {
-		res.status(500).json(null);
-	} else {
-
-		var itineraryItem = trip.itinerary.id(req.params.itemid);
-
-		if (itineraryItem) {
-
-		  itineraryItem.remove(function (err) {
-			if (err) {
-			  res.status(500).json(null);
-			};
-			res.json({});
-		  })
-
-		} else {
-			res.status(500).json(null);
-		}
-
-	}
-
-  });
-
+  if (!req.item) {
+    return res.status(500).json(null)
+  }
+  req.item.remove(function(err){
+    if (err)  res.status(500).json({errors: err.message})
+    else      res.json(null)
+  })
 };
