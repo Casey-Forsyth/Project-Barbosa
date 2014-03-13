@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 var ItineraryItem = require('./ItineraryItem');
-var User = require('./User');
 
 var tripSchema = new mongoose.Schema({
   name:  {type: String, default: "My Trip"},
   itinerary: [ItineraryItem.schema],
-  user:[User.Schema],
+  user:{type: String, default: "None"},
   date: {type: Date, default: Date.now()},
   archived: {type: Boolean, default: false}
 });

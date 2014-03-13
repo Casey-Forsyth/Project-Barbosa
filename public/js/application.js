@@ -271,6 +271,8 @@ module.exports = App;
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
+  "date": DS.attr('date'),
+  "user": DS.attr('string'),
 
   // "_id": DS.attr('string'),
 
@@ -450,11 +452,17 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['index'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
+  
+  data.buffer.push("All Trips");
+  }
+
+function program3(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n  Welcome ");
   hashTypes = {};
   hashContexts = {};
@@ -463,28 +471,15 @@ function program1(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "session.email", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("<br>\n  <div class='row'>\n	  <div class=\"col-md-6\">\n	    ");
-  hashContexts = {'classNames': depth0};
-  hashTypes = {'classNames': "STRING"};
-  options = {hash:{
-    'classNames': ("btn btn-primary pull-left")
-  },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trips", options) : helperMissing.call(depth0, "linkTo", "trips", options));
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n	  </div>\n  </div>\n  <a ");
+  data.buffer.push("<br>\n  <a ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "invalidateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">Logout</a>\n");
   return buffer;
   }
-function program2(depth0,data) {
-  
-  
-  data.buffer.push("My Trips");
-  }
 
-function program4(depth0,data) {
+function program5(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n  <a ");
@@ -495,12 +490,20 @@ function program4(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<h2>Welcome</h2>\n\n");
+  data.buffer.push("<h2>Welcome</h2>\n\n<div class='row'>\n    <div class=\"col-md-6\">\n      ");
+  hashContexts = {'classNames': depth0};
+  hashTypes = {'classNames': "STRING"};
+  options = {hash:{
+    'classNames': ("btn btn-primary pull-left")
+  },inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trips", options) : helperMissing.call(depth0, "linkTo", "trips", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n    </div>\n  </div>\n\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "session.isAuthenticated", {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n\n<hr>\n\n<h3>Trips</h3>\n\n<ul class=\"media-list\">\n  <li class=\"media\">\n    <a class=\"pull-left\" href=\"#\">\n      <img class=\"media-object\" src=\"http://maps.googleapis.com/maps/api/staticmap?center=Nantes+France&zoom=5&size=64x64&sensor=false\" alt=\"...\">\n    </a>\n    <div class=\"media-body\">\n      <h4 class=\"media-heading\">Journey to the Center of the Earth</h4>\n      Date: 8 February 1828<br>\n      User: Jules Verne\n    </div>\n  </li>\n  <li class=\"media\">\n    <a class=\"pull-left\" href=\"#\">\n      <img class=\"media-object\" src=\"http://maps.googleapis.com/maps/api/staticmap?center=Paris+France&zoom=5&size=64x64&sensor=false\" alt=\"...\">\n    </a>\n    <div class=\"media-body\">\n      <h4 class=\"media-heading\">Voyage au centre de la Terre</h4>\n      Date: 8 February 1828<br>\n      User: Jules Verne\n    </div>\n  </li>\n  <li class=\"media\">\n    <a class=\"pull-left\" href=\"#\">\n      <img class=\"media-object\" src=\"http://maps.googleapis.com/maps/api/staticmap?center=Bombay+India&zoom=4&size=64x64&sensor=false\" alt=\"...\">\n    </a>\n    <div class=\"media-body\">\n      <h4 class=\"media-heading\">Around the World in Eighty Days</h4>\n      Date: 8 February 1828<br>\n      User: Jules Verne\n    </div>\n  </li>\n  <li class=\"media\">\n    <a class=\"pull-left\" href=\"#\">\n      <img class=\"media-object\" src=\"http://maps.googleapis.com/maps/api/staticmap?center=Winnipeg+MB&zoom=5&size=64x64&sensor=false\" alt=\"...\">\n    </a>\n    <div class=\"media-body\">\n      <h4 class=\"media-heading\">Twenty Thousand Leagues Under the Sea</h4>\n      Date: 8 February 1828<br>\n      User: Jules Verne\n    </div>\n  </li>\n</ul>");
+  stack2 = helpers['if'].call(depth0, "session.isAuthenticated", {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n");
   return buffer;
   
 });
@@ -750,7 +753,15 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</h4>\n        Date: 8 February 1828<br>\n        User: Jules Verne\n      </div>\n    </li>\n    \n\n  ");
+  data.buffer.push("</h4>\n\n          Date: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.date", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\n          User: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.user", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      </div>\n    </li>\n    \n\n  ");
   return buffer;
   }
 function program4(depth0,data) {
