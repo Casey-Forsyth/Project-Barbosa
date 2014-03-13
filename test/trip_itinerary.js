@@ -44,13 +44,13 @@ describe('Itinerary Items', function() {
   })
 
   it('should have a location with a name, lat, and long', function(done) {
-    loc = {
-      name: "Takeoff from YWG",
+    item = {
+      locationName: "Takeoff from YWG",
       latitude: 49.89,
       longitude: -97.1,
     }
-    itineraryItem = new ItineraryItem({location: loc})
-    itineraryItem.location.should.have.properties(['name', 'latitude', 'longitude'])
+    itineraryItem = new ItineraryItem(item)
+    itineraryItem.should.have.properties(['locationName', 'latitude', 'longitude'])
     done()
   })
 
