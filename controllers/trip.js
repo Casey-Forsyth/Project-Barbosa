@@ -81,6 +81,15 @@ exports.listTrips = function(req, res) {
  */
 
 exports.createTrip = function(req, res) {
+  username = null;
+  if(req.cookies['ember_simple_auth:isAuthenticated'])
+  {
+    if(req.cookies['ember_simple_auth:name'] != null)
+    {
+      username = req.cookies['ember_simple_auth:name'];
+      console.log("username:"+username);
+    }
+  }
   trip = new Trip(req.body.trip)
   trip.save(function(err, trip){
     if(err)
