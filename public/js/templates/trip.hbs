@@ -9,12 +9,18 @@
     <img class='placeholder' src="http://placehold.it/300&text=Map">
   </div>
   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-    <h1 class="text-center"><small>Itinerary</small></h1>
+    <h1 class="text-center">
+      <small class='itinerary-header'>Itinerary</small>
+      <button class='btn btn-primary btn-sm pull-right' {{action 'openModal' 'item'}}>
+        Add item
+        <i class='glyphicon glyphicon-plus'></i>
+      </button>
+    </h1>
     <ul class='items'>
       {{#each item in itinerary}}
         <li>
           <strong>Title: "{{item.title}}"</strong>
-          <button class='btn btn-info btn-xs' {{action 'openModal' 'item' item}}>
+          <button class='pull-right btn btn-info btn-xs' {{action 'openModal' 'item' item}}>
             Edit
             <span class='glyphicon glyphicon-edit'></span>
           </button>
