@@ -727,7 +727,7 @@ function program3(depth0,data) {
 Ember.TEMPLATES['trips'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
@@ -737,26 +737,26 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
-  data.buffer.push("\n    <tr>\n      <td>");
-  hashTypes = {};
-  hashContexts = {};
-  options = {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
+  data.buffer.push("\n\n    \n    <li class=\"media\">\n    ");
+  hashContexts = {'classNames': depth0};
+  hashTypes = {'classNames': "STRING"};
+  options = {hash:{
+    'classNames': ("pull-left")
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trip", "trip", options) : helperMissing.call(depth0, "linkTo", "trip", "trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("</td>\n      <td>");
+  data.buffer.push("\n      <div class=\"media-body\">\n        <h4 class=\"media-heading\">");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</td>\n    </tr>\n    ");
+  data.buffer.push("</h4>\n        Date: 8 February 1828<br>\n        User: Jules Verne\n      </div>\n    </li>\n    \n\n  ");
   return buffer;
   }
 function program4(depth0,data) {
   
-  var hashTypes, hashContexts;
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.id", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  
+  data.buffer.push("\n        <img class=\"media-object\" src=\"http://maps.googleapis.com/maps/api/staticmap?center=Nantes+France&zoom=5&size=64x64&sensor=false\" alt=\"...\">\n    ");
   }
 
   data.buffer.push("<div class='row'>\n  <div class=\"col-md-6\">\n    <h2>Trips</h2>\n  </div>\n  <div class=\"col-md-6\">\n    ");
@@ -767,12 +767,12 @@ function program4(depth0,data) {
   },inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "new_trip", options) : helperMissing.call(depth0, "linkTo", "new_trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n  </div>\n</div>\n\n<table class=\"table table-hover\">\n  <thead>\n    <th>ID</th>\n    <th>Name</th>\n  </thead>\n  <tbody>\n    ");
+  data.buffer.push("\n  </div>\n</div>\n\n<ul class=\"media-list\">\n\n  ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "trip", "in", "controller", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n  </tbody>\n</table>\n\n\n");
+  data.buffer.push("\n</ul>\n\n\n");
   return buffer;
   
 });

@@ -7,19 +7,24 @@
   </div>
 </div>
 
-<table class="table table-hover">
-  <thead>
-    <th>ID</th>
-    <th>Name</th>
-  </thead>
-  <tbody>
-    {{#each trip in controller}}
-    <tr>
-      <td>{{#linkTo "trip" trip}}{{ trip.id }}{{/linkTo}}</td>
-      <td>{{ trip.name }}</td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+<ul class="media-list">
+
+  {{#each trip in controller}}
+
+    
+    <li class="media">
+    {{#linkTo "trip" trip classNames="pull-left"}}
+        <img class="media-object" src="http://maps.googleapis.com/maps/api/staticmap?center=Nantes+France&zoom=5&size=64x64&sensor=false" alt="...">
+    {{/linkTo}}
+      <div class="media-body">
+        <h4 class="media-heading">{{ trip.name }}</h4>
+        Date: 8 February 1828<br>
+        User: Jules Verne
+      </div>
+    </li>
+    
+
+  {{/each}}
+</ul>
 
 
