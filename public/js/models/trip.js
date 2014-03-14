@@ -4,8 +4,8 @@ var Trip = DS.Model.extend({
   "date": DS.attr('date'),
   "user": DS.attr('string'),
   "location": DS.attr('string'),
-
-  // "_id": DS.attr('string'),
+  "itinerary": DS.hasMany('App.Item', {async: true}),
+  "archived": DS.attr('boolean')
 
 });
 
@@ -18,5 +18,5 @@ Ember.Handlebars.helper('makeMap', function(trip) {
 
 
 Ember.Handlebars.helper('makeMapLarge', function(trip) {
-  return new Handlebars.SafeString('<img class="media-object" src="http://maps.googleapis.com/maps/api/staticmap?center=' + trip + '&zoom=5&size=300x150&sensor=false" alt="...">');
+  return new Handlebars.SafeString('<img class="media-object" src="http://maps.googleapis.com/maps/api/staticmap?center=' + trip + '&zoom=5&size=298x298&sensor=false" alt="...">');
 }, 'location');

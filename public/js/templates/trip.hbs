@@ -1,16 +1,23 @@
 {{#linkTo "trips"}}← All Trips{{/linkTo}}
-
-<h2>{{ name }}</h2>
-
-{{makeMapLarge location}}
-
-<p>
-  <b> id:</b> {{ id }}<br>
-  <b> user:</b> {{ user }}<br>
-  <b> date:</b> {{ date }}<br>
-  <b> location:</b> {{ location }}<br>
-</p>
-
-{{#linkTo "edit_trip" model}}Edit{{/linkTo}}
-|
-<a href="#" {{action "destroy"}}>Destroy</a>
+ 
+<div id="trip" class="row">
+  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <h2>{{ name }}</h2>
+    {{#linkTo "edit_trip" model classNames='btn btn-default btn-small'}}Edit{{/linkTo}}
+    <button class='btn btn-default btn-small' {{action "destroy"}}>Delete</button>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <img class='placeholder' src="http://placehold.it/300&text=Calendar">
+    {{makeMapLarge location}}
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <h1 class="text-center"><small>Itinerary</small></h1>
+    <ul class='items'>
+      {{#each item in itinerary}}
+        <li>Title: "{{item.title}}"</li>
+      {{else}}
+        <li><button {{action 'openModal' 'myModal'}}>Temp_Itinerary_Item</button></li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
