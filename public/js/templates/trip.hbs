@@ -2,8 +2,13 @@
 
 <h2>{{ name }}</h2>
 
+{{makeMapLarge location}}
+
 <p>
-  <b> id:</b> {{ id }}
+  <b> id:</b> {{ id }}<br>
+  <b> user:</b> {{ user }}<br>
+  <b> date:</b> {{ date }}<br>
+  <b> location:</b> {{ location }}<br>
 </p>
 
 {{#linkTo "edit_trip" model}}Edit{{/linkTo}}
