@@ -32,15 +32,17 @@
     {{#linkTo "trip" trip classNames="pull-left"}}
         {{makeMap trip}}
     {{/linkTo}}
+    {{#linkTo "trip" trip classNames="listLink"}}
       <div class="media-body">
-        {{#linkTo "trip" trip classNames="listLink"}}
+        
           <h4 class="media-heading">{{ trip.name }}</h4>
 
             Date: {{trip.date}}<br>
             User: {{ trip.user }}<br>
             Location: {{ trip.location }}
-        {{/linkTo}}
+        
       </div>
+      {{/linkTo}}
     </li>
     
 

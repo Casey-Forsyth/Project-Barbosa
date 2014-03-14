@@ -784,7 +784,7 @@ function program3(depth0,data) {
   },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trip", "trip", options) : helperMissing.call(depth0, "linkTo", "trip", "trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      <div class=\"media-body\">\n        ");
+  data.buffer.push("\n    ");
   hashContexts = {'classNames': depth0};
   hashTypes = {'classNames': "STRING"};
   options = {hash:{
@@ -792,7 +792,7 @@ function program3(depth0,data) {
   },inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "trip", "trip", options) : helperMissing.call(depth0, "linkTo", "trip", "trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      </div>\n    </li>\n    \n\n");
+  data.buffer.push("\n    </li>\n    \n\n");
   return buffer;
   }
 function program4(depth0,data) {
@@ -810,7 +810,7 @@ function program4(depth0,data) {
 function program6(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n          <h4 class=\"media-heading\">");
+  data.buffer.push("\n      <div class=\"media-body\">\n        \n          <h4 class=\"media-heading\">");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -826,7 +826,7 @@ function program6(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.location", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n        ");
+  data.buffer.push("\n        \n      </div>\n      ");
   return buffer;
   }
 
