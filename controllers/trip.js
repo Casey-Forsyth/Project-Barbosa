@@ -55,7 +55,7 @@ exports.deleteTrip = function(req, res){
 
 exports.showTrip = function(req, res) {
   if (!req.trip) return res.status(404).json(null);
-  res.json({trip: req.trip})
+  res.json(req.trip.flattened())
 };
 
 /**
