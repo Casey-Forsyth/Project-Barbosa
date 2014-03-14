@@ -5,6 +5,9 @@ var _ = require('underscore')
 var tripSchema = new mongoose.Schema({
   name:  {type: String, default: "My Trip"},
   itinerary: [ItineraryItem.schema],
+  user:{type: String, default: "None"},
+  location:{type: String, default: "None"},
+  date: {type: Date, default: Date.now()},
   archived: {type: Boolean, default: false}
 });
 

@@ -1,8 +1,13 @@
-<h2>Index</h2>
+<h2>Welcome</h2>
+
+<div class='row'>
+    <div class="col-md-6">
+      {{#linkTo "trips" classNames="btn btn-primary pull-left"}}All Trips{{/linkTo}}
+    </div>
+  </div>
 
 {{#if session.isAuthenticated}}
   Welcome {{ session.name }}<br>
-  ID: {{ session.userID }}<br>
   Email: {{ session.email }}<br>
   <a {{ action 'invalidateSession' }}>Logout</a>
 {{else}}

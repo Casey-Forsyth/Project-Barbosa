@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var Trip = require('../models/Trip');
 var extend = require('util')._extend;
-var _ = require('underscore');
 
 /**
  * Load a trip.
@@ -56,7 +55,6 @@ exports.deleteTrip = function(req, res){
 
 exports.showTrip = function(req, res) {
   if (!req.trip) return res.status(404).json(null);
-
   res.json(req.trip.flattened())
 };
 
@@ -83,7 +81,17 @@ exports.listTrips = function(req, res) {
  */
 
 exports.createTrip = function(req, res) {
+  var username = null;
+  if(req.cookies['ember_simple_auth:isAuthenticated'])
+  {
+    if(req.cookies['ember_simple_auth:name'] != null)
+    {
+      username = req.cookies['ember_simple_auth:name'];
+    }
+  }
   trip = new Trip(req.body.trip)
+  trip.date = Date.now()
+  trip.user = username;
   trip.save(function(err, trip){
     if(err)
       res.status(500).json(null)
