@@ -1,11 +1,5 @@
 <h2>Welcome</h2>
 
-<div class='row'>
-    <div class="col-md-6">
-      {{#linkTo "trips" classNames="btn btn-primary pull-left"}}All Trips{{/linkTo}}
-    </div>
-  </div>
-
 {{#if session.isAuthenticated}}
   Welcome {{ session.name }}<br>
   Email: {{ session.email }}<br>
@@ -13,3 +7,12 @@
 {{else}}
   <a {{ action 'authenticateSession' }}>Login</a>
 {{/if}}
+
+<div class='row'>
+    <div class="col-md-6">
+      {{#linkTo "trips" classNames="btn btn-primary pull-left"}}All Trips{{/linkTo}}
+      {{#linkTo "new_trip" classNames="btn btn-primary pull-right"}}Create New Trip{{/linkTo}}
+    </div>
+  </div>
+
+<img src='http://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap\&markers=size:mid%7Ccolor:red%7CSan+Francisco,CA%7CIceland%7CParis,France%7CLondon%7CWinnipeg&path=color:0x0000ff%7Cweight:5%7CParis,France%7CLondon%7CIceland%7CWinnipeg%7CSan+Francisco&size=512x512&sensor=false&sensor=false' alt='sampe map'>
