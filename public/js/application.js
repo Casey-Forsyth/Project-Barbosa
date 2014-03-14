@@ -24,13 +24,11 @@ App.initializer({
   }
 });
 
-App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin);
-
 App.ApplicationSerializer = DS.RESTSerializer.extend( {
   primaryKey: function(){return '_id'},
 });
 
-App.ApplicationRoute = Ember.Route.extend( {
+App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin, {
   actions: {
     openModal: function(modalName) {
       return this.render(modalName, {
