@@ -206,8 +206,8 @@ describe('Trip Controller', function(){
             Trip.findById(trip.id, function(err, trip){
               (trip == null).should.be.false
               trip.archived.should.be.true
+              done()
             })
-            done()
           })
       })
     })
