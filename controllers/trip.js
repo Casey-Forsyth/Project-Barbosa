@@ -87,14 +87,11 @@ exports.createTrip = function(req, res) {
     if(req.cookies['ember_simple_auth:name'] != null)
     {
       username = req.cookies['ember_simple_auth:name'];
-      console.log("username:"+username);
     }
   }
-  console.log(req.body.trip)
   trip = new Trip(req.body.trip)
   trip.date = Date.now()
   trip.user = username;
-  console.log(trip)
   trip.save(function(err, trip){
     if(err)
       res.status(500).json(null)
