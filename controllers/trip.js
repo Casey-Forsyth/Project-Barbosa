@@ -41,8 +41,8 @@ exports.updateTrip = function(req, res){
 exports.deleteTrip = function(req, res){
   if (!req.trip) return res.status(404).json(null);
 
-  trip.archived = true
-  trip.save(function (err) {
+  req.trip.archived = true
+  req.trip.save(function (err) {
     if (err) res.status(500).json(null)
     res.json({})
   })
