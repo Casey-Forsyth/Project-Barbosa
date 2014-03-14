@@ -80,10 +80,10 @@ describe('Trip Model', function(){
 
   //DATE FLAG
   it('should have a default `date` flag of approximately now', function(){
-      var bottomDate = Date.now()-2000;
+      var bottomDate = Date.now()-3500;
       var t = new Trip()
       var tripdate = Date.parse(t.date);
-      var topDate = Date.now()+2000;
+      var topDate = Date.now()+3500;
       tripdate.should.be.within(bottomDate,topDate);
   })
 
