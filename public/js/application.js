@@ -441,7 +441,7 @@ function program7(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "invalidateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Logout</a></li>\r\n              </ul>\r\n            </li>\r\n          ");
+  data.buffer.push("><i class=\"fa fa-sign-out\"></i> Logout</a></li>\r\n              </ul>\r\n            </li>\r\n          ");
   return buffer;
   }
 function program8(depth0,data) {
@@ -563,7 +563,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("location"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n  </div>\r\n\r\n  <button type=\"submit\" class='btn btn-default'>Save</button>\r\n\r\n</form>\r\n\r\n");
+  data.buffer.push("\r\n  </div>\r\n\r\n  <button type=\"submit\" class='btn btn-primary'><i class=\"fa fa-save\"></i>Save</button>\r\n\r\n</form>\r\n\r\n");
   return buffer;
   
 });
@@ -750,7 +750,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "closeModal", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">&times;</button>\r\n        <h3 class=\"modal-title\">Temp_Itineray_Name</h3>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <div class='form-group'>\r\n        <label for=\"name\">Activity Name:</label><br>\r\n        ");
+  data.buffer.push(">&times;</button>\r\n        <h3 class=\"modal-title\">New Itinerary</h3>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <div class='form-group'>\r\n        <label for=\"name\">Activity Name:</label><br>\r\n        ");
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
@@ -924,13 +924,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   
-  data.buffer.push("← All Trips");
+  data.buffer.push("<i class=\"fa fa-long-arrow-left\"></i>All Trips");
   }
 
 function program3(depth0,data) {
   
   
-  data.buffer.push("Edit");
+  data.buffer.push("<i class=\"fa fa-edit\"></i>Edit");
   }
 
 function program5(depth0,data) {
@@ -947,11 +947,11 @@ function program5(depth0,data) {
 function program7(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\r\n        <li><button ");
+  data.buffer.push("\r\n        <li><button classNames=\"btn btn-info\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "myModal", {hash:{},contexts:[depth0,depth0],types:["STRING","STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Temp_Itinerary_Item</button></li>\r\n      ");
+  data.buffer.push(">Add Itinerary Item</button></li>\r\n      ");
   return buffer;
   }
 
@@ -968,15 +968,15 @@ function program7(depth0,data) {
   hashContexts = {'classNames': depth0};
   hashTypes = {'classNames': "STRING"};
   options = {hash:{
-    'classNames': ("btn btn-default btn-small")
+    'classNames': ("btn btn-info btn-small")
   },inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "edit_trip", "model", options) : helperMissing.call(depth0, "linkTo", "edit_trip", "model", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\r\n    <button class='btn btn-default btn-small' ");
+  data.buffer.push("\r\n    <button class='btn btn-danger btn-small' ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Delete</button>\r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    <img class='placeholder' src=\"http://placehold.it/300&text=Calendar\">\r\n    ");
+  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>Delete</button>\r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    <img class='placeholder' src=\"http://placehold.it/300&text=Calendar\">\r\n    ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
