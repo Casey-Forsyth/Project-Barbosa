@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Trip = require('../models/Trip');
+var User = require('../models/User');
 var extend = require('util')._extend;
+var async = require('async')
 
 /**
  * Load a trip.
@@ -55,6 +57,7 @@ exports.deleteTrip = function(req, res){
 
 exports.showTrip = function(req, res) {
   if (!req.trip) return res.status(404).json(null);
+  console.log('falten')
   res.json(req.trip.flattened())
 };
 
@@ -64,13 +67,39 @@ exports.showTrip = function(req, res) {
  */
 
 exports.listTrips = function(req, res) {
-  var Trip = mongoose.model('Trip')
   archived = req.query.archived || false
   Trip.find({archived: archived}).exec(function(err, trips) {
     if (err) {
       res.status(500).json(null);
     } else {
-      res.json({'trips':trips});
+      newTrips = []
+      for(ii = 0; ii < trips.length; ii++) {
+        trip = {
+          _id: trips[ii]._id,
+          name: trips[ii].name,
+          location: trips[ii].location,
+          date: trips[ii].date,
+          userID: trips[ii].userID,
+          archived: trips[ii].archived,
+          itinerary: trips[ii].itinerary
+        }
+        newTrips.push(trip)
+      }
+
+      async.each(newTrips, function(trip, next) {
+        User.findOne({_id: trip.userID}).exec(function(err, user) {
+          if(!err) {
+            trip.user = user
+          } else {
+            trip.user = {}
+          }
+          delete trip.userID
+          next(false, trip)
+        })
+      },
+      function(err) {
+        res.json({trips: newTrips})
+      });
     }
   })
 }
@@ -81,22 +110,20 @@ exports.listTrips = function(req, res) {
  */
 
 exports.createTrip = function(req, res) {
-  var username = null;
-  if(req.cookies['ember_simple_auth:isAuthenticated'])
-  {
-    if(req.cookies['ember_simple_auth:name'] != null)
-    {
-      username = req.cookies['ember_simple_auth:name'];
-    }
-  }
+  console.log(req.user)
   trip = new Trip(req.body.trip)
   trip.date = Date.now()
-  trip.user = username;
+  
+  if(req.user)
+    trip.userID = req.user._id;
+
   trip.save(function(err, trip){
-    if(err)
+    if(err) {
+      console.log(err)
       res.status(500).json(null)
-    else
+    } else {
       res.json({trip:trip})
+    }
   })
 };
 
