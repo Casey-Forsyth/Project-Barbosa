@@ -487,13 +487,13 @@ function program12(depth0,data) {
 function program13(depth0,data) {
   
   
-  data.buffer.push("Login");
+  data.buffer.push("<i class=\"fa fa-sign-in\"></i>Login");
   }
 
 function program15(depth0,data) {
   
   
-  data.buffer.push("Create Account");
+  data.buffer.push("<i class=\"fa fa-user\"></i>Create Account");
   }
 
   data.buffer.push("<div id=\"wrap\">\r\n  <div class=\"navbar navbar-default navbar-fixed-top\">\r\n    <div class=\"container\">\r\n      <div class=\"navbar-header\">\r\n        <button class=\"navbar-toggle\" data-target=\".navbar-collapse\"\r\n        data-toggle=\"collapse\" type=\"button\"><span class=\"sr-only\">Toggle\r\n        navigation</span></button>");
@@ -588,7 +588,7 @@ function program1(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "invalidateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Logout</a>\r\n");
+  data.buffer.push("><buttonclass=\"btn btn-primary\"><i class=\"fa fa-sign-out\"></i> Logout</button></a>\r\n");
   return buffer;
   }
 
@@ -599,7 +599,7 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticateSession", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Login</a>\r\n");
+  data.buffer.push("><buttonclass=\"btn btn-primary\"><i class=\"fa fa-sign-in\"></i>Login</button></a>\r\n");
   return buffer;
   }
 
@@ -632,7 +632,7 @@ function program7(depth0,data) {
   hashContexts = {'classNames': depth0};
   hashTypes = {'classNames': "STRING"};
   options = {hash:{
-    'classNames': ("btn btn-primary pull-right")
+    'classNames': ("btn btn-primary pull-left")
   },inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "new_trip", options) : helperMissing.call(depth0, "linkTo", "new_trip", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
@@ -654,7 +654,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['login'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
@@ -676,6 +676,12 @@ function program2(depth0,data) {
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "msg", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("</div>\r\n      ");
   return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  
+  data.buffer.push("<span class=\"glyphicon glyphicon-user\"></span>Sign Up");
   }
 
   data.buffer.push("<div class=\"col-sm-8 col-sm-offset-2\">\r\n  ");
@@ -721,7 +727,15 @@ function program2(depth0,data) {
   data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
     'disabled': ("isProcessing")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("><i class=\"fa fa-unlock-alt\"></i>Login</button>\r\n    </div>\r\n  </form>\r\n</div>");
+  data.buffer.push("><i class=\"fa fa-sign-in\"></i>Login</button>\r\n      ");
+  hashContexts = {'classNames': depth0};
+  hashTypes = {'classNames': "STRING"};
+  options = {hash:{
+    'classNames': ("btn btn-info")
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "signup", options) : helperMissing.call(depth0, "linkTo", "signup", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\r\n    </div>\r\n  </form>\r\n</div>");
   return buffer;
   
 });
@@ -792,7 +806,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['signup'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
@@ -814,6 +828,12 @@ function program2(depth0,data) {
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "msg", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("</div>\r\n      ");
   return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  
+  data.buffer.push("<i class=\"fa fa-sign-in\"></i>Login");
   }
 
   data.buffer.push("<div class=\"col-sm-8 col-sm-offset-2\">\r\n  ");
@@ -873,7 +893,7 @@ function program2(depth0,data) {
     'class': ("form-control")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <div class=\"col-sm-offset-3 col-sm-7\">\r\n        <button type=\"submit\" class=\"btn btn-success\" ");
+  data.buffer.push("\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <div class=\"col-sm-offset-3 col-sm-7\">\r\n        <button type=\"submit\" class=\"btn btn-primary\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "authenticate", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -883,7 +903,15 @@ function program2(depth0,data) {
   data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
     'disabled': ("isProcessing")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("><i class=\"fa fa-check\"></i>Signup</button>\r\n      </div>\r\n    </div>\r\n  </form>\r\n</div>");
+  data.buffer.push("><i class=\"fa fa-check\"></i>Signup</button>\r\n        ");
+  hashContexts = {'classNames': depth0};
+  hashTypes = {'classNames': "STRING"};
+  options = {hash:{
+    'classNames': ("btn btn-info")
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers.linkTo || depth0.linkTo),stack1 ? stack1.call(depth0, "login", options) : helperMissing.call(depth0, "linkTo", "login", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\r\n      </div>\r\n    </div>\r\n  </form>\r\n</div>");
   return buffer;
   
 });
