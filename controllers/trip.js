@@ -67,8 +67,15 @@ exports.showTrip = function(req, res) {
  */
 
 exports.listTrips = function(req, res) {
-  archived = req.query.archived || false
-  Trip.find({archived: archived}).exec(function(err, trips) {
+  query = {
+    archived: req.query.archived || false
+  }
+
+  if(req.query.userID) {
+    query.userID = req.query.userID
+  }
+
+  Trip.find(query).exec(function(err, trips) {
     if (err) {
       res.status(500).json(null);
     } else {
