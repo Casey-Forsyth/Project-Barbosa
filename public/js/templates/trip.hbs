@@ -1,10 +1,10 @@
-{{#linkTo "trips"}}← All Trips{{/linkTo}}
+{{#linkTo "trips"}}<i class="fa fa-long-arrow-left"></i>All Trips{{/linkTo}}
  
 <div id="trip" class="row">
   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
     <h2>{{ name }}</h2>
-    {{#linkTo "edit_trip" model classNames='btn btn-default btn-small'}}Edit{{/linkTo}}
-    <button class='btn btn-default btn-small' {{action "destroy"}}>Delete</button>
+    {{#linkTo "edit_trip" model classNames='btn btn-info btn-small'}}<i class="fa fa-edit"></i>Edit{{/linkTo}}
+    <button class='btn btn-danger btn-small' {{action "destroy"}}><i class="fa fa-minus-circle"></i>Delete</button>
   </div>
   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
     <img class='placeholder' src="http://placehold.it/300&text=Calendar">
