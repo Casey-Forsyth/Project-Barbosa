@@ -3,15 +3,15 @@
 {{#if session.isAuthenticated}}
   Welcome {{ session.name }}<br>
   Email: {{ session.email }}<br>
-  <a {{ action 'invalidateSession' }}>Logout</a>
+  <a {{ action 'invalidateSession' }}><buttonclass="btn btn-primary"><i class="fa fa-sign-out"></i> Logout</button></a>
 {{else}}
-  <a {{ action 'authenticateSession' }}>Login</a>
+  <a {{ action 'authenticateSession' }}><buttonclass="btn btn-primary"><i class="fa fa-sign-in"></i>Login</button></a>
 {{/if}}
 
 <div class='row'>
     <div class="col-md-6">
       {{#linkTo "trips" classNames="btn btn-primary pull-left"}}All Trips{{/linkTo}}
-      {{#linkTo "new_trip" classNames="btn btn-primary pull-right"}}Create New Trip{{/linkTo}}
+      {{#linkTo "new_trip" classNames="btn btn-primary pull-left"}}Create New Trip{{/linkTo}}
     </div>
   </div>
 

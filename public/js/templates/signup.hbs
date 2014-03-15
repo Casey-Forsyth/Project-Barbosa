@@ -34,7 +34,8 @@
     </div>
     <div class="form-group">
       <div class="col-sm-offset-3 col-sm-7">
-        <button type="submit" class="btn btn-success" {{action 'authenticate'}} {{bindAttr disabled='isProcessing'}}><i class="fa fa-check"></i>Signup</button>
+        <button type="submit" class="btn btn-primary" {{action 'authenticate'}} {{bindAttr disabled='isProcessing'}}><i class="fa fa-check"></i>Signup</button>
+        {{#linkTo "login" classNames="btn btn-info"}}<i class="fa fa-sign-in"></i>Login{{/linkTo}}
       </div>
     </div>
   </form>
