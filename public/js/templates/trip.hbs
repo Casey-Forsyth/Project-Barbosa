@@ -16,7 +16,7 @@
       {{#each item in itinerary}}
         <li>Title: "{{item.title}}"</li>
       {{else}}
-        <li><button {{action 'openModal' 'myModal'}}>Temp_Itinerary_Item</button></li>
+        <li><button classNames="btn btn-info" {{action 'openModal' 'myModal'}}>Add Itinerary Item</button></li>
       {{/each}}
     </ul>
   </div>
