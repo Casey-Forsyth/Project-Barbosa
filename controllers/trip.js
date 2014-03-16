@@ -67,6 +67,8 @@ exports.showTrip = function(req, res) {
  */
 
 exports.listTrips = function(req, res) {
+  console.log(req.query)
+
   query = {
     archived: req.query.archived || false
   }
@@ -98,7 +100,11 @@ exports.listTrips = function(req, res) {
           if(!err) {
             trip.user = user
           } else {
-            trip.user = {}
+            trip.user = {
+              profile: {
+                name: 'Guest'
+              }
+            }
           }
           delete trip.userID
           next(false, trip)
