@@ -33,27 +33,27 @@ describe('Trip Model', function(){
     t.should.have.property('name', 'My Trip')
   })
 
-//USER
-  it('should save the user flag', function(){
-    var t = new Trip({user: "test"})
-    t.should.have.property('user', "test");
+  //USER
+  it('should save the user ID flag', function(){
+    var t = new Trip({userID: '0'})
+    t.should.have.property('userID', '0');
   })
 
   it('should save changes to the user flag', function(){
-    var t = new Trip({user: "test"})
-    t.should.have.property('user', "test");
-    t.user = "changed";
-    t.should.have.property('user', "changed")
+    var t = new Trip({userID: '0'})
+    t.should.have.property('userID', '0');
+    t.userID = '1';
+    t.should.have.property('userID', '1')
   })
 
   it('should accept null', function(){
-    var t = new Trip({user: null})
-    t.should.have.property('user', null)
+    var t = new Trip({userID: null})
+    t.should.have.property('userID', null)
   })
 
-  it('should have a default `user` flag of `None`', function(){
-   var  t = new Trip()
-    t.should.have.property('user', "None")
+  it('should have a default `userID` flag of `0`', function(){
+    var t = new Trip()
+    t.should.have.property('userID', '0')
   })
 
   //LOCATION FLAG
