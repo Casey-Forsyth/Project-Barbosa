@@ -13,12 +13,6 @@ var tripSchema = new mongoose.Schema({
 });
 
 tripSchema.methods.flattened = function(){
-  console.log('finding user: ' + this.userID)
-  User.findOne({_id: this.userID}).exec(function(err, user){
-    console.log(err)
-    console.log(user)
-  })
-
   return {
     trip: {
       _id: this._id,

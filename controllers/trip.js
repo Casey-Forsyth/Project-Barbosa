@@ -57,7 +57,6 @@ exports.deleteTrip = function(req, res){
 
 exports.showTrip = function(req, res) {
   if (!req.trip) return res.status(404).json(null);
-  console.log('falten')
   res.json(req.trip.flattened())
 };
 
@@ -67,8 +66,6 @@ exports.showTrip = function(req, res) {
  */
 
 exports.listTrips = function(req, res) {
-  console.log(req.query)
-
   query = {
     archived: req.query.archived || false
   }
@@ -123,7 +120,6 @@ exports.listTrips = function(req, res) {
  */
 
 exports.createTrip = function(req, res) {
-  console.log(req.user)
   trip = new Trip(req.body.trip)
   trip.date = Date.now()
   
@@ -132,7 +128,6 @@ exports.createTrip = function(req, res) {
 
   trip.save(function(err, trip){
     if(err) {
-      console.log(err)
       res.status(500).json(null)
     } else {
       res.json({trip:trip})
