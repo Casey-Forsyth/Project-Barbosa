@@ -5,6 +5,19 @@
     <h2>{{ name }}</h2>
     {{#linkTo "edit_trip" model classNames='btn btn-info btn-small'}}<i class="fa fa-edit"></i>Edit{{/linkTo}}
     <button class='btn btn-danger btn-small' {{action "destroy"}}><i class="fa fa-minus-circle"></i>Delete</button>
+    
+    <div style="margin-top: 15px;">
+    	<h1 class="text-center"><small>Packing List</small></h1>
+	    <ul class='items'>
+	      {{#each item in itinerary}}
+	        <li>Title: "{{item.title}}"</li>
+        {{else}}
+          <li style="font-style: italic;">(None)</li>
+        {{/each}}
+	    </ul>
+      <button classNames="btn btn-info" {{action 'openPackingItem' 'packing_item'}}>Add Packing Item</button>
+    </div>
+    
   </div>
   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
     <img class='placeholder' src="http://placehold.it/300&text=Calendar">
@@ -21,3 +34,4 @@
     </ul>
   </div>
 </div>
+

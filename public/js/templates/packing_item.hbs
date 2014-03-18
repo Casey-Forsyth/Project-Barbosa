@@ -1,0 +1,37 @@
+<div class="modal-dialog">
+  <div class="overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" {{action 'closeModal'}}>&times;</button>
+        <h3 class="modal-title">New Packing Item</h3>
+      </div>
+      <div class="modal-body">
+        <div class='form-group'>
+        <label for="name">Activity Name:</label><br>
+        {{view Ember.TextField valueBinding="name" id="name" classNames='form-control'}}
+        </div>
+        <div class='form-group'>
+        <label for="location">Location:</label><br>
+        {{view Ember.TextField valueBinding="location" id="location" classNames='form-control'}}
+        </div>
+        <div class='form-group'>
+        <label for="date">Date:</label><br>
+        {{view Ember.TextField valueBinding="date" id="date" classNames='form-control'}}
+        </div>
+        <div class='form-group'>
+        <label for="scheduledAt">At:</label><br>
+        {{view Ember.TextField valueBinding="scheduledAt" id="scheduledAt" classNames='form-control'}}
+        </div>
+        <div class='form-group'>
+        <label for="description">Description:</label><br>
+        {{view Ember.TextField valueBinding="description" id="description" classNames='form-control'}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-default" {{action 'closeModal'}}>Close</a>
+        <a href="#" class="btn btn-primary" {{action save}}>Send</a>
+    </div>
+  </div>
+</div>
+
+
