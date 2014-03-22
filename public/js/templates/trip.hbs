@@ -16,14 +16,19 @@
         <i class='glyphicon glyphicon-plus'></i>
       </button>
     </h1>
-    <ul class='items'>
+    <ul class="media-list">
       {{#each item in itinerary}}
-        <li>
+        <li class="media">
           <strong>Title: "{{item.title}}"</strong>
           <button class='pull-right btn btn-info btn-xs' {{action 'openModal' 'item' item}}>
-            Edit
+            Edit Trip
             <span class='glyphicon glyphicon-edit'></span>
           </button>
+		  <div class="media-body">
+            Location: {{ item.locationName }}<br>
+            At: {{ item.scheduledAt }}<br>
+            Description: {{ item.description }}
+          </div>
         </li>
       {{else}}
         <li>nope</li>
