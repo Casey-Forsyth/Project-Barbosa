@@ -32,6 +32,10 @@ App.ApplicationSerializer = DS.RESTSerializer.extend( {
 App.ApplicationRoute = Ember.Route.extend( {
   actions: {
     openModal: function(modalName, model) {
+      if (!model) {
+        modelType = this.get('store').modelFor(modalName)
+        model = this.get('store').createRecord(modelType, {})
+      }
       this.controllerFor(modalName).set('model', model);
       return this.render(modalName, {
         into: 'application',
