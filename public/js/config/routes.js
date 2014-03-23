@@ -9,7 +9,6 @@ App.Router.map(function() {
     this.resource('item', {path: '/:item_id'})
 	 //this.resource('myModal') //not sure which is needed
 	this.resource('myModal', {path: '/:trip_id/myModal'}) //not sure which is needed
-  this.resource('packing_item', {path: '/:trip_id/packing_item'})
   });
   this.route('edit_trip', {path: '/trips/:trip_id/edit'});
   this.route('new_trip', {path: '/trips/new'});
@@ -18,4 +17,3 @@ App.Router.map(function() {
   this.route('login', {path: '/login'});
   this.route('signup', {path: '/signup'});
 });
-

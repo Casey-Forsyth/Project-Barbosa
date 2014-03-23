@@ -19,6 +19,7 @@ var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var tripController = require('./controllers/trip');
 var itineraryItemController = require('./controllers/itinerary_item');
+var packingItemController = require('./controllers/packing_item');
 
 /**
  * API keys + Passport configuration.
@@ -98,6 +99,8 @@ app.post('/items', itineraryItemController.createItineraryItem);
 app.get('/items/:itemid', itineraryItemController.showItineraryItem);
 app.put('/items/:itemid', itineraryItemController.updateItineraryItem);
 app.delete('/items/:itemid', itineraryItemController.deleteItineraryItem);
+
+app.post('/packing_items', packingItemController.createPackingItem);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));

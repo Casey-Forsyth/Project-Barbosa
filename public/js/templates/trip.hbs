@@ -7,15 +7,24 @@
     <button class='btn btn-danger btn-small' {{action "destroy"}}><i class="fa fa-minus-circle"></i>Delete</button>
     
     <div style="margin-top: 15px;">
+    	DEBUG INFO: Packing List Size = ({{model.packinglist.length}})
     	<h1 class="text-center"><small>Packing List</small></h1>
 	    <ul class='items'>
-	      {{#each item in itinerary}}
-	        <li>Title: "{{item.title}}"</li>
+	      {{#each item in model.packinglist}}
+	        <li>Title: "{{item.name}}"
         {{else}}
           <li style="font-style: italic;">(None)</li>
         {{/each}}
 	    </ul>
-      <button classNames="btn btn-info" {{action 'openModal' 'packing_item'}}>Add Packing Item</button>
+      
+      <form>
+      
+      	New Item: <input type="text" id="itemName" name="itemName" /><br />
+        <button classNames="btn btn-info"{{action "addPackingItem"}}>Add Packing Item</button>
+        
+      </form>
+      
+      
     </div>
     
   </div>

@@ -10,7 +10,16 @@ var TripController = Ember.ObjectController.extend({
     });
 
     this.get('store').commit()
-  }
+  },
+
+  addPackingItem: function() {
+
+	  this.get('model.packinglist').pushObject( App.PackingItem.createRecord({name: itemName.value}) );
+	  this.get('model').save();
+
+	  this.get('store').commit();
+
+  },
 
 });
 
