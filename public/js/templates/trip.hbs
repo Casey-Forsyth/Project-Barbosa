@@ -5,6 +5,26 @@
     <h2>{{ name }}</h2>
     {{#linkTo "edit_trip" model classNames='btn btn-info btn-small'}}<i class="fa fa-edit"></i>Edit{{/linkTo}}
     <button class='btn btn-danger btn-small' {{action "destroy"}}><i class="fa fa-minus-circle"></i>Delete</button>
+    
+    <div style="margin-top: 15px;">
+    	<h1 class="text-center"><small>Packing List</small></h1>
+	    <ul class='items'>
+	      {{#each item in model.packingItems}}
+	        <li><div style="display: inline-block; width: 250px;">{{item.name}}</div><div style="display: inline-block;"><a style="cursor: pointer; color: red;" {{action "deletePackingItem" item}}>X</a></div></li>
+        {{else}}
+          <li style="font-style: italic;">(None)</li>
+        {{/each}}
+	    </ul>
+      
+      <form>
+      
+      	New Item: <input type="text" id="itemName" name="itemName" style="width: 250px; margin-right: 3px;" /><button classNames="btn btn-info"{{action "addPackingItem"}}>+</button>
+        
+      </form>
+      
+      
+    </div>
+    
   </div>
   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
     <img class='placeholder' src="http://placehold.it/300&text=Calendar">
@@ -21,3 +41,4 @@
     </ul>
   </div>
 </div>
+

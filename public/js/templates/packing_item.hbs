@@ -1,0 +1,21 @@
+<div class="modal-dialog">
+  <div class="overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" {{action 'closeModal'}}>&times;</button>
+        <h3 class="modal-title">New Packing Item</h3>
+      </div>
+      <div class="modal-body">
+        <div class='form-group'>
+        <label for="name">Name:</label><br>
+        {{view Ember.TextField valueBinding="name" id="name" classNames='form-control'}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-default" {{action 'closeModal'}}>Close</a>
+        <a href="#" class="btn btn-primary" {{action "addPackingItem2"}}>Save</a>
+    </div>
+  </div>
+</div>
+
+
