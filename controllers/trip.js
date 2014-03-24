@@ -95,7 +95,7 @@ exports.listTrips = function(req, res) {
         //tripList.push(trip);
 
         flattenedTrip = trips[i].flattened();
-        tripList.push(flattenedTrip);
+        tripList.push(flattenedTrip.trip);
 
       }
 
@@ -115,7 +115,6 @@ exports.listTrips = function(req, res) {
         })
       },
       function(err) {
-		console.log(JSON.stringify({trips: tripList}));
         res.json({trips: tripList})
       });
     }

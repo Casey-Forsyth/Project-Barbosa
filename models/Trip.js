@@ -16,17 +16,17 @@ var tripSchema = new mongoose.Schema({
 
 tripSchema.methods.flattened = function(){
   return {
-		trip: {
-		  _id: this._id,
-		  name: this.name,
-		  location: this.location,
-		  user: this.userID,
-		  archived: this.archived,
-		  itinerary: _.pluck(this.itinerary, '_id'),
-		  packinglist: _.pluck(this.packinglist, '_id')
-		},
-		itinerary: this.itinerary,
-		packinglist: this.packinglist
+    trip: {
+      _id: this._id,
+      name: this.name,
+      location: this.location,
+      user: this.userID,
+      archived: this.archived,
+      itinerary_ids: _.pluck(this.itinerary, '_id'),
+      packinglist_ids: _.pluck(this.packinglist, '_id')
+    },
+    items: this.itinerary,
+    packingitems: this.packinglist
   }
 }
 
