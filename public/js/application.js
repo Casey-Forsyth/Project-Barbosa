@@ -251,6 +251,15 @@ module.exports = SignupController;
 },{}],10:[function(require,module,exports){
 var TripController = Ember.ObjectController.extend({
 
+  deletePackingItem: function(packingItem) {
+
+    if (confirm('Are you sure?')){
+    	packingItem.deleteRecord();
+    	this.get('store').commit();
+	}
+
+  },
+
   destroy: function() {
     if (!confirm('Are you sure?')) return;
     this.get('model').deleteRecord();
@@ -1004,11 +1013,15 @@ function program3(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\r\n	        <li>Title: \"");
+  data.buffer.push("\r\n	        <li><div style=\"display: inline-block; width: 250px;\">");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\"\r\n        ");
+  data.buffer.push("</div><div style=\"display: inline-block;\"><a style=\"cursor: pointer; color: red;\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "deletePackingItem", "item", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">X</a></div></li>\r\n        ");
   return buffer;
   }
 

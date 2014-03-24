@@ -1,5 +1,14 @@
 var TripController = Ember.ObjectController.extend({
 
+  deletePackingItem: function(packingItem) {
+
+    if (confirm('Are you sure?')){
+    	packingItem.deleteRecord();
+    	this.get('store').commit();
+	}
+
+  },
+
   destroy: function() {
     if (!confirm('Are you sure?')) return;
     this.get('model').deleteRecord();

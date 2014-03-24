@@ -10,7 +10,7 @@
     	<h1 class="text-center"><small>Packing List</small></h1>
 	    <ul class='items'>
 	      {{#each item in model.packingItems}}
-	        <li>Title: "{{item.name}}"
+	        <li><div style="display: inline-block; width: 250px;">{{item.name}}</div><div style="display: inline-block;"><a style="cursor: pointer; color: red;" {{action "deletePackingItem" item}}>X</a></div></li>
         {{else}}
           <li style="font-style: italic;">(None)</li>
         {{/each}}
