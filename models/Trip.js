@@ -26,7 +26,7 @@ tripSchema.methods.flattened = function(){
       packinglist_ids: _.pluck(this.packinglist, '_id')
     },
     items: this.itinerary,
-    packingitems: this.packinglist
+    packing_items: this.packinglist
   }
 }
 
