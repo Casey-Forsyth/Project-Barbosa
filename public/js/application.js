@@ -1061,11 +1061,7 @@ function program11(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>Delete</button>\r\n    \r\n    <div style=\"margin-top: 15px;\">\r\n    	DEBUG INFO: Packing List Size = (");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "model.packingItems.length", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(")\r\n    	<h1 class=\"text-center\"><small>Packing List</small></h1>\r\n	    <ul class='items'>\r\n	      ");
+  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>Delete</button>\r\n    \r\n    <div style=\"margin-top: 15px;\">\r\n    	<h1 class=\"text-center\"><small>Packing List</small></h1>\r\n	    <ul class='items'>\r\n	      ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "item", "in", "model.packingItems", {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -1102,12 +1098,8 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
-  data.buffer.push("\r\n    <li class=\"media\">\r\n      DEBUG INFO: Packing List Size: (");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "trip.packingItems.length", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(")\r\n      ");
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
+  data.buffer.push("\r\n    <li class=\"media\">\r\n      ");
   hashContexts = {'classNames': depth0};
   hashTypes = {'classNames': "STRING"};
   options = {hash:{
