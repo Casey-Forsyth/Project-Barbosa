@@ -11,7 +11,7 @@
   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
     <h1 class="text-center">
       <small class='itinerary-header'>Itinerary</small>
-      <button class='btn btn-primary btn-sm pull-right' {{action 'openModal' 'item'}}>
+      <button class='btn btn-primary btn-sm pull-right' {{action 'openModal' 'item' id}}>
         Add item
         <i class='glyphicon glyphicon-plus'></i>
       </button>
@@ -20,7 +20,7 @@
       {{#each item in itinerary}}
         <li class="media">
           <strong>Title: "{{item.title}}"</strong>
-          <button class='pull-right btn btn-info btn-xs' {{action 'openModal' 'item' item}}>
+          <button class='pull-right btn btn-info btn-xs' {{action 'openModal' 'item' trip item}}>
             Edit Trip
             <span class='glyphicon glyphicon-edit'></span>
           </button>

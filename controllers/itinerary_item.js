@@ -39,7 +39,7 @@ exports.listTripItineraryItems = function(req, res) {
 */
 
 exports.createItineraryItem = function(req, res) {
-  tripid = req.body.trip_id
+  tripid = req.body.item.title
   if (!tripid) {
     res.status(500).json(null)
     return

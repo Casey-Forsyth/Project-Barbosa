@@ -32,10 +32,10 @@ App.ApplicationSerializer = DS.RESTSerializer.extend( {
 
 App.ApplicationRoute = Ember.Route.extend( {
   actions: {
-    openModal: function(modalName, model) {
+    openModal: function(modalName, tripid, model) {
       if (!model) {
         modelType = this.get('store').modelFor(modalName)
-        model = this.get('store').createRecord(modelType, {})
+        model = this.get('store').createRecord(modelType, {title: tripid})
       }
       this.controllerFor(modalName).set('model', model);
       return this.render(modalName, {
@@ -833,7 +833,7 @@ function program3(depth0,data) {
   data.buffer.push("\"</strong>\r\n          <button class='pull-right btn btn-info btn-xs' ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "item", {hash:{},contexts:[depth0,depth0,depth0],types:["STRING","STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "trip", "item", {hash:{},contexts:[depth0,depth0,depth0,depth0],types:["STRING","STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\r\n            Edit Trip\r\n            <span class='glyphicon glyphicon-edit'></span>\r\n          </button>\r\n		  <div class=\"media-body\">\r\n            Location: ");
   hashTypes = {};
   hashContexts = {};
@@ -875,7 +875,7 @@ function program5(depth0,data) {
   data.buffer.push(">Delete</button>\r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    <img class='placeholder' src=\"http://placehold.it/300&text=Calendar\">\r\n    <img class='placeholder' src=\"http://placehold.it/300&text=Map\">\r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    <h1 class=\"text-center\">\r\n      <small class='itinerary-header'>Itinerary</small>\r\n      <button class='btn btn-primary btn-sm pull-right' ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", {hash:{},contexts:[depth0,depth0],types:["STRING","STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "id", {hash:{},contexts:[depth0,depth0,depth0],types:["STRING","STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\r\n        Add item\r\n        <i class='glyphicon glyphicon-plus'></i>\r\n      </button>\r\n    </h1>\r\n    <ul class=\"media-list\">\r\n      ");
   hashTypes = {};
   hashContexts = {};
