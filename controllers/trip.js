@@ -83,17 +83,6 @@ exports.listTrips = function(req, res) {
       tripList = []
       for(i = 0; i < trips.length; i++) {
 
-        trip = {
-          _id: trips[i]._id,
-          name: trips[i].name,
-          location: trips[i].location,
-          date: trips[i].date,
-          userID: trips[i].userID,
-          archived: trips[i].archived
-        }
-
-        //tripList.push(trip);
-
         flattenedTrip = trips[i].flattened();
         tripList.push(flattenedTrip.trip);
 

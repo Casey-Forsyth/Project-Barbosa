@@ -22,7 +22,7 @@
 <ul class="media-list">
  {{#each trip in controller}}
     <li class="media">
-      DEBUG INFO: Packing List Size = ({{trip.packinglist.length}})
+      DEBUG INFO: Packing List Size: ({{trip.packingItems.length}})
       {{#linkTo "trip" trip classNames="pull-left"}}
         {{makeMap trip}}
       {{/linkTo}}

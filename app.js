@@ -101,6 +101,7 @@ app.put('/items/:itemid', itineraryItemController.updateItineraryItem);
 app.delete('/items/:itemid', itineraryItemController.deleteItineraryItem);
 
 app.post('/packing_items', packingItemController.createPackingItem);
+app.get('/packing_items', packingItemController.getPackingItems);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));

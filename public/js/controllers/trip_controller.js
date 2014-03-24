@@ -14,10 +14,12 @@ var TripController = Ember.ObjectController.extend({
 
   addPackingItem: function() {
 
-	  this.get('model.packinglist').pushObject( App.PackingItem.createRecord({name: itemName.value}) );
+	  this.get('model.packingItems').pushObject( App.PackingItem.createRecord({name: itemName.value}) );
 	  this.get('model').save();
 
 	  this.get('store').commit();
+
+	  itemName.value = '';
 
   },
 

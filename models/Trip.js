@@ -7,7 +7,7 @@ var _ = require('underscore')
 var tripSchema = new mongoose.Schema({
   name:  {type: String, default: "My Trip"},
   itinerary: [ItineraryItem.schema],
-  packinglist: [PackingItem.schema],
+  packingItems: [PackingItem.schema],
   userID: {type: String, default: "0"},
   location: {type: String, default: "None"},
   date: {type: Date, default: Date.now()},
@@ -22,11 +22,11 @@ tripSchema.methods.flattened = function(){
       location: this.location,
       user: this.userID,
       archived: this.archived,
-      itinerary_ids: _.pluck(this.itinerary, '_id'),
-      packinglist_ids: _.pluck(this.packinglist, '_id')
+      itinerary: _.pluck(this.itinerary, '_id'),
+      packing_item_ids: _.pluck(this.packingItems, '_id')
     },
-    items: this.itinerary,
-    packing_items: this.packinglist
+    itinerary: this.itinerary,
+    packing_items: this.packingItems
   }
 }
 

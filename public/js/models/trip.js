@@ -5,7 +5,7 @@ var Trip = DS.Model.extend({
   "user": DS.attr('App.User'),
   "location": DS.attr('string'),
   "itinerary": DS.hasMany('App.Item', {async: true}),
-  "packinglist": DS.hasMany('App.PackingItem', {async: true}),
+  "packingItems": DS.hasMany('App.PackingItem', {async: true}),
   "archived": DS.attr('boolean')
 
 });

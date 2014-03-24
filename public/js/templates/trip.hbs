@@ -7,10 +7,10 @@
     <button class='btn btn-danger btn-small' {{action "destroy"}}><i class="fa fa-minus-circle"></i>Delete</button>
     
     <div style="margin-top: 15px;">
-    	DEBUG INFO: Packing List Size = ({{model.packinglist.length}})
+    	DEBUG INFO: Packing List Size = ({{model.packingItems.length}})
     	<h1 class="text-center"><small>Packing List</small></h1>
 	    <ul class='items'>
-	      {{#each item in model.packinglist}}
+	      {{#each item in model.packingItems}}
 	        <li>Title: "{{item.name}}"
         {{else}}
           <li style="font-style: italic;">(None)</li>
@@ -19,8 +19,7 @@
       
       <form>
       
-      	New Item: <input type="text" id="itemName" name="itemName" /><br />
-        <button classNames="btn btn-info"{{action "addPackingItem"}}>Add Packing Item</button>
+      	New Item: <input type="text" id="itemName" name="itemName" style="width: 250px; margin-right: 3px;" /><button classNames="btn btn-info"{{action "addPackingItem"}}>+</button>
         
       </form>
       
