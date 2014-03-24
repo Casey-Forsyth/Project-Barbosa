@@ -7,6 +7,7 @@ var itineraryItemSchema = new mongoose.Schema({
   scheduled_at:  {type: String, default: ''},
   latitude:      {type: Number, default: 49.89},
   longitude:     {type: Number, default: -97.1},
+  trip_id:       {type: String, default: ''}
 });
 
 module.exports.model = mongoose.model('ItineraryItem', itineraryItemSchema);

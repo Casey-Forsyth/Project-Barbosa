@@ -34,7 +34,7 @@ App.ApplicationRoute = Ember.Route.extend( {
     openModal: function(modalName, tripid, model) {
       if (!model) {
         modelType = this.get('store').modelFor(modalName)
-        model = this.get('store').createRecord(modelType, {title: tripid})
+        model = this.get('store').createRecord(modelType, {trip_id: tripid})
       }
       this.controllerFor(modalName).set('model', model);
       return this.render(modalName, {
