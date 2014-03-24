@@ -601,20 +601,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("title"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"locationName\">Location:</label><br>\r\n          ");
+  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"location_name\">Location:</label><br>\r\n          ");
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
-    'valueBinding': ("locationName"),
-    'id': ("locationName"),
+    'valueBinding': ("location_name"),
+    'id': ("location_name"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"scheduledAt\">At:</label><br>\r\n          ");
+  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"scheduled_at\">At:</label><br>\r\n          ");
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
-    'valueBinding': ("scheduledAt"),
-    'id': ("scheduledAt"),
+    'valueBinding': ("scheduled_at"),
+    'id': ("scheduled_at"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"description\">Description:</label><br>\r\n          ");
@@ -833,15 +833,15 @@ function program3(depth0,data) {
   data.buffer.push("\"</strong>\r\n          <button class='pull-right btn btn-info btn-xs' ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "trip", "item", {hash:{},contexts:[depth0,depth0,depth0,depth0],types:["STRING","STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "id", "item", {hash:{},contexts:[depth0,depth0,depth0,depth0],types:["STRING","STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\r\n            Edit Trip\r\n            <span class='glyphicon glyphicon-edit'></span>\r\n          </button>\r\n		  <div class=\"media-body\">\r\n            Location: ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.locationName", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.location_name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("<br>\r\n            At: ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.scheduledAt", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.scheduled_at", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("<br>\r\n            Description: ");
   hashTypes = {};
   hashContexts = {};
