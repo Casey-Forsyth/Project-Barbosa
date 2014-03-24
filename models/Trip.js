@@ -20,6 +20,7 @@ tripSchema.methods.flattened = function(){
       _id: this._id,
       name: this.name,
       location: this.location,
+      date: this.date,
       user: this.userID,
       archived: this.archived,
       itinerary: _.pluck(this.itinerary, '_id'),

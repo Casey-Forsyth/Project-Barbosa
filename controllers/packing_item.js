@@ -50,3 +50,19 @@ exports.getPackingItems = function(req, res) {
   })
 
 }
+
+exports.deletePackingItem = function(req, res) {
+
+  var packing_item_id = req.params.packing_item_id;
+
+	PackingItem.remove({ id: packing_item_id }, function(err) {
+		if (err) {
+				res.status(500).json(null)
+		}
+		else {
+				res.json({})
+		}
+	});
+
+}
+
