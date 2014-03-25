@@ -1,2 +1,34 @@
-<h2>Item</h2>
+<div class='trip-item'>
+  <div class='overlay' {{action "close"}}>
 
+  </div>
+  <div class="ember-modal modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" {{action 'closeModal'}}>&times;</button>
+          <h3 class="modal-title">{{ title }}</h3>
+        </div>
+        <div class="modal-body">
+          <div class='form-group'>
+          <label for="title">Activity Name:</label><br>
+          {{view Ember.TextField valueBinding="title" id="title" classNames='form-control'}}
+          </div>
+          <div class='form-group'>
+          <label for="location_name">Location:</label><br>
+          {{view Ember.TextField valueBinding="location_name" id="location_name" classNames='form-control'}}
+          </div>
+          <div class='form-group'>
+          <label for="scheduled_at">At:</label><br>
+          {{view Ember.TextField valueBinding="scheduled_at" id="scheduled_at" classNames='form-control'}}
+          </div>
+          <div class='form-group'>
+          <label for="description">Description:</label><br>
+          {{view Ember.TextField valueBinding="description" id="description" classNames='form-control'}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-default" {{action 'closeModal'}}>Close</a>
+          <a href="#" class="btn btn-primary" {{action save}}>Send</a>
+      </div>
+    </div>
+</div>
