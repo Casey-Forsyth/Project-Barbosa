@@ -30,14 +30,25 @@ App.ApplicationSerializer = DS.RESTSerializer.extend({
 
 App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin, {
   actions: {
-    openModal: function(modalName) {
+    openModal: function(modalName, tripid, model) {
+      if (!model) {
+        modelType = this.get('store').modelFor(modalName)
+        model = this.get('store').createRecord(modelType, {trip_id_number: tripid})
+      }
+      this.controllerFor(modalName).set('model', model);
       return this.render(modalName, {
         into: 'application',
         outlet: 'modal'
       });
     },
+<<<<<<< HEAD
 	  closeModal: function() {
       return this.disconnectOutlet({
+=======
+    closeModal: function() {
+      $('modal-backdrop fade').removeClass('in')
+      return this.disconnectOutlet( {
+>>>>>>> edit-trip-item-ui
         outlet: 'modal',
         parentView: 'application'
       });
@@ -59,8 +70,6 @@ App.Router.map(function() {
   this.resource('trip', {path: '/trips/:trip_id'}, function(){
     this.resource('items')	
     this.resource('item', {path: '/:item_id'})
-	 //this.resource('myModal') //not sure which is needed
-	this.resource('myModal', {path: '/:trip_id/myModal'}) //not sure which is needed
   }); 
   this.route('edit_trip', {path: '/trips/:trip_id/edit'});
   this.route('new_trip', {path: '/trips/new'});
@@ -138,9 +147,15 @@ module.exports = AuthenticatorController;
 },{}],5:[function(require,module,exports){
 var EditTripController = Ember.ObjectController.extend({
 
-  save: function() {
+  save: function(trip) {
     this.get('store').commit();
-    this.redirectToModel();
+    if (trip.id){
+      this.redirectToModel();
+    } else {
+      trip.one('didCreate', this, function(){
+        this.redirectToModel();
+      });
+    }
   },
 
   redirectToModel: function() {
@@ -156,6 +171,21 @@ module.exports = EditTripController;
 
 },{}],6:[function(require,module,exports){
 var ItemController = Ember.ObjectController.extend({
+
+  actions: {
+    save: function() {
+      this.get('store').commit();
+	  return this.send('closeModal');
+    },
+    close: function() {
+      return this.send('closeModal');
+    },
+    destroy: function() {
+      if (!confirm('Are you sure?')) return;
+      this.get('model').deleteRecord();
+      this.get('store').commit();
+    }
+  }
 
 });
 
@@ -292,27 +322,26 @@ App.LoginRoute = require('./routes/login_route');
 App.NewTripRoute = require('./routes/new_trip_route');
 App.SignupRoute = require('./routes/signup_route');
 App.TripsRoute = require('./routes/trips_route');
+App.ItemView = require('./views/item_view');
 
 require('./config/routes');
 
 module.exports = App;
 
 
+<<<<<<< HEAD
 },{"./config/app":1,"./config/routes":2,"./controllers/authenticator_controller":4,"./controllers/edit_trip_controller":5,"./controllers/item_controller":6,"./controllers/login_controller":7,"./controllers/new_trip_controller":8,"./controllers/signup_controller":9,"./controllers/trip_controller":10,"./models/item":12,"./models/trip":13,"./models/user":14,"./routes/item_route":15,"./routes/login_route":16,"./routes/new_trip_route":17,"./routes/signup_route":18,"./routes/trips_route":19,"./templates":20}],12:[function(require,module,exports){
+=======
+},{"./config/app":1,"./config/routes":2,"./controllers/authenticator_controller":4,"./controllers/edit_trip_controller":5,"./controllers/item_controller":6,"./controllers/login_controller":7,"./controllers/new_trip_controller":8,"./controllers/signup_controller":9,"./controllers/trip_controller":10,"./models/item":12,"./models/trip":13,"./routes/item_route":14,"./routes/login_route":15,"./routes/new_trip_route":16,"./routes/signup_route":17,"./routes/trips_route":18,"./templates":19,"./views/item_view":25}],12:[function(require,module,exports){
+>>>>>>> edit-trip-item-ui
 var Item = DS.Model.extend({
-
   title: DS.attr('string'),
-
   description: DS.attr('string'),
-
-  scheduledAt: DS.attr('date'),
-
-  location: {
-    name: DS.attr('string'),
-    latitude: DS.attr('number'),
-    longitude: DS.attr('number')
-  }
-
+  scheduled_at: DS.attr('string'),
+  location_name: DS.attr('string'),
+  latitude: DS.attr('number'),
+  longitude: DS.attr('number'),
+  trip_id_number: DS.attr('string')
 });
 
 module.exports = Item;
@@ -542,7 +571,11 @@ function program15(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+<<<<<<< HEAD
   data.buffer.push("\n	");
+=======
+  data.buffer.push("\r\n    ");
+>>>>>>> edit-trip-item-ui
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
@@ -561,10 +594,15 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("<h2>Trip</h2>\n\n<form ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "save", {hash:{
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "save", "model", {hash:{
     'on': ("submit")
+<<<<<<< HEAD
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n\n  <div class='form-group'>\n    <label for=\"name\">Name</label><br>\n    ");
+=======
+  },contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\r\n\r\n  <div class='form-group'>\r\n    <label for=\"name\">Name</label><br>\r\n    ");
+>>>>>>> edit-trip-item-ui
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
@@ -661,10 +699,67 @@ function program7(depth0,data) {
 Ember.TEMPLATES['item'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  
+  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
 
 
+<<<<<<< HEAD
   data.buffer.push("<h2>Item</h2>\n\n");
+=======
+  data.buffer.push("<div class='trip-item'>\r\n  <div class='overlay' ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\r\n\r\n  </div>\r\n  <div class=\"ember-modal modal-dialog\">\r\n      <div class=\"modal-content\">\r\n        <div class=\"modal-header\">\r\n          <button type=\"button\" class=\"close\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "closeModal", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">&times;</button>\r\n          <h3 class=\"modal-title\">");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</h3>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class='form-group'>\r\n          <label for=\"title\">Activity Name:</label><br>\r\n          ");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("title"),
+    'id': ("title"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"location_name\">Location:</label><br>\r\n          ");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("location_name"),
+    'id': ("location_name"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"scheduled_at\">At:</label><br>\r\n          ");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("scheduled_at"),
+    'id': ("scheduled_at"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"description\">Description:</label><br>\r\n          ");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("description"),
+    'id': ("description"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n          <a href=\"#\" class=\"btn btn-default\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "closeModal", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Close</a>\r\n          <a href=\"#\" class=\"btn btn-primary\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "save", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Send</a>\r\n      </div>\r\n    </div>\r\n</div>");
+  return buffer;
+>>>>>>> edit-trip-item-ui
   
 });
 
@@ -757,6 +852,7 @@ function program4(depth0,data) {
   
 });
 
+<<<<<<< HEAD
 Ember.TEMPLATES['myModal'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
@@ -820,6 +916,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
+=======
+>>>>>>> edit-trip-item-ui
 Ember.TEMPLATES['signup'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
@@ -953,16 +1051,45 @@ function program3(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
+<<<<<<< HEAD
   data.buffer.push("\n        <li>Title: \"");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\"</li>\n      ");
+=======
+  data.buffer.push("\r\n        <li class=\"media\">\r\n          <strong>Title: \"");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\"</strong>\r\n		  <button class='pull-right btn btn-danger btn-xs' ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>\r\n		    Delete\r\n		  </button>\r\n          <button class='pull-right btn btn-info btn-xs' ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "id", "item", {hash:{},contexts:[depth0,depth0,depth0,depth0],types:["STRING","STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\r\n            Edit Trip\r\n            <span class='glyphicon glyphicon-edit'></span>\r\n          </button>\r\n		  <div class=\"media-body\">\r\n            Location: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.location_name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\r\n            At: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.scheduled_at", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<br>\r\n            Description: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.description", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\r\n          </div>\r\n        </li>\r\n      ");
+>>>>>>> edit-trip-item-ui
   return buffer;
   }
 
 function program7(depth0,data) {
   
+<<<<<<< HEAD
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n        <li><button classNames=\"btn btn-info\" ");
   hashTypes = {};
@@ -970,6 +1097,10 @@ function program7(depth0,data) {
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "myModal", {hash:{},contexts:[depth0,depth0],types:["STRING","STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">Add Itinerary Item</button></li>\n      ");
   return buffer;
+=======
+  
+  data.buffer.push("\r\n        <li>There are no itinerary items for this trip.</li>\r\n      ");
+>>>>>>> edit-trip-item-ui
   }
 
   hashTypes = {};
@@ -993,7 +1124,15 @@ function program7(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+<<<<<<< HEAD
   data.buffer.push("><i class=\"fa fa-minus-circle\"></i>Delete</button>\n  </div>\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\n    <img class='placeholder' src=\"http://placehold.it/300&text=Calendar\">\n    ");
+=======
+  data.buffer.push(">Delete</button>\r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    <img class='placeholder' src=\"http://placehold.it/300&text=Calendar\">\r\n    <img class='placeholder' src=\"http://placehold.it/300&text=Map\">\r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    <h1 class=\"text-center\">\r\n      <small class='itinerary-header'>Itinerary</small>\r\n      <button class='btn btn-primary btn-sm pull-right' ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "id", {hash:{},contexts:[depth0,depth0,depth0],types:["STRING","STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\r\n        Add item\r\n        <i class='glyphicon glyphicon-plus'></i>\r\n      </button>\r\n    </h1>\r\n    <ul class=\"media-list\">\r\n      ");
+>>>>>>> edit-trip-item-ui
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
@@ -59246,5 +59385,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 }
 
 })( window );
+},{}],25:[function(require,module,exports){
+var ItemView = Ember.View.extend({
+
+});
+
+module.exports = ItemView;
+
+
 },{}]},{},[11])
 ;
