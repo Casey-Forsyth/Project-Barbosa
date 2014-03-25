@@ -40,14 +40,9 @@ App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin
         outlet: 'modal'
       });
     },
-<<<<<<< HEAD
-	  closeModal: function() {
-      return this.disconnectOutlet({
-=======
     closeModal: function() {
       $('modal-backdrop fade').removeClass('in')
       return this.disconnectOutlet( {
->>>>>>> edit-trip-item-ui
         outlet: 'modal',
         parentView: 'application'
       });
