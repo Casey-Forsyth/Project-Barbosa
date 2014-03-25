@@ -5,7 +5,7 @@ var Item = DS.Model.extend({
   location_name: DS.attr('string'),
   latitude: DS.attr('number'),
   longitude: DS.attr('number'),
-  trip_id: DS.attr('string')
+  trip_id_number: DS.attr('string')
 });
 
 module.exports = Item;

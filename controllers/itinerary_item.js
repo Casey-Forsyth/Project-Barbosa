@@ -39,11 +39,15 @@ exports.listTripItineraryItems = function(req, res) {
 */
 
 exports.createItineraryItem = function(req, res) {
-  tripid = req.body.item.trip_id
-  if (!tripid) {
-    res.status(500).json(null)
+  tripid = req.body.trip_id
+  if (!tripid) {  
+    tripid = req.body.item.trip_id_number
+  };
+  if (!tripid) {  
+    res.status(503).json(null)
     return
   };
+
   Trip.findById(tripid).exec(function(err, trip) {
     if (err) {
       res.status(500).json(null);

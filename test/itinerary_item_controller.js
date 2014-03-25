@@ -10,7 +10,7 @@ describe('ItineraryItem Controller', function(){
     it('should respond with json', function(done) {
       trip = new Trip()
       trip.save(function(){
-        item = new ItineraryItem({name: 'tripname'});
+        item = new ItineraryItem({title: 'tripname'});
 
         request(app)
           .post('/items')

@@ -35,7 +35,7 @@ App.ApplicationRoute = Ember.Route.extend( {
     openModal: function(modalName, tripid, model) {
       if (!model) {
         modelType = this.get('store').modelFor(modalName)
-        model = this.get('store').createRecord(modelType, {trip_id: tripid})
+        model = this.get('store').createRecord(modelType, {trip_id_number: tripid})
       }
       this.controllerFor(modalName).set('model', model);
       return this.render(modalName, {
@@ -328,7 +328,7 @@ var Item = DS.Model.extend({
   location_name: DS.attr('string'),
   latitude: DS.attr('number'),
   longitude: DS.attr('number'),
-  trip_id: DS.attr('string')
+  trip_id_number: DS.attr('string')
 });
 
 module.exports = Item;
