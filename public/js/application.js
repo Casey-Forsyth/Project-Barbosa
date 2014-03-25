@@ -175,18 +175,15 @@ var ItemController = Ember.ObjectController.extend({
     close: function() {
       return this.send('closeModal');
     },
-  },
-  remove: function() {
-    if (!confirm('Are you sure?')) return;
-    this.get('model').deleteRecord();
+    remove: function() {
+      if (!confirm('Are you sure?')) return;
+      this.get('model').deleteRecord();
+      this.get('store').commit();
+      return this.send('closeModal');
+    }
+  }	
+  
 
-    root_context = this;
-    this.get('model').one('didDelete', function(){
-      root_context.get('target.router').transitionTo('trips');
-    });
-
-    this.get('store').commit()
-  }
 
 });
 
@@ -977,11 +974,7 @@ function program5(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\"</strong>\r\n		  <button class='pull-right btn btn-danger btn-xs' ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "remove", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>\r\n		    Delete\r\n		  </button>\r\n          <button class='pull-right btn btn-info btn-xs' ");
+  data.buffer.push("\"</strong>\r\n          <button class='pull-right btn btn-info btn-xs' ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "id", "item", {hash:{},contexts:[depth0,depth0,depth0,depth0],types:["STRING","STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));

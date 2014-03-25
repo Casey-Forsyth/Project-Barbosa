@@ -8,18 +8,15 @@ var ItemController = Ember.ObjectController.extend({
     close: function() {
       return this.send('closeModal');
     },
-  },
-  remove: function() {
-    if (!confirm('Are you sure?')) return;
-    this.get('model').deleteRecord();
+    remove: function() {
+      if (!confirm('Are you sure?')) return;
+      this.get('model').deleteRecord();
+      this.get('store').commit();
+      return this.send('closeModal');
+    }
+  }	
+  
 
-    root_context = this;
-    this.get('model').one('didDelete', function(){
-      root_context.get('target.router').transitionTo('trips');
-    });
-
-    this.get('store').commit()
-  }
 
 });
 
