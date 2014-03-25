@@ -92,7 +92,28 @@ exports.updateItineraryItem = function(req, res){
   updatedItem.save(function(err){
     if (err)  res.status(500).json({errors: err.message})
     else      res.json({item:updatedItem})
-  })
+  }) 
+  tripid = req.body.item.trip_id_number
+
+  if (!tripid) {  
+    res.status(503).json(null)
+    return
+  };  
+  Trip.findById(tripid).exec(function(err, trip) {
+     if (err) {
+       res.status(500).json(null);
+     } 
+	 else {	
+       trip.itinerary.remove(req.item);
+       trip.itinerary.push(updatedItem);
+         trip.save(function (err) {
+           if (err) {
+             res.status(500).json(null);
+           };
+           res.json({item:updatedItem});
+         });
+	  }
+	});
 }
 
 /**
