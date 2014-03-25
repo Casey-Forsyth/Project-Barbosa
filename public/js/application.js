@@ -175,11 +175,17 @@ var ItemController = Ember.ObjectController.extend({
     close: function() {
       return this.send('closeModal');
     },
-    destroy: function() {
-      if (!confirm('Are you sure?')) return;
-      this.get('model').deleteRecord();
-      this.get('store').commit();
-    }
+  },
+  remove: function() {
+    if (!confirm('Are you sure?')) return;
+    this.get('model').deleteRecord();
+
+    root_context = this;
+    this.get('model').one('didDelete', function(){
+      root_context.get('target.router').transitionTo('trips');
+    });
+
+    this.get('store').commit()
   }
 
 });
@@ -728,7 +734,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("description"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n          <a href=\"#\" class=\"btn btn-default\" ");
+  data.buffer.push("\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n	      <a href=\"#\" class=\"pull-left btn btn-danger btn-small\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "remove", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>Delete</a>\r\n          <a href=\"#\" class=\"btn btn-default\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "closeModal", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -970,7 +980,7 @@ function program5(depth0,data) {
   data.buffer.push("\"</strong>\r\n		  <button class='pull-right btn btn-danger btn-xs' ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "remove", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("><i class=\"fa fa-minus-circle\"></i>\r\n		    Delete\r\n		  </button>\r\n          <button class='pull-right btn btn-info btn-xs' ");
   hashTypes = {};
   hashContexts = {};
