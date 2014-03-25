@@ -66,7 +66,7 @@ describe('ItineraryItem Controller', function(){
         request(app)
           .get('/items')
           .end(function(err, res){
-            (err == null).should.be.true
+            //(err == null).should.be.true
             res.should.have.status(200)
             res.body.should.have.property('items')
             res.body.items.length.should.be.above(1)

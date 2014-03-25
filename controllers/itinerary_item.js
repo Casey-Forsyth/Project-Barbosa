@@ -95,8 +95,7 @@ exports.updateItineraryItem = function(req, res){
   }) 
   tripid = req.body.item.trip_id_number
 
-  if (!tripid) {  
-    res.status(503).json(null)
+  if (!tripid) {    
     return
   };  
   Trip.findById(tripid).exec(function(err, trip) {
