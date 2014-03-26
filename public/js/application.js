@@ -345,7 +345,7 @@ module.exports = Item;
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
-  "date": DS.attr('date'),
+  "date": DS.attr('string'),
   "user": DS.attr('App.User'),
   "location": DS.attr('string'),
   "itinerary": DS.hasMany('App.Item', {async: true}),
@@ -595,12 +595,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("name"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n    <label for=\"name\">Location</label><br>\r\n    ");
+  data.buffer.push("\r\n    <label for=\"location\">Location</label><br>\r\n    ");
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
     'valueBinding': ("location"),
     'id': ("location"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\r\n	<label for=\"date\">Date</label><br>\r\n    ");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("date"),
+    'id': ("date"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\r\n  </div>\r\n\r\n  <button type=\"submit\" class='btn btn-primary'><i class=\"fa fa-save\"></i>Save</button>\r\n\r\n</form>\r\n\r\n");
