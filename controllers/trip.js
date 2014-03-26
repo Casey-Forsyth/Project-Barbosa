@@ -66,6 +66,7 @@ exports.showTrip = function(req, res) {
  */
 
 exports.listTrips = function(req, res) {
+
   query = {
     archived: req.query.archived || false
   }
@@ -78,21 +79,16 @@ exports.listTrips = function(req, res) {
     if (err) {
       res.status(500).json(null);
     } else {
-      newTrips = []
-      for(ii = 0; ii < trips.length; ii++) {
-        trip = {
-          _id: trips[ii]._id,
-          name: trips[ii].name,
-          location: trips[ii].location,
-          date: trips[ii].date,
-          userID: trips[ii].userID,
-          archived: trips[ii].archived,
-          itinerary: trips[ii].itinerary
-        }
-        newTrips.push(trip)
+
+      tripList = []
+      for(i = 0; i < trips.length; i++) {
+
+        flattenedTrip = trips[i].flattened();
+        tripList.push(flattenedTrip.trip);
+
       }
 
-      async.each(newTrips, function(trip, next) {
+      async.each(tripList, function(trip, next) {
         User.findOne({_id: trip.userID}).exec(function(err, user) {
           if(!err) {
             trip.user = user
@@ -108,7 +104,7 @@ exports.listTrips = function(req, res) {
         })
       },
       function(err) {
-        res.json({trips: newTrips})
+        res.json({trips: tripList})
       });
     }
   })
@@ -120,8 +116,14 @@ exports.listTrips = function(req, res) {
  */
 
 exports.createTrip = function(req, res) {
+
   trip = new Trip(req.body.trip)
+<<<<<<< HEAD
   
+=======
+  trip.date = Date.now()
+
+>>>>>>> master
   if(req.user)
     trip.userID = req.user._id;
 
