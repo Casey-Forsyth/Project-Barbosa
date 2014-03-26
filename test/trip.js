@@ -79,12 +79,25 @@ describe('Trip Model', function(){
   })
 
   //DATE FLAG
-  it('should have a default `date` flag of approximately now', function(){
-      var bottomDate = Date.now()-3500;
-      var t = new Trip()
-      var tripdate = Date.parse(t.date);
-      var topDate = Date.now()+3500;
-      tripdate.should.be.within(bottomDate,topDate);
+  it('should save the date flag', function(){
+    var t = new Trip({date: "test"})
+    t.should.have.property('date', "test");
+  })
+
+  it('should save changes to the date flag', function(){
+    var t = new Trip({date: "test"})
+    t.should.have.property('date', "test");
+    t.date = "changed";
+    t.should.have.property('date', "changed")
+  })
+
+  it('should accept null', function(){
+    var t = new Trip({date: null})
+    t.should.have.property('date', null)
+  })
+  it('should have a default `date` flag of `None`', function(){
+   var  t = new Trip()
+    t.should.have.property('date', "None")
   })
 
    //ARCHIVED FLAG
