@@ -7,8 +7,8 @@ App.Router.map(function() {
   this.resource('trip', {path: '/trips/:trip_id'}, function(){
     this.resource('items')
     this.resource('item', {path: '/:item_id'})
-	 //this.resource('myModal') //not sure which is needed
-	this.resource('myModal', {path: '/:trip_id/myModal'}) //not sure which is needed
+    //this.resource('myModal') //not sure which is needed
+    this.resource('myModal', {path: '/:trip_id/myModal'}) //not sure which is needed
   });
   this.route('edit_trip', {path: '/trips/:trip_id/edit'});
   this.route('new_trip', {path: '/trips/new'});
