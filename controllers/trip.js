@@ -3,6 +3,7 @@ var Trip = require('../models/Trip');
 var User = require('../models/User');
 var extend = require('util')._extend;
 var async = require('async')
+var _ = require('underscore')
 
 /**
  * Load a trip.
@@ -79,18 +80,25 @@ exports.listTrips = function(req, res) {
     if (err) {
       res.status(500).json(null);
     } else {
-
       tripList = []
-      for(i = 0; i < trips.length; i++) {
-
-        flattenedTrip = trips[i].flattened();
-        tripList.push(flattenedTrip.trip);
-
+      for(ii = 0; ii < trips.length; ii++) {
+        trip = {
+          _id: trips[ii]._id,
+          name: trips[ii].name,
+          location: trips[ii].location,
+          date: trips[ii].date,
+          userID: trips[ii].userID,
+          archived: trips[ii].archived,
+          itinerary: trips[ii].itinerary,
+          itinerary_ids: _.pluck(trips[ii].itinerary, '_id'),
+          packing_item_ids: _.pluck(trips[ii].packingItems, '_id')
+        }
+        tripList.push(trip);
       }
 
       async.each(tripList, function(trip, next) {
-        User.findOne({_id: trip.userID}).exec(function(err, user) {
-          if(!err) {
+        User.findOne({_id: trip.user}).exec(function(err, user) {
+          if(!err && user != null) {
             trip.user = user
           } else {
             trip.user = {
@@ -99,6 +107,7 @@ exports.listTrips = function(req, res) {
               }
             }
           }
+          console.log(trip.user)
           delete trip.userID
           next(false, trip)
         })
