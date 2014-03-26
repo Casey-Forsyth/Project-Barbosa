@@ -29,7 +29,7 @@ describe('Trip Controller', function(){
               res.should.have.status(200)
               res.body.should.have.property('trip')
               res.body.trip.itinerary_ids.should.have.lengthOf(1)
-              res.body.itinerary.should.have.lengthOf(1)
+              res.body.items.should.have.lengthOf(1)
               done()
             })
         })
