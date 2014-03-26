@@ -736,36 +736,40 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("</h3>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class='form-group'>\r\n          <label for=\"title\">Activity Name:</label><br>\r\n          ");
-  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
-  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0,'placeholder': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING",'placeholder': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
     'valueBinding': ("title"),
     'id': ("title"),
-    'classNames': ("form-control")
+    'classNames': ("form-control"),
+    'placeholder': ("e.g. Visit the Museum")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"location_name\">Location:</label><br>\r\n          ");
-  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
-  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0,'placeholder': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING",'placeholder': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
     'valueBinding': ("location_name"),
     'id': ("location_name"),
-    'classNames': ("form-control")
+    'classNames': ("form-control"),
+    'placeholder': ("e.g. The Louvre, Paris, France")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"scheduled_at\">At:</label><br>\r\n          ");
-  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
-  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"scheduled_at\">When:</label><br>\r\n          ");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0,'placeholder': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING",'placeholder': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
     'valueBinding': ("scheduled_at"),
     'id': ("scheduled_at"),
-    'classNames': ("form-control")
+    'classNames': ("form-control"),
+    'placeholder': ("e.g. March 25, 10:00pm")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\r\n          </div>\r\n          <div class='form-group'>\r\n          <label for=\"description\">Description:</label><br>\r\n          ");
-  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
-  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0,'placeholder': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING",'placeholder': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
     'valueBinding': ("description"),
     'id': ("description"),
-    'classNames': ("form-control")
+    'classNames': ("form-control"),
+    'placeholder': ("e.g. One person will get food while the other waits with the kids in line")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n	      <a href=\"#\" class=\"pull-left btn btn-danger btn-small\" ");
   hashTypes = {};
@@ -779,7 +783,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "save", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Send</a>\r\n      </div>\r\n    </div>\r\n</div>");
+  data.buffer.push(">Add Itinerary Item</a>\r\n      </div>\r\n    </div>\r\n</div>");
   return buffer;
   
 });
@@ -1066,7 +1070,7 @@ function program9(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "id", "item", {hash:{},contexts:[depth0,depth0,depth0,depth0],types:["STRING","STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\r\n            Edit Trip\r\n            <span class='glyphicon glyphicon-edit'></span>\r\n          </button>\r\n		  <div class=\"media-body\">\r\n            Location: ");
+  data.buffer.push(">\r\n            Edit Item\r\n            <span class='glyphicon glyphicon-edit'></span>\r\n          </button>\r\n		  <div class=\"media-body\">\r\n            Location: ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.location_name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -1118,7 +1122,7 @@ function program11(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "addPackingItem", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">+</button>\r\n        \r\n      </form>\r\n      \r\n      \r\n    </div>\r\n    \r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    <img class='placeholder' src=\"http://placehold.it/300&text=Calendar\">\r\n    ");
+  data.buffer.push(">+</button>\r\n        \r\n      </form>\r\n      \r\n      \r\n    </div>\r\n    \r\n  </div>\r\n  <div class=\"col-xs-12 col-sm-12 col-md-4 col-lg-4\">\r\n    ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
