@@ -1,8 +1,14 @@
 var EditTripController = Ember.ObjectController.extend({
 
-  save: function() {
+  save: function(trip) {
     this.get('store').commit();
-    this.redirectToModel();
+    if (trip.id){
+      this.redirectToModel();
+    } else {
+      trip.one('didCreate', this, function(){
+        this.redirectToModel();
+      });
+    }
   },
 
   redirectToModel: function() {

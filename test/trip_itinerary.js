@@ -33,23 +33,24 @@ describe('Itinerary Items', function() {
     done()
   })
 
-  it('should have a scheduledAt Date, defaulting to null', function(done) {
+  it('should have a scheduled_at Date, defaulting to null', function(done) {
     now = new Date()
     itineraryItem = new ItineraryItem()
-    assert.equal(itineraryItem.updatedAt, null)
-    itineraryItem.scheduledAt = now
-    assert.equal(itineraryItem.scheduledAt.toISOString(), now.toISOString())
+    v = (itineraryItem.scheduled_at == '')
+    v.should.be.true
+    itineraryItem.scheduled_at = '12/12/12'
+    itineraryItem.scheduled_at.should.equal('12/12/12')
     done()
   })
 
   it('should have a location with a name, lat, and long', function(done) {
-    loc = {
-      name: "Takeoff from YWG",
+    item = {
+      location_name: "Takeoff from YWG",
       latitude: 49.89,
       longitude: -97.1,
     }
-    itineraryItem = new ItineraryItem({location: loc})
-    itineraryItem.location.should.have.properties(['name', 'latitude', 'longitude'])
+    itineraryItem = new ItineraryItem(item)
+    itineraryItem.should.have.properties(['location_name', 'latitude', 'longitude'])
     done()
   })
 
