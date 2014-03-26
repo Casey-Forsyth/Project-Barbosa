@@ -175,12 +175,15 @@ var ItemController = Ember.ObjectController.extend({
     close: function() {
       return this.send('closeModal');
     },
-    destroy: function() {
+    remove: function() {
       if (!confirm('Are you sure?')) return;
       this.get('model').deleteRecord();
       this.get('store').commit();
+      return this.send('closeModal');
     }
-  }
+  }	
+  
+
 
 });
 
@@ -369,7 +372,7 @@ module.exports = PackingItem;
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
-  "date": DS.attr('date'),
+  "date": DS.attr('string'),
   "user": DS.attr('App.User'),
   "location": DS.attr('string'),
   "itinerary": DS.hasMany('App.Item', {async: true}),
@@ -620,12 +623,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("name"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n    <label for=\"name\">Location</label><br>\r\n    ");
+  data.buffer.push("\r\n    <label for=\"location\">Location</label><br>\r\n    ");
   hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
   hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
     'valueBinding': ("location"),
     'id': ("location"),
+    'classNames': ("form-control")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\r\n	<label for=\"date\">Date</label><br>\r\n    ");
+  hashContexts = {'valueBinding': depth0,'id': depth0,'classNames': depth0};
+  hashTypes = {'valueBinding': "STRING",'id': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("date"),
+    'id': ("date"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\r\n  </div>\r\n\r\n  <button type=\"submit\" class='btn btn-primary'><i class=\"fa fa-save\"></i>Save</button>\r\n\r\n</form>\r\n\r\n");
@@ -756,7 +767,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'id': ("description"),
     'classNames': ("form-control")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n          <a href=\"#\" class=\"btn btn-default\" ");
+  data.buffer.push("\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n	      <a href=\"#\" class=\"pull-left btn btn-danger btn-small\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "remove", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>Delete</a>\r\n          <a href=\"#\" class=\"btn btn-default\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "closeModal", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -1047,11 +1062,7 @@ function program9(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\"</strong>\r\n		  <button class='pull-right btn btn-danger btn-xs' ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "destroy", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("><i class=\"fa fa-minus-circle\"></i>\r\n		    Delete\r\n		  </button>\r\n          <button class='pull-right btn btn-info btn-xs' ");
+  data.buffer.push("\"</strong>\r\n          <button class='pull-right btn btn-info btn-xs' ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "openModal", "item", "id", "item", {hash:{},contexts:[depth0,depth0,depth0,depth0],types:["STRING","STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));

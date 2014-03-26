@@ -8,12 +8,15 @@ var ItemController = Ember.ObjectController.extend({
     close: function() {
       return this.send('closeModal');
     },
-    destroy: function() {
+    remove: function() {
       if (!confirm('Are you sure?')) return;
       this.get('model').deleteRecord();
       this.get('store').commit();
+      return this.send('closeModal');
     }
-  }
+  }	
+  
+
 
 });
 

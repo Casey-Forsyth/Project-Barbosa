@@ -123,9 +123,35 @@ exports.updateItineraryItem = function(req, res){
 exports.deleteItineraryItem = function(req, res){
   if (!req.item) {
     return res.status(500).json(null)
-  }
-  req.item.remove(function(err){
+  }	
+  
+  tripid = req.item.trip_id_number
+
+  if (!tripid) {    
+    req.item.remove(function(err){
     if (err)  res.status(500).json({errors: err.message})
-    else      res.json(null)
-  })
-};
+    else      res.json(null)			   
+    });
+	return;
+  };  
+  
+  Trip.findById(tripid).exec(function(err, trip) {
+     if (err) {
+       res.status(500).json(null);
+     } 
+	 else {	
+       trip.itinerary.remove(req.item);
+         trip.save(function (err) {
+           if (err) {
+             res.status(500).json(null);
+           }		   
+		   req.item.remove(function(err){
+             if (err)  res.status(500).json({errors: err.message})
+             else      res.json(null)			   
+           });	  
+	    });
+      }
+  });
+} 
+
+

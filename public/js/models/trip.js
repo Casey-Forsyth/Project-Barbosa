@@ -1,7 +1,7 @@
 var Trip = DS.Model.extend({
 
   "name": DS.attr('string'),
-  "date": DS.attr('date'),
+  "date": DS.attr('string'),
   "user": DS.attr('App.User'),
   "location": DS.attr('string'),
   "itinerary": DS.hasMany('App.Item', {async: true}),

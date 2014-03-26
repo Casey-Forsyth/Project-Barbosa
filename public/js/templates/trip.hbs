@@ -42,9 +42,6 @@
       {{#each item in itinerary}}
         <li class="media">
           <strong>Title: "{{item.title}}"</strong>
-		  <button class='pull-right btn btn-danger btn-xs' {{action 'destroy'}}><i class="fa fa-minus-circle"></i>
-		    Delete
-		  </button>
           <button class='pull-right btn btn-info btn-xs' {{action 'openModal' 'item' id item}}>
             Edit Trip
             <span class='glyphicon glyphicon-edit'></span>

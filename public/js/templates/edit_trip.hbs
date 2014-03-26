@@ -5,8 +5,10 @@
   <div class='form-group'>
     <label for="name">Name</label><br>
     {{view Ember.TextField valueBinding="name" id="name" classNames='form-control'}}
-    <label for="name">Location</label><br>
+    <label for="location">Location</label><br>
     {{view Ember.TextField valueBinding="location" id="location" classNames='form-control'}}
+	<label for="date">Date</label><br>
+    {{view Ember.TextField valueBinding="date" id="date" classNames='form-control'}}
   </div>
 
   <button type="submit" class='btn btn-primary'><i class="fa fa-save"></i>Save</button>
