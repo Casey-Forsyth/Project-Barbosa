@@ -3,8 +3,8 @@ var TripController = Ember.ObjectController.extend({
   deletePackingItem: function(packingItem) {
 
     if (confirm('Are you sure?')){
-    	packingItem.deleteRecord();
-    	this.get('store').commit();
+     packingItem.deleteRecord();
+     this.get('store').commit();
 	}
 
   },
@@ -23,16 +23,15 @@ var TripController = Ember.ObjectController.extend({
 
   addPackingItem: function() {
 
-	  this.get('model.packingItems').pushObject( App.PackingItem.createRecord({name: itemName.value}) );
-	  this.get('model').save();
+	this.get('model.packingItems').pushObject( App.PackingItem.createRecord({name: itemName.value}) );
+	this.get('model').save();
 
-	  this.get('store').commit();
+	this.get('store').commit();
 
-	  itemName.value = '';
+	itemName.value = '';
 
   },
 
 });
 
 module.exports = TripController;
-

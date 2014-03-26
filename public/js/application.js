@@ -251,12 +251,33 @@ module.exports = SignupController;
 },{}],10:[function(require,module,exports){
 var TripController = Ember.ObjectController.extend({
 
-  deletePackingItem: function(packingItem) {
+  deletePackingItem: function(trip, packingItem) {
 
+	console.log(' ** deletePackingItem ** ');
+
+	console.log('packingItem id: ' + packingItem.id);
+	console.log('trip id: ' + trip.id);
+
+	var dbTrip = App.Trip.find(trip.id);
+
+	this.get('model.packingItems').removeObject( packingItem );
+
+	packingItem.deleteRecord();
+
+	this.get('model').save();
+
+	this.get('store').commit();
+
+	console.log('dbTrip: ' + 'hello');
+
+	//console.log('trip.packingItems: ' + trip.packingItems);
+
+	/*
     if (confirm('Are you sure?')){
     	packingItem.deleteRecord();
     	this.get('store').commit();
 	}
+	*/
 
   },
 
@@ -1020,7 +1041,7 @@ function program5(depth0,data) {
   data.buffer.push("</div><div style=\"display: inline-block;\"><a style=\"cursor: pointer; color: red;\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "deletePackingItem", "item", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "deletePackingItem", "model", "item", {hash:{},contexts:[depth0,depth0,depth0],types:["STRING","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">X</a></div></li>\r\n        ");
   return buffer;
   }
