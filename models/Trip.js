@@ -8,7 +8,7 @@ var tripSchema = new mongoose.Schema({
   itinerary: [ItineraryItem.schema],
   userID: {type: String, default: "0"},
   location: {type: String, default: "None"},
-  date: {type: Date, default: Date.now()},
+  date: {type: String, default: "None"},
   archived: {type: Boolean, default: false}
 });
 

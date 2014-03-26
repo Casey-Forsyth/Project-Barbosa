@@ -121,7 +121,6 @@ exports.listTrips = function(req, res) {
 
 exports.createTrip = function(req, res) {
   trip = new Trip(req.body.trip)
-  trip.date = Date.now()
   
   if(req.user)
     trip.userID = req.user._id;
