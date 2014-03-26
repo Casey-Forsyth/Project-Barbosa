@@ -11,25 +11,25 @@
         <div class="modal-body">
           <div class='form-group'>
           <label for="title">Activity Name:</label><br>
-          {{view Ember.TextField valueBinding="title" id="title" classNames='form-control'}}
+          {{view Ember.TextField valueBinding="title" id="title" classNames='form-control' placeholder="e.g. Visit the Museum"}}
           </div>
           <div class='form-group'>
           <label for="location_name">Location:</label><br>
-          {{view Ember.TextField valueBinding="location_name" id="location_name" classNames='form-control'}}
+          {{view Ember.TextField valueBinding="location_name" id="location_name" classNames='form-control' placeholder="e.g. The Louvre, Paris, France"}}
           </div>
           <div class='form-group'>
-          <label for="scheduled_at">At:</label><br>
-          {{view Ember.TextField valueBinding="scheduled_at" id="scheduled_at" classNames='form-control'}}
+          <label for="scheduled_at">When:</label><br>
+          {{view Ember.TextField valueBinding="scheduled_at" id="scheduled_at" classNames='form-control' placeholder="e.g. March 25, 10:00pm"}}
           </div>
           <div class='form-group'>
           <label for="description">Description:</label><br>
-          {{view Ember.TextField valueBinding="description" id="description" classNames='form-control'}}
+          {{view Ember.TextField valueBinding="description" id="description" classNames='form-control' placeholder="e.g. One person will get food while the other waits with the kids in line"}}
           </div>
         </div>
         <div class="modal-footer">
 	      <a href="#" class="pull-left btn btn-danger btn-small" {{action 'remove'}}><i class="fa fa-minus-circle"></i>Delete</a>
           <a href="#" class="btn btn-default" {{action 'closeModal'}}>Close</a>
-          <a href="#" class="btn btn-primary" {{action save}}>Send</a>
+          <a href="#" class="btn btn-primary" {{action save}}>Add Itinerary Item</a>
       </div>
     </div>
 </div>
