@@ -98,7 +98,7 @@ exports.listTrips = function(req, res) {
 
       async.each(tripList, function(trip, next) {
         User.findOne({_id: trip.user}).exec(function(err, user) {
-          if(!err) {
+          if(!err && user != null) {
             trip.user = user
           } else {
             trip.user = {
@@ -107,6 +107,7 @@ exports.listTrips = function(req, res) {
               }
             }
           }
+          console.log(trip.user)
           delete trip.userID
           next(false, trip)
         })
