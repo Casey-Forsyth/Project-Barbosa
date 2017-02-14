@@ -74,7 +74,7 @@ We are following a [Feature Branch Workflow](https://www.atlassian.com/git/workf
 
 #Design and Architecture
 ###Libraries used:
-* [Mocha](http://visionmedia.github.io/mocha/) for running automated tests.
+* [Mocha](http://mochajs.org/) for running automated tests.
 * [Should.js](https://github.com/visionmedia/should.js) for nice assertions.
 * [Supertest](https://github.com/visionmedia/supertest) for doing the request tests.
 * [Ember-tools](https://github.com/rpflorence/ember-tools) for building `application.js` and for awesome [generators](https://github.com/rpflorence/ember-tools#generators).
